@@ -18,6 +18,7 @@ import type {
   StrainDoseData,
   StrainDoseResult,
   StrainDataset,
+  StrainExperienceMeta,
 } from "@/lib/types";
 
 // Re-export types for convenience
@@ -41,10 +42,11 @@ const dataset = rawStrainData as {
   doses: DoseKey[];
   axes: TraitAxisId[];
   doseConfig: DoseConfigMap;
-  strains: Record<string, Omit<StrainJsonEntry, 'meta' | 'snapshots' | 'testimonials'> & {
+  strains: Record<string, Omit<StrainJsonEntry, 'meta' | 'snapshots' | 'testimonials' | 'experienceMeta'> & {
     meta?: StrainMeta;
     snapshots?: Record<DoseKey, DoseSnapshot>;
     testimonials?: StrainTestimonials;
+    experienceMeta?: Record<DoseKey, StrainExperienceMeta>;
   }>;
 };
 
@@ -125,6 +127,7 @@ export function getStrainDoseData(
   const snapshot = strainEntry.snapshots?.[doseKey] ?? null;
   const testimonialsForDose =
     strainEntry.testimonials?.[doseKey]?.filter(Boolean) ?? [];
+  const experienceMeta = strainEntry.experienceMeta?.[doseKey] ?? null;
 
   const baseColor = SLUG_TO_INFO[strainId]?.colorHex ?? DEFAULT_COLOR;
   const accentHex =
@@ -153,6 +156,7 @@ export function getStrainDoseData(
     meta,
     snapshot,
     testimonialsForDose,
+    experienceMeta,
   };
 }
 

@@ -1,0 +1,13 @@
+{
+  "messages": [
+    {
+      "id": "msg-welcome-001",
+      "guideId": "all",
+      "subject": "Welcome to Psilly Guides!",
+      "body": "Welcome to the Psilly Guides portal. Here you'll find training materials, session logs, and important updates from the team. Check back regularly for new content and messages.",
+      "createdAt": "2025-01-15T10:00:00.000Z",
+      "readBy": []
+    }
+  ]
+}
+

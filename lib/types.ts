@@ -19,6 +19,31 @@ export type DoseSnapshot = {
   setting: string[];
 };
 
+// Experience metadata types for enhanced radar view
+export type ExperienceLevel =
+  | "gentle"        // New explorers
+  | "balanced"      // Comfortable users
+  | "intense";      // Experienced only
+
+export type StrainTimeline = {
+  onsetMinMinutes: number;
+  onsetMaxMinutes: number;
+  peakMinHours: number;
+  peakMaxHours: number;
+  tailMinHours: number;
+  tailMaxHours: number;
+};
+
+export type StrainExperienceMeta = {
+  effectWord: string;               // e.g. "Create", "Connect", "Transform"
+  effectTagline: string;            // short sentence: "Deep perspective shifts", etc.
+  tripProfileBullets: string[];     // max 3 bullets, short phrases
+  bestForTags: string[];            // short tags: "Solo reflection", "Creative work", etc.
+  experienceLevel: ExperienceLevel; // gentle/balanced/intense for this strain+dose
+  timeline: StrainTimeline;
+  safetyTips?: string[];            // OPTIONAL, short reminders
+};
+
 export type StrainMeta = {
   origin: string;
   history: string;
@@ -49,6 +74,7 @@ export type StrainJsonEntry = {
   meta: StrainMeta;
   snapshots: Record<DoseKey, DoseSnapshot>;
   testimonials: StrainTestimonials;
+  experienceMeta?: Record<DoseKey, StrainExperienceMeta>;
 };
 
 export type EditorDataset = {
@@ -90,6 +116,7 @@ export type StrainDoseResult = {
   meta: StrainMeta | null;
   snapshot: DoseSnapshot | null;
   testimonialsForDose: string[];
+  experienceMeta: StrainExperienceMeta | null;
 };
 
 export type StrainDataset = {
@@ -191,4 +218,39 @@ export type Product = {
 export type ProductDataset = {
   products: Product[];
 };
+
+// ============================================
+// Psilly Guides Portal Types
+// ============================================
+
+export type GuideRole = "guide" | "manager" | "admin";
+
+export interface GuideAccount {
+  id: string;              // e.g. "guide-dani-top"
+  username: string;        // e.g. "dani"
+  passwordHash: string;    // bcrypt hash
+  name: string;            // full name
+  email?: string;
+  partnerKeyId?: string;   // link to access key like "dani-top"
+  role: GuideRole;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface GuideAccountDataset {
+  guides: GuideAccount[];
+}
+
+export interface GuideMessage {
+  id: string;
+  guideId: string | "all";  // "all" = broadcast to all guides
+  subject: string;
+  body: string;
+  createdAt: string;
+  readBy: string[];         // array of guideIds who have read it
+}
+
+export interface GuideMessageDataset {
+  messages: GuideMessage[];
+}
 

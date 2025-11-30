@@ -49,6 +49,126 @@
         "museum": ["Hercules GT 1g"],
         "mega": ["Hercules GT 2-pack"],
         "hero": ["Hercules GT 5-pack"]
+      },
+      "experienceMeta": {
+        "micro": {
+          "effectWord": "Create",
+          "effectTagline": "Gentle clarity and soft uplift.",
+          "tripProfileBullets": [
+            "Subtle shift in mood and focus",
+            "Little to no visuals",
+            "Great for light creative work"
+          ],
+          "bestForTags": ["Creative focus", "Daytime tasks"],
+          "experienceLevel": "gentle",
+          "timeline": {
+            "onsetMinMinutes": 30,
+            "onsetMaxMinutes": 60,
+            "peakMinHours": 1.5,
+            "peakMaxHours": 2.5,
+            "tailMinHours": 1,
+            "tailMaxHours": 2
+          }
+        },
+        "mini": {
+          "effectWord": "Create",
+          "effectTagline": "Warm creative spark with social ease.",
+          "tripProfileBullets": [
+            "Enhanced colors and warmth",
+            "Heightened sociability",
+            "Gentle creative flow"
+          ],
+          "bestForTags": ["Social hangouts", "Light creativity"],
+          "experienceLevel": "gentle",
+          "timeline": {
+            "onsetMinMinutes": 25,
+            "onsetMaxMinutes": 50,
+            "peakMinHours": 2,
+            "peakMaxHours": 3,
+            "tailMinHours": 1.5,
+            "tailMaxHours": 2.5
+          }
+        },
+        "macro": {
+          "effectWord": "Create",
+          "effectTagline": "Rich, heart-centered journey.",
+          "tripProfileBullets": [
+            "Warm euphoria and deep introspection",
+            "Soft pattern breathing in visuals",
+            "Ideal for safe, comfortable settings"
+          ],
+          "bestForTags": ["Deep talks", "Inner work"],
+          "experienceLevel": "balanced",
+          "timeline": {
+            "onsetMinMinutes": 30,
+            "onsetMaxMinutes": 60,
+            "peakMinHours": 2,
+            "peakMaxHours": 3,
+            "tailMinHours": 2,
+            "tailMaxHours": 3
+          },
+          "safetyTips": ["No driving", "Safe, comfy setting"]
+        },
+        "museum": {
+          "effectWord": "Create",
+          "effectTagline": "Vivid wisdom and emotional depth.",
+          "tripProfileBullets": [
+            "Flowing visuals with meaning",
+            "Strong emotional connection",
+            "Classic 'teacher' presence"
+          ],
+          "bestForTags": ["Art galleries", "Nature immersion"],
+          "experienceLevel": "balanced",
+          "timeline": {
+            "onsetMinMinutes": 20,
+            "onsetMaxMinutes": 45,
+            "peakMinHours": 2.5,
+            "peakMaxHours": 4,
+            "tailMinHours": 2,
+            "tailMaxHours": 3
+          },
+          "safetyTips": ["Have a trusted companion", "Plan your setting"]
+        },
+        "mega": {
+          "effectWord": "Create",
+          "effectTagline": "Deep personal exploration.",
+          "tripProfileBullets": [
+            "Pronounced emotional insight",
+            "Strong introspective pull",
+            "Spiritual resonance"
+          ],
+          "bestForTags": ["Solo reflection", "Therapeutic work"],
+          "experienceLevel": "intense",
+          "timeline": {
+            "onsetMinMinutes": 20,
+            "onsetMaxMinutes": 40,
+            "peakMinHours": 3,
+            "peakMaxHours": 5,
+            "tailMinHours": 2,
+            "tailMaxHours": 4
+          },
+          "safetyTips": ["Experienced users only", "Have a sitter", "Safe space required"]
+        },
+        "hero": {
+          "effectWord": "Create",
+          "effectTagline": "Profound ego-dissolving wisdom.",
+          "tripProfileBullets": [
+            "Ego dissolution likely",
+            "Deep spiritual openness",
+            "Inner wisdom and guidance"
+          ],
+          "bestForTags": ["Spiritual ceremony", "Deep healing"],
+          "experienceLevel": "intense",
+          "timeline": {
+            "onsetMinMinutes": 15,
+            "onsetMaxMinutes": 35,
+            "peakMinHours": 4,
+            "peakMaxHours": 6,
+            "tailMinHours": 3,
+            "tailMaxHours": 5
+          },
+          "safetyTips": ["Experienced users only", "Trusted sitter required", "Controlled environment"]
+        }
       }
     },
 
@@ -84,6 +204,126 @@
         "museum": ["Hercules PE 2-pack"],
         "mega": ["Hercules PE 4-pack"],
         "hero": ["Hercules PE 5-pack"]
+      },
+      "experienceMeta": {
+        "micro": {
+          "effectWord": "Transform",
+          "effectTagline": "Grounded focus with body awareness.",
+          "tripProfileBullets": [
+            "Deep mental clarity",
+            "Subtle somatic presence",
+            "Enhanced concentration"
+          ],
+          "bestForTags": ["Deep work", "Body awareness"],
+          "experienceLevel": "gentle",
+          "timeline": {
+            "onsetMinMinutes": 30,
+            "onsetMaxMinutes": 60,
+            "peakMinHours": 1.5,
+            "peakMaxHours": 2.5,
+            "tailMinHours": 1,
+            "tailMaxHours": 2
+          }
+        },
+        "mini": {
+          "effectWord": "Transform",
+          "effectTagline": "Quiet depth and emotional clarity.",
+          "tripProfileBullets": [
+            "Calm introspective mood",
+            "Emotional depth emerges",
+            "Good for journaling"
+          ],
+          "bestForTags": ["Journaling", "Quiet reflection"],
+          "experienceLevel": "gentle",
+          "timeline": {
+            "onsetMinMinutes": 25,
+            "onsetMaxMinutes": 50,
+            "peakMinHours": 2,
+            "peakMaxHours": 3,
+            "tailMinHours": 1.5,
+            "tailMaxHours": 2.5
+          }
+        },
+        "macro": {
+          "effectWord": "Transform",
+          "effectTagline": "Deep body-mind exploration.",
+          "tripProfileBullets": [
+            "Strong body sensations",
+            "Inward-facing reflection",
+            "Emotional material surfaces"
+          ],
+          "bestForTags": ["Inner work", "Solo journey"],
+          "experienceLevel": "balanced",
+          "timeline": {
+            "onsetMinMinutes": 25,
+            "onsetMaxMinutes": 50,
+            "peakMinHours": 2.5,
+            "peakMaxHours": 4,
+            "tailMinHours": 2,
+            "tailMaxHours": 3
+          },
+          "safetyTips": ["No driving", "Private, safe space"]
+        },
+        "museum": {
+          "effectWord": "Transform",
+          "effectTagline": "Profound insight and catharsis.",
+          "tripProfileBullets": [
+            "Rich sensory detail",
+            "Emotional catharsis possible",
+            "Deep meaning-making"
+          ],
+          "bestForTags": ["Therapeutic work", "Emotional healing"],
+          "experienceLevel": "intense",
+          "timeline": {
+            "onsetMinMinutes": 20,
+            "onsetMaxMinutes": 45,
+            "peakMinHours": 3,
+            "peakMaxHours": 5,
+            "tailMinHours": 2.5,
+            "tailMaxHours": 4
+          },
+          "safetyTips": ["Have a sitter", "Quiet, controlled setting"]
+        },
+        "mega": {
+          "effectWord": "Transform",
+          "effectTagline": "Heavy inner work and revelation.",
+          "tripProfileBullets": [
+            "Intense introspection",
+            "Profound realizations",
+            "Strong emotional processing"
+          ],
+          "bestForTags": ["Deep healing", "Spiritual work"],
+          "experienceLevel": "intense",
+          "timeline": {
+            "onsetMinMinutes": 20,
+            "onsetMaxMinutes": 40,
+            "peakMinHours": 4,
+            "peakMaxHours": 6,
+            "tailMinHours": 3,
+            "tailMaxHours": 5
+          },
+          "safetyTips": ["Experienced only", "Sitter required", "Safe environment"]
+        },
+        "hero": {
+          "effectWord": "Transform",
+          "effectTagline": "Complete surrender and rebirth.",
+          "tripProfileBullets": [
+            "Ego dissolution expected",
+            "Intense spiritual territory",
+            "Full surrender journey"
+          ],
+          "bestForTags": ["Ceremony", "Advanced practitioners"],
+          "experienceLevel": "intense",
+          "timeline": {
+            "onsetMinMinutes": 15,
+            "onsetMaxMinutes": 35,
+            "peakMinHours": 5,
+            "peakMaxHours": 8,
+            "tailMinHours": 4,
+            "tailMaxHours": 6
+          },
+          "safetyTips": ["Experienced psychonauts only", "Professional sitter", "Ceremonial setting"]
+        }
       }
     },
 
@@ -119,6 +359,126 @@
         "museum": ["Hercules AMAZ 2-pack"],
         "mega": ["Hercules AMAZ 4-pack"],
         "hero": ["Hercules AMAZ 5-pack"]
+      },
+      "experienceMeta": {
+        "micro": {
+          "effectWord": "Energize",
+          "effectTagline": "Bright clarity and physical vitality.",
+          "tripProfileBullets": [
+            "Crisp mental uplift",
+            "Good for physical activity",
+            "Motivating energy"
+          ],
+          "bestForTags": ["Active days", "Workouts"],
+          "experienceLevel": "gentle",
+          "timeline": {
+            "onsetMinMinutes": 25,
+            "onsetMaxMinutes": 50,
+            "peakMinHours": 1.5,
+            "peakMaxHours": 2.5,
+            "tailMinHours": 1,
+            "tailMaxHours": 2
+          }
+        },
+        "mini": {
+          "effectWord": "Energize",
+          "effectTagline": "Social spark with vibrant colors.",
+          "tripProfileBullets": [
+            "Euphoric social boost",
+            "Enhanced color perception",
+            "Easy-going mood"
+          ],
+          "bestForTags": ["Social gatherings", "Creative hangouts"],
+          "experienceLevel": "gentle",
+          "timeline": {
+            "onsetMinMinutes": 20,
+            "onsetMaxMinutes": 45,
+            "peakMinHours": 2,
+            "peakMaxHours": 3,
+            "tailMinHours": 1.5,
+            "tailMaxHours": 2.5
+          }
+        },
+        "macro": {
+          "effectWord": "Energize",
+          "effectTagline": "Bold exploration with clear visuals.",
+          "tripProfileBullets": [
+            "Clear, defined visuals",
+            "Energized emotional state",
+            "Adventure-ready mood"
+          ],
+          "bestForTags": ["Nature walks", "Outdoor exploration"],
+          "experienceLevel": "balanced",
+          "timeline": {
+            "onsetMinMinutes": 20,
+            "onsetMaxMinutes": 45,
+            "peakMinHours": 2.5,
+            "peakMaxHours": 4,
+            "tailMinHours": 2,
+            "tailMaxHours": 3
+          },
+          "safetyTips": ["No driving", "Familiar outdoor setting"]
+        },
+        "museum": {
+          "effectWord": "Energize",
+          "effectTagline": "Vibrant adventure and wonder.",
+          "tripProfileBullets": [
+            "Vibrant visual display",
+            "Sense of exploration",
+            "Expansive awareness"
+          ],
+          "bestForTags": ["Adventure trips", "Nature immersion"],
+          "experienceLevel": "balanced",
+          "timeline": {
+            "onsetMinMinutes": 20,
+            "onsetMaxMinutes": 40,
+            "peakMinHours": 3,
+            "peakMaxHours": 5,
+            "tailMinHours": 2.5,
+            "tailMaxHours": 4
+          },
+          "safetyTips": ["Trusted companion", "Safe outdoor space"]
+        },
+        "mega": {
+          "effectWord": "Energize",
+          "effectTagline": "Powerful visuals with spiritual weight.",
+          "tripProfileBullets": [
+            "Strong visual experience",
+            "Deep emotional meaning",
+            "Spiritual undertones"
+          ],
+          "bestForTags": ["Spiritual exploration", "Deep nature connection"],
+          "experienceLevel": "intense",
+          "timeline": {
+            "onsetMinMinutes": 15,
+            "onsetMaxMinutes": 35,
+            "peakMinHours": 4,
+            "peakMaxHours": 6,
+            "tailMinHours": 3,
+            "tailMaxHours": 5
+          },
+          "safetyTips": ["Experienced users", "Have a sitter", "Safe environment"]
+        },
+        "hero": {
+          "effectWord": "Energize",
+          "effectTagline": "Cosmic voyage with mystical depth.",
+          "tripProfileBullets": [
+            "Full-spectrum mystical",
+            "Cosmic visual depth",
+            "Intense spiritual encounter"
+          ],
+          "bestForTags": ["Ceremony", "Cosmic exploration"],
+          "experienceLevel": "intense",
+          "timeline": {
+            "onsetMinMinutes": 15,
+            "onsetMaxMinutes": 30,
+            "peakMinHours": 5,
+            "peakMaxHours": 7,
+            "tailMinHours": 4,
+            "tailMaxHours": 6
+          },
+          "safetyTips": ["Advanced psychonauts only", "Sitter required", "Ceremonial space"]
+        }
       }
     },
 
@@ -145,7 +505,7 @@
         "macro": "The classic Enigma warp—soft visuals and unusual thought patterns.",
         "museum": "Expect identity-looping, dreamlike themes, and surreal insights.",
         "mega": "Vivid distortions, emotional depth, and nonlinear time.",
-        "hero": "A transcendent, multidimensional experience—very ‘Inception’ in tone."
+        "hero": "A transcendent, multidimensional experience—very 'Inception' in tone."
       },
       "products": {
         "micro": ["Pandora Enigma 200mg"],
@@ -154,6 +514,126 @@
         "museum": ["Hercules Enigma 2-pack"],
         "mega": ["Hercules Enigma 4-pack"],
         "hero": ["Hercules Enigma 5-pack"]
+      },
+      "experienceMeta": {
+        "micro": {
+          "effectWord": "Transcend",
+          "effectTagline": "Crisp focus with dreamy edges.",
+          "tripProfileBullets": [
+            "Clean mental clarity",
+            "Slight dreamy undertone",
+            "Creative spark"
+          ],
+          "bestForTags": ["Creative tasks", "Light reflection"],
+          "experienceLevel": "gentle",
+          "timeline": {
+            "onsetMinMinutes": 30,
+            "onsetMaxMinutes": 60,
+            "peakMinHours": 1.5,
+            "peakMaxHours": 2.5,
+            "tailMinHours": 1,
+            "tailMaxHours": 2
+          }
+        },
+        "mini": {
+          "effectWord": "Transcend",
+          "effectTagline": "Surreal creativity awakens.",
+          "tripProfileBullets": [
+            "Gentle perception shifts",
+            "Surreal creative mood",
+            "Light visual breathing"
+          ],
+          "bestForTags": ["Art creation", "Music sessions"],
+          "experienceLevel": "gentle",
+          "timeline": {
+            "onsetMinMinutes": 25,
+            "onsetMaxMinutes": 50,
+            "peakMinHours": 2,
+            "peakMaxHours": 3.5,
+            "tailMinHours": 1.5,
+            "tailMaxHours": 2.5
+          }
+        },
+        "macro": {
+          "effectWord": "Transcend",
+          "effectTagline": "Reality bends gently.",
+          "tripProfileBullets": [
+            "Soft visual warping",
+            "Unusual thought patterns",
+            "Dreamlike atmosphere"
+          ],
+          "bestForTags": ["Surreal exploration", "Creative immersion"],
+          "experienceLevel": "balanced",
+          "timeline": {
+            "onsetMinMinutes": 25,
+            "onsetMaxMinutes": 50,
+            "peakMinHours": 2.5,
+            "peakMaxHours": 4,
+            "tailMinHours": 2,
+            "tailMaxHours": 3.5
+          },
+          "safetyTips": ["No driving", "Comfortable indoor space"]
+        },
+        "museum": {
+          "effectWord": "Transcend",
+          "effectTagline": "Inception-like depth unfolds.",
+          "tripProfileBullets": [
+            "Identity-looping themes",
+            "Dreamlike visual layers",
+            "Surreal insights emerge"
+          ],
+          "bestForTags": ["Mind exploration", "Philosophical inquiry"],
+          "experienceLevel": "intense",
+          "timeline": {
+            "onsetMinMinutes": 20,
+            "onsetMaxMinutes": 45,
+            "peakMinHours": 3,
+            "peakMaxHours": 5,
+            "tailMinHours": 2.5,
+            "tailMaxHours": 4
+          },
+          "safetyTips": ["Have a sitter", "Private, safe space"]
+        },
+        "mega": {
+          "effectWord": "Transcend",
+          "effectTagline": "Waves of distortion and depth.",
+          "tripProfileBullets": [
+            "Vivid visual distortions",
+            "Nonlinear time perception",
+            "Profound emotional waves"
+          ],
+          "bestForTags": ["Deep inner work", "Consciousness exploration"],
+          "experienceLevel": "intense",
+          "timeline": {
+            "onsetMinMinutes": 15,
+            "onsetMaxMinutes": 40,
+            "peakMinHours": 4,
+            "peakMaxHours": 6,
+            "tailMinHours": 3,
+            "tailMaxHours": 5
+          },
+          "safetyTips": ["Experienced only", "Sitter required", "Controlled setting"]
+        },
+        "hero": {
+          "effectWord": "Transcend",
+          "effectTagline": "Multidimensional reality shift.",
+          "tripProfileBullets": [
+            "Time dilation intense",
+            "Multidimensional awareness",
+            "Transcendent consciousness"
+          ],
+          "bestForTags": ["Advanced ceremony", "Ego dissolution"],
+          "experienceLevel": "intense",
+          "timeline": {
+            "onsetMinMinutes": 15,
+            "onsetMaxMinutes": 35,
+            "peakMinHours": 5,
+            "peakMaxHours": 8,
+            "tailMinHours": 4,
+            "tailMaxHours": 6
+          },
+          "safetyTips": ["Expert psychonauts only", "Professional guidance", "Ceremonial container"]
+        }
       }
     },
 
@@ -189,6 +669,126 @@
         "museum": ["Cambodian Dried 3g"],
         "mega": ["Cambodian Dried 5g"],
         "hero": ["Cambodian Dried 10g"]
+      },
+      "experienceMeta": {
+        "micro": {
+          "effectWord": "Explore",
+          "effectTagline": "Bright, uplifting energy.",
+          "tripProfileBullets": [
+            "Clean energetic lift",
+            "Social ease enhanced",
+            "Positive mood boost"
+          ],
+          "bestForTags": ["Daytime energy", "Social settings"],
+          "experienceLevel": "gentle",
+          "timeline": {
+            "onsetMinMinutes": 25,
+            "onsetMaxMinutes": 50,
+            "peakMinHours": 1.5,
+            "peakMaxHours": 2.5,
+            "tailMinHours": 1,
+            "tailMaxHours": 2
+          }
+        },
+        "mini": {
+          "effectWord": "Explore",
+          "effectTagline": "Euphoric warmth and flow.",
+          "tripProfileBullets": [
+            "Warm euphoric glow",
+            "Creative energy flows",
+            "Perfect for adventures"
+          ],
+          "bestForTags": ["Daytime adventures", "Creative sessions"],
+          "experienceLevel": "gentle",
+          "timeline": {
+            "onsetMinMinutes": 20,
+            "onsetMaxMinutes": 45,
+            "peakMinHours": 2,
+            "peakMaxHours": 3,
+            "tailMinHours": 1.5,
+            "tailMaxHours": 2.5
+          }
+        },
+        "macro": {
+          "effectWord": "Explore",
+          "effectTagline": "Joyful clarity in motion.",
+          "tripProfileBullets": [
+            "Active, moving energy",
+            "Joyful exploration",
+            "Clear visual enhancement"
+          ],
+          "bestForTags": ["Dancing", "Hiking", "Creating"],
+          "experienceLevel": "balanced",
+          "timeline": {
+            "onsetMinMinutes": 20,
+            "onsetMaxMinutes": 45,
+            "peakMinHours": 2.5,
+            "peakMaxHours": 4,
+            "tailMinHours": 2,
+            "tailMaxHours": 3
+          },
+          "safetyTips": ["No driving", "Stay hydrated"]
+        },
+        "museum": {
+          "effectWord": "Explore",
+          "effectTagline": "High energy at depth.",
+          "tripProfileBullets": [
+            "Energy sustains at depth",
+            "Vivid visual enhancement",
+            "Euphoric undertow"
+          ],
+          "bestForTags": ["Active exploration", "Festival vibes"],
+          "experienceLevel": "balanced",
+          "timeline": {
+            "onsetMinMinutes": 20,
+            "onsetMaxMinutes": 40,
+            "peakMinHours": 3,
+            "peakMaxHours": 5,
+            "tailMinHours": 2.5,
+            "tailMaxHours": 4
+          },
+          "safetyTips": ["Trusted companions", "Pace yourself"]
+        },
+        "mega": {
+          "effectWord": "Explore",
+          "effectTagline": "Powerful euphoric surge.",
+          "tripProfileBullets": [
+            "Peak euphoria waves",
+            "Strong emotional release",
+            "Spiritual undertones emerge"
+          ],
+          "bestForTags": ["Euphoric release", "Dance ceremonies"],
+          "experienceLevel": "intense",
+          "timeline": {
+            "onsetMinMinutes": 15,
+            "onsetMaxMinutes": 35,
+            "peakMinHours": 4,
+            "peakMaxHours": 6,
+            "tailMinHours": 3,
+            "tailMaxHours": 5
+          },
+          "safetyTips": ["Experienced users", "Have a sitter", "Safe space"]
+        },
+        "hero": {
+          "effectWord": "Explore",
+          "effectTagline": "Ecstatic transcendence.",
+          "tripProfileBullets": [
+            "Blissful dissolution",
+            "Ecstatic spiritual waves",
+            "Complete surrender"
+          ],
+          "bestForTags": ["Ecstatic ceremony", "Bliss states"],
+          "experienceLevel": "intense",
+          "timeline": {
+            "onsetMinMinutes": 15,
+            "onsetMaxMinutes": 30,
+            "peakMinHours": 5,
+            "peakMaxHours": 7,
+            "tailMinHours": 4,
+            "tailMaxHours": 6
+          },
+          "safetyTips": ["Advanced practitioners only", "Sitter required", "Ceremonial container"]
+        }
       }
     },
 
@@ -224,6 +824,126 @@
         "museum": ["FMP Dried 3g"],
         "mega": ["FMP Dried 5g"],
         "hero": ["FMP Dried 10g"]
+      },
+      "experienceMeta": {
+        "micro": {
+          "effectWord": "Connect",
+          "effectTagline": "Party-ready mood boost.",
+          "tripProfileBullets": [
+            "Social enhancement",
+            "Mood elevation",
+            "Energy uplift"
+          ],
+          "bestForTags": ["Pre-party", "Social gatherings"],
+          "experienceLevel": "gentle",
+          "timeline": {
+            "onsetMinMinutes": 25,
+            "onsetMaxMinutes": 50,
+            "peakMinHours": 1.5,
+            "peakMaxHours": 2.5,
+            "tailMinHours": 1,
+            "tailMaxHours": 2
+          }
+        },
+        "mini": {
+          "effectWord": "Connect",
+          "effectTagline": "Social magic sparkles.",
+          "tripProfileBullets": [
+            "Enhanced social connection",
+            "Visual sparkle emerges",
+            "Music sounds richer"
+          ],
+          "bestForTags": ["Festivals", "Dance parties"],
+          "experienceLevel": "gentle",
+          "timeline": {
+            "onsetMinMinutes": 20,
+            "onsetMaxMinutes": 45,
+            "peakMinHours": 2,
+            "peakMaxHours": 3.5,
+            "tailMinHours": 1.5,
+            "tailMaxHours": 2.5
+          }
+        },
+        "macro": {
+          "effectWord": "Connect",
+          "effectTagline": "The celebration unfolds.",
+          "tripProfileBullets": [
+            "Dance floor ready",
+            "Music becomes transcendent",
+            "Euphoric body high"
+          ],
+          "bestForTags": ["Dance events", "Live music"],
+          "experienceLevel": "balanced",
+          "timeline": {
+            "onsetMinMinutes": 20,
+            "onsetMaxMinutes": 45,
+            "peakMinHours": 2.5,
+            "peakMaxHours": 4,
+            "tailMinHours": 2,
+            "tailMaxHours": 3
+          },
+          "safetyTips": ["Stay with friends", "Stay hydrated"]
+        },
+        "museum": {
+          "effectWord": "Connect",
+          "effectTagline": "Ecstatic visual celebration.",
+          "tripProfileBullets": [
+            "Visual fireworks",
+            "Deep social warmth",
+            "Euphoric waves roll"
+          ],
+          "bestForTags": ["Festival peaks", "Group celebrations"],
+          "experienceLevel": "balanced",
+          "timeline": {
+            "onsetMinMinutes": 20,
+            "onsetMaxMinutes": 40,
+            "peakMinHours": 3,
+            "peakMaxHours": 5,
+            "tailMinHours": 2.5,
+            "tailMaxHours": 4
+          },
+          "safetyTips": ["Trusted crew", "Know your setting"]
+        },
+        "mega": {
+          "effectWord": "Connect",
+          "effectTagline": "Full moon rises within.",
+          "tripProfileBullets": [
+            "Intense euphoric surge",
+            "Deep visual immersion",
+            "Spiritual party energy"
+          ],
+          "bestForTags": ["Peak experiences", "Transformational events"],
+          "experienceLevel": "intense",
+          "timeline": {
+            "onsetMinMinutes": 15,
+            "onsetMaxMinutes": 35,
+            "peakMinHours": 4,
+            "peakMaxHours": 6,
+            "tailMinHours": 3,
+            "tailMaxHours": 5
+          },
+          "safetyTips": ["Experienced only", "Safe setting", "Sitter nearby"]
+        },
+        "hero": {
+          "effectWord": "Connect",
+          "effectTagline": "Lunar surrender complete.",
+          "tripProfileBullets": [
+            "Complete rhythm surrender",
+            "Ecstatic dissolution",
+            "Cosmic celebration"
+          ],
+          "bestForTags": ["Sacred dance", "Transformational ceremony"],
+          "experienceLevel": "intense",
+          "timeline": {
+            "onsetMinMinutes": 15,
+            "onsetMaxMinutes": 30,
+            "peakMinHours": 5,
+            "peakMaxHours": 8,
+            "tailMinHours": 4,
+            "tailMaxHours": 6
+          },
+          "safetyTips": ["Advanced only", "Ceremonial container", "Trusted guides"]
+        }
       }
     }
   }

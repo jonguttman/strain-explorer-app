@@ -43,6 +43,7 @@ export async function GET(_request: Request, { params }: RouteParams) {
     meta: result.meta,
     snapshot: result.snapshot,
     testimonials: result.testimonialsForDose,
+    experienceMeta: result.experienceMeta,
   };
 
   return NextResponse.json(payload);

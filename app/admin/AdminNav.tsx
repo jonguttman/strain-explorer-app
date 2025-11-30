@@ -3,7 +3,7 @@
 import Link from "next/link";
 
 type AdminNavProps = {
-  active: "strains" | "access" | "feedback" | "products";
+  active: "strains" | "access" | "feedback" | "products" | "guides";
   title?: string;
   subtitle?: string;
 };
@@ -14,6 +14,7 @@ export function AdminNav({ active, title, subtitle }: AdminNavProps) {
     { href: "/admin/products", label: "Products", key: "products" as const },
     { href: "/admin/access", label: "Access Keys", key: "access" as const },
     { href: "/admin/feedback", label: "Feedback", key: "feedback" as const },
+    { href: "/admin/guides/messages", label: "Guides", key: "guides" as const },
   ];
 
   return (

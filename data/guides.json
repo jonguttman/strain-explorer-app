@@ -1,0 +1,25 @@
+{
+  "guides": [
+    {
+      "id": "guide-dani",
+      "username": "dani",
+      "passwordHash": "$2b$10$YeqN903z831qs0oYhTYnmuKlUgu64b.tZ/ns16JASYXbvGtDsq1re",
+      "name": "Dani Rodriguez",
+      "email": "dani@theoriginalpsilly.com",
+      "partnerKeyId": "dani-top",
+      "role": "guide",
+      "createdAt": "2025-01-15T00:00:00.000Z",
+      "updatedAt": "2025-01-15T00:00:00.000Z"
+    },
+    {
+      "id": "guide-admin",
+      "username": "admin",
+      "passwordHash": "$2b$10$YeqN903z831qs0oYhTYnmuKlUgu64b.tZ/ns16JASYXbvGtDsq1re",
+      "name": "Psilly Admin",
+      "email": "admin@theoriginalpsilly.com",
+      "role": "admin",
+      "createdAt": "2025-01-01T00:00:00.000Z",
+      "updatedAt": "2025-01-01T00:00:00.000Z"
+    }
+  ]
+}

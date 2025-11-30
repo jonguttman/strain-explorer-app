@@ -9,6 +9,7 @@ type StrainHeaderProps = {
   onShowFeedback: () => void;
   feedbackActive: boolean;
   welcomeLabel?: string;
+  effectWord?: string;
 };
 
 export function StrainHeader({
@@ -20,6 +21,7 @@ export function StrainHeader({
   onShowFeedback,
   feedbackActive,
   welcomeLabel,
+  effectWord,
 }: StrainHeaderProps) {
   // _accentHex kept for API compatibility but using unified cream color scheme
   return (
@@ -29,8 +31,13 @@ export function StrainHeader({
         <div className="flex flex-col justify-between min-h-[84px] flex-1">
         <div>
             <h1 className="text-3xl font-semibold tracking-tight leading-none md:text-4xl text-[#3f301f]">
-                {strainName}
-              </h1>
+              {strainName}
+              {effectWord && (
+                <span className="ml-2 font-light text-stone-400">
+                  {effectWord}
+                </span>
+              )}
+            </h1>
             {welcomeLabel && (
               <p className="mt-0.5 text-xs font-medium uppercase tracking-wide text-[#8b7a5c]">
                 Welcome back {welcomeLabel}

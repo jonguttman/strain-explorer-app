@@ -20,6 +20,7 @@ import type {
   DoseConfig,
   AccessKey,
   Product,
+  StrainExperienceMeta,
 } from "@/lib/types";
 import { getProductsForStrainAndDose } from "@/lib/productData";
 import { StrainHeader } from "./components/StrainHeader";
@@ -47,6 +48,7 @@ type StrainDosePayload = {
   meta?: StrainMeta | null;
   snapshot?: DoseSnapshot | null;
   testimonials?: string[];
+  experienceMeta?: StrainExperienceMeta | null;
 };
 
 export function StrainExplorerClient() {
@@ -204,6 +206,7 @@ export function StrainExplorerClient() {
           meta: data.meta ?? null,
           snapshot: data.snapshot ?? null,
           testimonials: data.testimonials ?? [],
+          experienceMeta: data.experienceMeta ?? null,
         };
         cacheRef.current[cacheKey] = payload;
         if (!cancelled) {
@@ -268,6 +271,7 @@ export function StrainExplorerClient() {
         onShowFeedback={() => setShowFeedbackQR(true)}
         feedbackActive={showFeedbackQR}
         welcomeLabel={welcomeLabel}
+        effectWord={doseData.experienceMeta?.effectWord}
       />
 
       <StrainScroller
@@ -302,6 +306,7 @@ export function StrainExplorerClient() {
                         traits={doseData.traits}
                         axisLabels={doseData.axisLabels}
                         doseKey={selectedDoseKey}
+                        experienceMeta={doseData.experienceMeta ?? undefined}
                       />
                     )}
                   </div>

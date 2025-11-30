@@ -1,6 +1,6 @@
 {
   "name": "strain-explorer-kiosk",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -9,7 +9,9 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@types/bcryptjs": "^2.4.6",
     "@types/qrcode": "^1.5.6",
+    "bcryptjs": "^3.0.3",
     "chart.js": "^4.5.1",
     "next": "16.0.5",
     "qrcode": "^1.5.4",
