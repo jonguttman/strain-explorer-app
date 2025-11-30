@@ -2,13 +2,18 @@ import { NextResponse } from "next/server";
 import { promises as fs } from "fs";
 import path from "path";
 import rawAccessKeys from "@/data/accessKeys.json";
-import type { AccessKeyDataset, AccessKey } from "@/lib/types";
+import type { AccessKeyDataset, AccessKey, AccessKeySettings } from "@/lib/types";
+
+const DEFAULT_SETTINGS: AccessKeySettings = {
+  requireKeyForRoot: false,
+};
 
 export async function GET() {
   const dataset = rawAccessKeys as AccessKeyDataset;
   
   return NextResponse.json({
     keys: dataset.keys,
+    settings: dataset.settings ?? DEFAULT_SETTINGS,
   });
 }
 
@@ -25,6 +30,12 @@ function isValidAccessKey(obj: unknown): obj is AccessKey {
     typeof key.updatedAt === "string" &&
     (key.notes === undefined || typeof key.notes === "string")
   );
+}
+
+function isValidSettings(obj: unknown): obj is AccessKeySettings {
+  if (typeof obj !== "object" || obj === null) return false;
+  const settings = obj as Record<string, unknown>;
+  return typeof settings.requireKeyForRoot === "boolean";
 }
 
 export async function POST(request: Request) {
@@ -57,7 +68,15 @@ export async function POST(request: Request) {
       }
     }
 
-    const dataset: AccessKeyDataset = { keys: body.keys };
+    // Validate settings if provided
+    const settings: AccessKeySettings = body.settings && isValidSettings(body.settings)
+      ? body.settings
+      : DEFAULT_SETTINGS;
+
+    const dataset: AccessKeyDataset = { 
+      keys: body.keys,
+      settings,
+    };
 
     // Write to data/accessKeys.json
     const filePath = path.join(process.cwd(), "data", "accessKeys.json");

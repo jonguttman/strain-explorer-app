@@ -144,7 +144,7 @@ export default async function ProductPage({
               )}
             </div>
 
-            {/* Strain + dose info */}
+            {/* Strain + dose level info */}
             {strainDoseLabel && (
               <div className="mt-4 flex items-center gap-2">
                 {strain && (
@@ -156,6 +156,18 @@ export default async function ProductPage({
                 <span className="text-sm font-medium text-[#4c3926]">
                   {strainDoseLabel}
                 </span>
+              </div>
+            )}
+
+            {/* Mushroom amount per unit */}
+            {product.mushroomAmountPerUnit && (
+              <div className="mt-3 rounded-lg bg-[#fdfbf7] px-3 py-2 border border-[#e2d3b5]">
+                <span className="text-xs font-semibold uppercase tracking-wide text-[#8b7a5c]">
+                  Dose per unit
+                </span>
+                <p className="text-sm font-medium text-[#3c291b]">
+                  {product.mushroomAmountPerUnit}
+                </p>
               </div>
             )}
 

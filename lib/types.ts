@@ -112,8 +112,13 @@ export type AccessKey = {
   updatedAt: string;    // ISO timestamp
 };
 
+export type AccessKeySettings = {
+  requireKeyForRoot: boolean;
+};
+
 export type AccessKeyDataset = {
   keys: AccessKey[];
+  settings?: AccessKeySettings;
 };
 
 // Feedback entry types
@@ -159,7 +164,15 @@ export type Product = {
   name: string;                    // e.g. "Psilly Mighty Caps – Golden Teacher"
   brand: string;                   // e.g. "The Original Psilly"
   strainId?: string;               // strain slug, e.g. "golden-teacher"
-  doseKey?: DoseKey;               // optional: micro/mini/macro/museum/mega/hero
+  doseKey?: DoseKey;               // optional: micro/mini/macro/museum/mega/hero (dose level for kiosk mapping)
+  /**
+   * How much mushroom is in ONE unit of this product.
+   * Free-form text so we can store things like:
+   * - "200 mg per capsule"
+   * - "0.75 g per tea bag"
+   * - "1 g per packet"
+   */
+  mushroomAmountPerUnit?: string;
   shortDescription?: string;
   imageUrl?: string;               // path under /public, e.g. "/products/mighty-caps-gt.png"
   tags?: string[];

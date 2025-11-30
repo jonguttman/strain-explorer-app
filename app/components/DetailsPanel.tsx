@@ -320,6 +320,12 @@ function ProductCard({
             )}
           </div>
 
+          {product.mushroomAmountPerUnit && (
+            <p className="mt-1 text-[11px] font-medium text-[#6b5841]">
+              Dose: {product.mushroomAmountPerUnit}
+            </p>
+          )}
+
           {product.shortDescription && (
             <p className="mt-1 line-clamp-2 text-xs leading-relaxed text-[#4c3926]">
               {product.shortDescription}

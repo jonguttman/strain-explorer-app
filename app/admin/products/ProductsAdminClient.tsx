@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, Fragment, useRef } from "react";
 import type { Product, ProductStatus, DoseKey } from "@/lib/types";
 
 type ProductsAdminClientProps = {
@@ -16,6 +16,10 @@ export function ProductsAdminClient({ initialProducts }: ProductsAdminClientProp
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
   const [statusFilter, setStatusFilter] = useState<"all" | ProductStatus>("all");
+  const [expandedId, setExpandedId] = useState<string | null>(null);
+  const [uploadingId, setUploadingId] = useState<string | null>(null);
+  const [uploadError, setUploadError] = useState<string | null>(null);
+  const fileInputRefs = useRef<Record<string, HTMLInputElement | null>>({});
 
   const filteredProducts =
     statusFilter === "all"
@@ -30,6 +34,7 @@ export function ProductsAdminClient({ initialProducts }: ProductsAdminClientProp
       status: "active",
     };
     setProducts([...products, newProduct]);
+    setExpandedId(newProduct.id); // Auto-expand new product
     setSuccess(null);
     setError(null);
   };
@@ -52,6 +57,7 @@ export function ProductsAdminClient({ initialProducts }: ProductsAdminClientProp
   const handleDeleteProduct = (id: string) => {
     if (!confirm("Are you sure you want to delete this product?")) return;
     setProducts((prev) => prev.filter((p) => p.id !== id));
+    if (expandedId === id) setExpandedId(null);
     setSuccess(null);
     setError(null);
   };
@@ -89,23 +95,53 @@ export function ProductsAdminClient({ initialProducts }: ProductsAdminClientProp
     }
   };
 
+  const toggleExpand = (id: string) => {
+    setExpandedId(expandedId === id ? null : id);
+  };
+
+  const handleImageUpload = async (productId: string, file: File) => {
+    setUploadingId(productId);
+    setUploadError(null);
+
+    try {
+      const formData = new FormData();
+      formData.append("file", file);
+      formData.append("productId", productId);
+
+      const res = await fetch("/api/admin/product-image", {
+        method: "POST",
+        body: formData,
+      });
+
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        throw new Error(data.error || `Upload failed: ${res.status}`);
+      }
+
+      const data = await res.json();
+      
+      // Update the product's imageUrl in local state
+      handleUpdateProduct(productId, "imageUrl", data.url);
+    } catch (err) {
+      setUploadError(err instanceof Error ? err.message : "Upload failed");
+    } finally {
+      setUploadingId(null);
+      // Clear the file input so the same file can be selected again if needed
+      if (fileInputRefs.current[productId]) {
+        fileInputRefs.current[productId]!.value = "";
+      }
+    }
+  };
+
   return (
     <div className="space-y-4">
-      {/* Top actions */}
-      <div className="flex flex-wrap items-center justify-between gap-4">
-        <div className="flex items-center gap-2">
-          <label className="text-sm text-slate-600">Filter:</label>
-          <select
-            value={statusFilter}
-            onChange={(e) =>
-              setStatusFilter(e.target.value as "all" | ProductStatus)
-            }
-            className="rounded-md border border-slate-300 bg-white px-3 py-1.5 text-sm text-slate-700"
-          >
-            <option value="all">All</option>
-            <option value="active">Active</option>
-            <option value="inactive">Inactive</option>
-          </select>
+      {/* Page header */}
+      <div className="flex flex-wrap items-start justify-between gap-4">
+        <div>
+          <h1 className="text-lg font-semibold text-slate-900">Products</h1>
+          <p className="text-sm text-slate-500">
+            Manage product catalog entries that appear on the Strain Explorer details screen.
+          </p>
         </div>
         <button
           onClick={handleAddProduct}
@@ -113,6 +149,22 @@ export function ProductsAdminClient({ initialProducts }: ProductsAdminClientProp
         >
           + Add Product
         </button>
+      </div>
+
+      {/* Filter row */}
+      <div className="flex items-center gap-2">
+        <label className="text-sm text-slate-600">Filter:</label>
+        <select
+          value={statusFilter}
+          onChange={(e) =>
+            setStatusFilter(e.target.value as "all" | ProductStatus)
+          }
+          className="rounded-md border border-slate-300 bg-white px-3 py-1.5 text-sm text-slate-700"
+        >
+          <option value="all">All</option>
+          <option value="active">Active</option>
+          <option value="inactive">Inactive</option>
+        </select>
       </div>
 
       {/* Status messages */}
@@ -128,36 +180,30 @@ export function ProductsAdminClient({ initialProducts }: ProductsAdminClientProp
       )}
 
       {/* Products table */}
-      <div className="overflow-x-auto rounded-lg border border-slate-200 bg-white">
-        <table className="min-w-full divide-y divide-slate-200">
+      <div className="overflow-x-auto rounded-xl border border-slate-200 bg-white shadow-sm">
+        <table className="w-full table-fixed divide-y divide-slate-200">
           <thead className="bg-slate-50">
             <tr>
-              <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-600">
+              <th className="w-[140px] px-3 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-600">
                 ID
               </th>
-              <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-600">
+              <th className="w-[180px] px-3 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-600">
                 Name
               </th>
-              <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-600">
+              <th className="w-[130px] px-3 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-600">
                 Brand
               </th>
-              <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-600">
+              <th className="w-[120px] px-3 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-600">
                 Strain
               </th>
-              <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-600">
-                Dose
-              </th>
-              <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-600">
+              <th className="w-[90px] px-3 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-600">
                 Status
               </th>
-              <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-600">
-                House Pick
+              <th className="w-[70px] px-3 py-3 text-center text-xs font-semibold uppercase tracking-wider text-slate-600">
+                Pick
               </th>
-              <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-600">
-                Image URL
-              </th>
-              <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-600">
-                Actions
+              <th className="w-[50px] px-3 py-3 text-center text-xs font-semibold uppercase tracking-wider text-slate-600">
+                More
               </th>
             </tr>
           </thead>
@@ -165,137 +211,322 @@ export function ProductsAdminClient({ initialProducts }: ProductsAdminClientProp
             {filteredProducts.length === 0 ? (
               <tr>
                 <td
-                  colSpan={9}
+                  colSpan={7}
                   className="px-4 py-8 text-center text-sm text-slate-500"
                 >
                   No products found. Click &quot;+ Add Product&quot; to create one.
                 </td>
               </tr>
             ) : (
-              filteredProducts.map((product) => (
-                <tr key={product.id} className="hover:bg-slate-50">
-                  <td className="whitespace-nowrap px-4 py-3">
-                    <code className="text-xs text-slate-600">{product.id}</code>
-                  </td>
-                  <td className="px-4 py-3">
-                    <input
-                      type="text"
-                      value={product.name}
-                      onChange={(e) =>
-                        handleUpdateProduct(product.id, "name", e.target.value)
-                      }
-                      placeholder="Product name"
-                      className="w-full min-w-[180px] rounded border border-slate-300 px-2 py-1 text-sm focus:border-slate-500 focus:outline-none"
-                    />
-                  </td>
-                  <td className="px-4 py-3">
-                    <input
-                      type="text"
-                      value={product.brand ?? ""}
-                      onChange={(e) =>
-                        handleUpdateProduct(product.id, "brand", e.target.value)
-                      }
-                      placeholder="Brand"
-                      className="w-full min-w-[140px] rounded border border-slate-300 px-2 py-1 text-sm focus:border-slate-500 focus:outline-none"
-                    />
-                  </td>
-                  <td className="px-4 py-3">
-                    <input
-                      type="text"
-                      value={product.strainId ?? ""}
-                      onChange={(e) =>
-                        handleUpdateProduct(
-                          product.id,
-                          "strainId",
-                          e.target.value
-                        )
-                      }
-                      placeholder="e.g. golden-teacher"
-                      className="w-full min-w-[120px] rounded border border-slate-300 px-2 py-1 text-sm focus:border-slate-500 focus:outline-none"
-                    />
-                  </td>
-                  <td className="px-4 py-3">
-                    <select
-                      value={product.doseKey ?? ""}
-                      onChange={(e) =>
-                        handleUpdateProduct(
-                          product.id,
-                          "doseKey",
-                          e.target.value || undefined
-                        )
-                      }
-                      className="w-full min-w-[90px] rounded border border-slate-300 bg-white px-2 py-1 text-sm focus:border-slate-500 focus:outline-none"
-                    >
-                      <option value="">—</option>
-                      {DOSE_KEYS.map((dk) => (
-                        <option key={dk} value={dk}>
-                          {dk}
-                        </option>
-                      ))}
-                    </select>
-                  </td>
-                  <td className="px-4 py-3">
-                    <select
-                      value={product.status}
-                      onChange={(e) =>
-                        handleUpdateProduct(
-                          product.id,
-                          "status",
-                          e.target.value as ProductStatus
-                        )
-                      }
-                      className={`w-full min-w-[90px] rounded border px-2 py-1 text-sm focus:border-slate-500 focus:outline-none ${
-                        product.status === "active"
-                          ? "border-green-300 bg-green-50 text-green-700"
-                          : "border-slate-300 bg-slate-50 text-slate-600"
-                      }`}
-                    >
-                      {STATUS_OPTIONS.map((s) => (
-                        <option key={s} value={s}>
-                          {s}
-                        </option>
-                      ))}
-                    </select>
-                  </td>
-                  <td className="px-4 py-3 text-center">
-                    <input
-                      type="checkbox"
-                      checked={product.isHousePick ?? false}
-                      onChange={(e) =>
-                        handleUpdateProduct(
-                          product.id,
-                          "isHousePick",
-                          e.target.checked
-                        )
-                      }
-                      className="h-4 w-4 rounded border-slate-300 text-slate-900 focus:ring-slate-500"
-                    />
-                  </td>
-                  <td className="px-4 py-3">
-                    <input
-                      type="text"
-                      value={product.imageUrl ?? ""}
-                      onChange={(e) =>
-                        handleUpdateProduct(
-                          product.id,
-                          "imageUrl",
-                          e.target.value
-                        )
-                      }
-                      placeholder="/products/..."
-                      className="w-full min-w-[160px] rounded border border-slate-300 px-2 py-1 text-sm focus:border-slate-500 focus:outline-none"
-                    />
-                  </td>
-                  <td className="px-4 py-3">
-                    <button
-                      onClick={() => handleDeleteProduct(product.id)}
-                      className="text-sm text-red-600 hover:text-red-800"
-                    >
-                      Delete
-                    </button>
-                  </td>
-                </tr>
-              ))
+              filteredProducts.map((product) => {
+                const isExpanded = expandedId === product.id;
+                return (
+                  <Fragment key={product.id}>
+                    {/* Summary row */}
+                    <tr className={`hover:bg-slate-50 ${isExpanded ? "bg-slate-50" : ""}`}>
+                      <td className="px-3 py-2">
+                        <code className="block truncate text-xs text-slate-600" title={product.id}>
+                          {product.id}
+                        </code>
+                      </td>
+                      <td className="px-3 py-2">
+                        <input
+                          type="text"
+                          value={product.name}
+                          onChange={(e) =>
+                            handleUpdateProduct(product.id, "name", e.target.value)
+                          }
+                          placeholder="Product name"
+                          className="w-full rounded border border-slate-300 px-2 py-1 text-sm focus:border-slate-500 focus:outline-none"
+                        />
+                      </td>
+                      <td className="px-3 py-2">
+                        <input
+                          type="text"
+                          value={product.brand ?? ""}
+                          onChange={(e) =>
+                            handleUpdateProduct(product.id, "brand", e.target.value)
+                          }
+                          placeholder="Brand"
+                          className="w-full rounded border border-slate-300 px-2 py-1 text-sm focus:border-slate-500 focus:outline-none"
+                        />
+                      </td>
+                      <td className="px-3 py-2">
+                        <input
+                          type="text"
+                          value={product.strainId ?? ""}
+                          onChange={(e) =>
+                            handleUpdateProduct(product.id, "strainId", e.target.value)
+                          }
+                          placeholder="e.g. golden-teacher"
+                          className="w-full rounded border border-slate-300 px-2 py-1 text-sm focus:border-slate-500 focus:outline-none"
+                        />
+                      </td>
+                      <td className="px-3 py-2">
+                        <select
+                          value={product.status}
+                          onChange={(e) =>
+                            handleUpdateProduct(
+                              product.id,
+                              "status",
+                              e.target.value as ProductStatus
+                            )
+                          }
+                          className={`w-full rounded border px-2 py-1 text-xs focus:border-slate-500 focus:outline-none ${
+                            product.status === "active"
+                              ? "border-green-300 bg-green-50 text-green-700"
+                              : "border-slate-300 bg-slate-50 text-slate-600"
+                          }`}
+                        >
+                          {STATUS_OPTIONS.map((s) => (
+                            <option key={s} value={s}>
+                              {s}
+                            </option>
+                          ))}
+                        </select>
+                      </td>
+                      <td className="px-3 py-2 text-center">
+                        <input
+                          type="checkbox"
+                          checked={product.isHousePick ?? false}
+                          onChange={(e) =>
+                            handleUpdateProduct(
+                              product.id,
+                              "isHousePick",
+                              e.target.checked
+                            )
+                          }
+                          className="h-4 w-4 rounded border-slate-300 text-slate-900 focus:ring-slate-500"
+                        />
+                      </td>
+                      <td className="px-3 py-2 text-center">
+                        <button
+                          type="button"
+                          onClick={() => toggleExpand(product.id)}
+                          aria-expanded={isExpanded}
+                          className="rounded p-1 text-slate-500 hover:bg-slate-100 hover:text-slate-700"
+                        >
+                          <svg
+                            className={`h-4 w-4 transition-transform ${isExpanded ? "rotate-180" : ""}`}
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M19 9l-7 7-7-7"
+                            />
+                          </svg>
+                        </button>
+                      </td>
+                    </tr>
+
+                    {/* Details row (expandable) */}
+                    {isExpanded && (
+                      <tr className="bg-slate-50">
+                        <td colSpan={7} className="px-3 pb-4 pt-0">
+                          <div className="mt-2 rounded-lg border border-slate-200 bg-white p-4">
+                            <div className="grid gap-4 md:grid-cols-2">
+                              {/* Left column */}
+                              <div className="space-y-3">
+                                <div>
+                                  <label className="mb-1 block text-xs font-medium text-slate-600">
+                                    Dose Level
+                                  </label>
+                                  <select
+                                    value={product.doseKey ?? ""}
+                                    onChange={(e) =>
+                                      handleUpdateProduct(
+                                        product.id,
+                                        "doseKey",
+                                        e.target.value || undefined
+                                      )
+                                    }
+                                    className="w-full rounded border border-slate-300 bg-white px-2 py-1.5 text-sm focus:border-slate-500 focus:outline-none"
+                                  >
+                                    <option value="">— Select level —</option>
+                                    {DOSE_KEYS.map((dk) => (
+                                      <option key={dk} value={dk}>
+                                        {dk}
+                                      </option>
+                                    ))}
+                                  </select>
+                                </div>
+
+                                <div>
+                                  <label className="mb-1 block text-xs font-medium text-slate-600">
+                                    Mushroom per Unit
+                                  </label>
+                                  <input
+                                    type="text"
+                                    value={product.mushroomAmountPerUnit ?? ""}
+                                    onChange={(e) =>
+                                      handleUpdateProduct(
+                                        product.id,
+                                        "mushroomAmountPerUnit",
+                                        e.target.value
+                                      )
+                                    }
+                                    placeholder="e.g. 200 mg per cap"
+                                    className="w-full rounded border border-slate-300 px-2 py-1.5 text-sm focus:border-slate-500 focus:outline-none"
+                                  />
+                                </div>
+
+                                <div>
+                                  <label className="mb-1 block text-xs font-medium text-slate-600">
+                                    Product Image
+                                  </label>
+                                  <div className="flex items-start gap-3">
+                                    {/* Thumbnail preview */}
+                                    <div className="flex-shrink-0">
+                                      {product.imageUrl ? (
+                                        <div className="relative">
+                                          {/* eslint-disable-next-line @next/next/no-img-element */}
+                                          <img
+                                            src={product.imageUrl}
+                                            alt={product.name || "Product"}
+                                            className="h-16 w-16 rounded border border-slate-200 object-cover"
+                                            onError={(e) => {
+                                              e.currentTarget.style.display = "none";
+                                              e.currentTarget.nextElementSibling?.classList.remove("hidden");
+                                            }}
+                                          />
+                                          <div className="hidden h-16 w-16 items-center justify-center rounded border border-dashed border-slate-300 bg-slate-50 text-xs text-slate-400">
+                                            Error
+                                          </div>
+                                        </div>
+                                      ) : (
+                                        <div className="flex h-16 w-16 items-center justify-center rounded border border-dashed border-slate-300 bg-slate-50">
+                                          <svg className="h-6 w-6 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                          </svg>
+                                        </div>
+                                      )}
+                                    </div>
+
+                                    {/* Upload controls */}
+                                    <div className="flex-1 space-y-2">
+                                      <div className="flex items-center gap-2">
+                                        <input
+                                          ref={(el) => { fileInputRefs.current[product.id] = el; }}
+                                          type="file"
+                                          accept="image/png,image/jpeg"
+                                          onChange={(e) => {
+                                            const file = e.target.files?.[0];
+                                            if (file) handleImageUpload(product.id, file);
+                                          }}
+                                          className="hidden"
+                                          id={`image-upload-${product.id}`}
+                                        />
+                                        <label
+                                          htmlFor={`image-upload-${product.id}`}
+                                          className={`cursor-pointer rounded border border-slate-300 bg-white px-3 py-1.5 text-xs font-medium text-slate-700 transition hover:bg-slate-50 ${
+                                            uploadingId === product.id ? "pointer-events-none opacity-50" : ""
+                                          }`}
+                                        >
+                                          {uploadingId === product.id ? "Uploading…" : "Upload Image"}
+                                        </label>
+                                        {uploadError && uploadingId === null && expandedId === product.id && (
+                                          <span className="text-xs text-red-600">{uploadError}</span>
+                                        )}
+                                      </div>
+                                      <input
+                                        type="text"
+                                        value={product.imageUrl ?? ""}
+                                        onChange={(e) =>
+                                          handleUpdateProduct(
+                                            product.id,
+                                            "imageUrl",
+                                            e.target.value
+                                          )
+                                        }
+                                        placeholder="/products/my-product.png"
+                                        className="w-full rounded border border-slate-300 px-2 py-1 text-xs text-slate-600 focus:border-slate-500 focus:outline-none"
+                                      />
+                                    </div>
+                                  </div>
+                                </div>
+
+                                <div>
+                                  <label className="mb-1 block text-xs font-medium text-slate-600">
+                                    Short Description
+                                  </label>
+                                  <textarea
+                                    value={product.shortDescription ?? ""}
+                                    onChange={(e) =>
+                                      handleUpdateProduct(
+                                        product.id,
+                                        "shortDescription",
+                                        e.target.value
+                                      )
+                                    }
+                                    placeholder="Brief product description..."
+                                    rows={2}
+                                    className="w-full rounded border border-slate-300 px-2 py-1.5 text-sm focus:border-slate-500 focus:outline-none"
+                                  />
+                                </div>
+                              </div>
+
+                              {/* Right column */}
+                              <div className="space-y-3">
+                                <div>
+                                  <label className="mb-1 block text-xs font-medium text-slate-600">
+                                    External URL
+                                  </label>
+                                  <input
+                                    type="text"
+                                    value={product.externalUrl ?? ""}
+                                    onChange={(e) =>
+                                      handleUpdateProduct(
+                                        product.id,
+                                        "externalUrl",
+                                        e.target.value
+                                      )
+                                    }
+                                    placeholder="https://..."
+                                    className="w-full rounded border border-slate-300 px-2 py-1.5 text-sm focus:border-slate-500 focus:outline-none"
+                                  />
+                                </div>
+
+                                <div>
+                                  <label className="mb-1 block text-xs font-medium text-slate-600">
+                                    Notes
+                                  </label>
+                                  <textarea
+                                    value={product.notes ?? ""}
+                                    onChange={(e) =>
+                                      handleUpdateProduct(
+                                        product.id,
+                                        "notes",
+                                        e.target.value
+                                      )
+                                    }
+                                    placeholder="Internal notes..."
+                                    rows={2}
+                                    className="w-full rounded border border-slate-300 px-2 py-1.5 text-sm focus:border-slate-500 focus:outline-none"
+                                  />
+                                </div>
+
+                                {/* Delete button */}
+                                <div className="pt-2">
+                                  <button
+                                    onClick={() => handleDeleteProduct(product.id)}
+                                    className="rounded border border-red-200 bg-red-50 px-3 py-1.5 text-xs font-medium text-red-600 transition hover:bg-red-100"
+                                  >
+                                    Delete Product
+                                  </button>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </td>
+                      </tr>
+                    )}
+                  </Fragment>
+                );
+              })
             )}
           </tbody>
         </table>
@@ -314,4 +545,3 @@ export function ProductsAdminClient({ initialProducts }: ProductsAdminClientProp
     </div>
   );
 }
-

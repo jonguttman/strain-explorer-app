@@ -1,8 +1,12 @@
 import { AdminNav } from "../AdminNav";
 import { promises as fs } from "fs";
 import path from "path";
-import type { AccessKeyDataset } from "@/lib/types";
+import type { AccessKeyDataset, AccessKeySettings } from "@/lib/types";
 import { AccessAdminClient } from "./AccessAdminClient";
+
+const DEFAULT_SETTINGS: AccessKeySettings = {
+  requireKeyForRoot: false,
+};
 
 async function loadAccessKeys(): Promise<AccessKeyDataset> {
   const filePath = path.join(process.cwd(), "data", "accessKeys.json");
@@ -10,17 +14,20 @@ async function loadAccessKeys(): Promise<AccessKeyDataset> {
     const raw = await fs.readFile(filePath, "utf8");
     const parsed = JSON.parse(raw) as AccessKeyDataset;
     if (!parsed || !Array.isArray(parsed.keys)) {
-      return { keys: [] };
+      return { keys: [], settings: DEFAULT_SETTINGS };
     }
-    return parsed;
+    return {
+      keys: parsed.keys,
+      settings: parsed.settings ?? DEFAULT_SETTINGS,
+    };
   } catch {
     // If the file is missing or invalid, fall back to empty
-    return { keys: [] };
+    return { keys: [], settings: DEFAULT_SETTINGS };
   }
 }
 
 export default async function AccessAdminPage() {
-  const { keys } = await loadAccessKeys();
+  const { keys, settings } = await loadAccessKeys();
 
   return (
     <div className="min-h-screen bg-slate-50">
@@ -70,7 +77,7 @@ export default async function AccessAdminPage() {
           </div>
         </div>
 
-        <AccessAdminClient initialKeys={keys} />
+        <AccessAdminClient initialKeys={keys} initialSettings={settings ?? DEFAULT_SETTINGS} />
       </div>
     </div>
   );

@@ -5,10 +5,14 @@
       "name": "Psilly Mighty Caps – Golden Teacher",
       "brand": "The Original Psilly",
       "strainId": "golden-teacher",
-      "doseKey": "mini",
+      "doseKey": "macro",
       "shortDescription": "Gentle Golden Teacher microcapsule for color, clarity, and creative focus.",
-      "imageUrl": "/products/mighty-caps-gt.png",
-      "tags": ["capsules", "microdose", "golden-teacher"],
+      "imageUrl": "/products/psilly-mighty-caps-gt-1764490702917.png",
+      "tags": [
+        "capsules",
+        "microdose",
+        "golden-teacher"
+      ],
       "status": "active",
       "isHousePick": true,
       "whereToBuy": [
@@ -17,7 +21,8 @@
           "url": "https://theotherpathcbd.com",
           "notes": "Ask for The Original Psilly display in the front room."
         }
-      ]
+      ],
+      "mushroomAmountPerUnit": "1g"
     },
     {
       "id": "psilly-hercules-enigma-1g",
@@ -27,7 +32,11 @@
       "doseKey": "hero",
       "shortDescription": "Single 1 g Enigma hero-dose capsule for deep, transcendent journeys.",
       "imageUrl": "/products/hercules-enigma-1g.png",
-      "tags": ["capsules", "hero-dose", "enigma"],
+      "tags": [
+        "capsules",
+        "hero-dose",
+        "enigma"
+      ],
       "status": "active",
       "isHousePick": true,
       "whereToBuy": [
@@ -44,7 +53,11 @@
       "strainId": "golden-teacher",
       "shortDescription": "Golden Teacher–infused honey sticks for warm, sociable micro moments.",
       "imageUrl": "/products/psilly-stix-gt.png",
-      "tags": ["honey", "edible", "golden-teacher"],
+      "tags": [
+        "honey",
+        "edible",
+        "golden-teacher"
+      ],
       "status": "active",
       "whereToBuy": [
         {
@@ -54,4 +67,3 @@
     }
   ]
 }
-

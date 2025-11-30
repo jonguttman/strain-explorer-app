@@ -19,19 +19,13 @@ export default async function ProductsAdminPage() {
   const products = await loadProducts();
 
   return (
-    <div className="min-h-screen bg-slate-50">
-      <AdminNav active="products" />
-      <main className="mx-auto max-w-7xl px-4 py-8">
-        <div className="mb-6 flex items-center justify-between">
-          <div>
-            <h1 className="text-lg font-semibold text-slate-900">Products</h1>
-            <p className="text-sm text-slate-500">
-              Manage Psilly and partner products shown in the kiosk.
-            </p>
-          </div>
-        </div>
-        <ProductsAdminClient initialProducts={products} />
-      </main>
+    <div className="flex flex-col h-screen bg-slate-50">
+      <AdminNav active="products" title="Products Admin" />
+      <div className="flex-1 min-h-0 overflow-y-auto">
+        <main className="mx-auto max-w-7xl px-6 py-6">
+          <ProductsAdminClient initialProducts={products} />
+        </main>
+      </div>
     </div>
   );
 }
