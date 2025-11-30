@@ -190,7 +190,7 @@ export type Product = {
   id: string;                      // e.g. "psilly-mighty-caps-gt"
   name: string;                    // e.g. "Psilly Mighty Caps – Golden Teacher"
   brand: string;                   // e.g. "The Original Psilly"
-  strainId?: string;               // strain slug, e.g. "golden-teacher"
+  strainIds: string[];             // strain slugs, e.g. ["golden-teacher", "enigma"]; empty = all strains
   doseKey?: DoseKey;               // optional: micro/mini/macro/museum/mega/hero (dose level for kiosk mapping)
   /**
    * How much mushroom is in ONE unit of this product.
@@ -200,6 +200,13 @@ export type Product = {
    * - "1 g per packet"
    */
   mushroomAmountPerUnit?: string;
+  /**
+   * Dosing direction shown in the kiosk, e.g.:
+   * - "Take two Mighty Caps"
+   * - "Enjoy one chocolate square"
+   * - "Brew one tea bag in hot water"
+   */
+  dosingDirection?: string;
   shortDescription?: string;
   imageUrl?: string;               // path under /public, e.g. "/products/mighty-caps-gt.png"
   tags?: string[];

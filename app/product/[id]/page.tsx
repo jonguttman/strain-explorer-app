@@ -1,9 +1,9 @@
 import { notFound } from "next/navigation";
-import Image from "next/image";
 import Link from "next/link";
 import type { Metadata } from "next";
 import { getProductById } from "@/lib/productData";
 import { STRAINS, DEFAULT_DOSE_CONFIG } from "@/app/components/strainConstants";
+import { ProductImage } from "./ProductImage";
 
 type ProductPageProps = {
   params: Promise<{ id: string }>;
@@ -35,8 +35,10 @@ export default async function ProductPage({
   }
 
   const backHref = key ? `/?key=${key}` : "/";
-  const strain = product.strainId
-    ? STRAINS.find((s) => s.id === product.strainId)
+  // Use the first strain from strainIds if available
+  const primaryStrainId = product.strainIds?.[0];
+  const strain = primaryStrainId
+    ? STRAINS.find((s) => s.id === primaryStrainId)
     : null;
   const doseConfig = product.doseKey
     ? DEFAULT_DOSE_CONFIG[product.doseKey]
@@ -100,24 +102,11 @@ export default async function ProductPage({
           {/* Product image */}
           <div className="relative aspect-[4/3] bg-[#f6eddc]">
             {product.imageUrl ? (
-              <>
-                <Image
-                  src={product.imageUrl}
-                  alt={product.name}
-                  fill
-                  className="object-cover"
-                  priority
-                  onError={(e) => {
-                    e.currentTarget.style.display = "none";
-                  }}
-                />
-                {/* Fallback initials behind image */}
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <span className="text-6xl font-bold text-[#d3c3a2]">
-                    {initials}
-                  </span>
-                </div>
-              </>
+              <ProductImage
+                src={product.imageUrl}
+                alt={product.name}
+                initials={initials}
+              />
             ) : (
               <div className="flex h-full items-center justify-center">
                 <span className="text-6xl font-bold text-[#d3c3a2]">

@@ -29,8 +29,24 @@ function isValidProduct(obj: unknown): obj is Product {
     typeof product.name === "string" &&
     product.name.length > 0 &&
     typeof product.status === "string" &&
-    ["active", "inactive"].includes(product.status)
+    ["active", "inactive"].includes(product.status) &&
+    Array.isArray(product.strainIds)
   );
+}
+
+// Normalize product to ensure strainIds exists (migrate old strainId if present)
+function normalizeProduct(product: Record<string, unknown>): Record<string, unknown> {
+  // If strainIds doesn't exist but strainId does, migrate it
+  if (!Array.isArray(product.strainIds)) {
+    if (typeof product.strainId === "string" && product.strainId) {
+      product.strainIds = [product.strainId];
+    } else {
+      product.strainIds = [];
+    }
+  }
+  // Remove old strainId field
+  delete product.strainId;
+  return product;
 }
 
 export async function POST(request: Request) {
@@ -50,17 +66,20 @@ export async function POST(request: Request) {
       );
     }
 
-    // Validate each product in the array
+    // Normalize and validate each product in the array
+    const normalizedProducts: Product[] = [];
     for (let i = 0; i < body.products.length; i++) {
-      if (!isValidProduct(body.products[i])) {
+      const normalized = normalizeProduct(body.products[i] as Record<string, unknown>);
+      if (!isValidProduct(normalized)) {
         return NextResponse.json(
-          { error: `Invalid product at index ${i}: requires id, name, and status` },
+          { error: `Invalid product at index ${i}: requires id, name, status, and strainIds` },
           { status: 400 }
         );
       }
+      normalizedProducts.push(normalized as Product);
     }
 
-    const dataset: ProductDataset = { products: body.products };
+    const dataset: ProductDataset = { products: normalizedProducts };
 
     // Write to data/products.json
     await fs.writeFile(DATA_FILE, JSON.stringify(dataset, null, 2), "utf8");

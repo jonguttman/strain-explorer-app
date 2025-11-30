@@ -14,6 +14,7 @@ import {
 import type { DoseKey, TraitAxisId, DoseTraits, StrainExperienceMeta, ExperienceLevel } from "@/lib/types";
 import { formatAxisLabel, hexToRgba } from "@/lib/utils";
 import { DOSE_STYLE, heroGlowPlugin } from "./strainConstants";
+import { getApothecaryRadarOptions, getMainRadarDatasetStyle } from "@/lib/radarTheme";
 
 ChartJS.register(RadialLinearScale, PointElement, LineElement, Filler, Tooltip);
 
@@ -50,8 +51,9 @@ function Chip({ children }: { children: React.ReactNode }) {
 export function RadarPanel({ color, traits, axisLabels, doseKey, experienceMeta }: RadarPanelProps) {
   const style = DOSE_STYLE[doseKey] ?? DOSE_STYLE.macro;
   const baseHex = doseKey === "micro" ? "#c4c4c4" : color;
-  const fillColor = hexToRgba(baseHex, style.fillAlpha);
-  const borderColor = hexToRgba(baseHex, style.borderAlpha);
+  
+  // Use shared theme for dataset styling
+  const datasetStyle = getMainRadarDatasetStyle(baseHex, style.fillAlpha);
 
   const data = useMemo(() => {
     const labels = axisLabels.map(formatAxisLabel);
@@ -61,57 +63,14 @@ export function RadarPanel({ color, traits, axisLabels, doseKey, experienceMeta 
       datasets: [
         {
           data: values,
-          backgroundColor: fillColor,
-          borderColor,
-          borderWidth: 2,
-          pointRadius: 3.5,
-          pointHoverRadius: 6,
-          pointBackgroundColor: borderColor,
-          pointBorderColor: borderColor,
+          ...datasetStyle,
         },
       ],
     };
-  }, [traits, axisLabels, fillColor, borderColor]);
+  }, [traits, axisLabels, datasetStyle]);
 
-  const options = useMemo<ChartOptions<"radar">>(
-    () => ({
-      responsive: true,
-      maintainAspectRatio: false,
-      plugins: {
-        legend: { display: false },
-        tooltip: { enabled: false },
-      },
-      animation: {
-        duration: 450,
-        easing: "easeOutQuad" as const,
-      },
-      scales: {
-        r: {
-          beginAtZero: true,
-          min: 0,
-          max: 100,
-          ticks: {
-            display: false,
-          },
-          grid: {
-            color: "rgba(148, 116, 76, 0.25)",
-          },
-          angleLines: {
-            color: "rgba(148, 116, 76, 0.45)",
-          },
-          pointLabels: {
-            font: {
-              size: 14,
-              weight: 600,
-              family: "system-ui, sans-serif",
-            },
-            color: "#3f301f",
-          },
-        },
-      },
-    }),
-    []
-  );
+  // Use shared Apothecary radar options
+  const baseOptions = useMemo(() => getApothecaryRadarOptions({ max: 100 }), []);
 
   const levelCfg = getLevelConfig(experienceMeta?.experienceLevel);
 
@@ -140,14 +99,29 @@ export function RadarPanel({ color, traits, axisLabels, doseKey, experienceMeta 
         </div>
       )}
 
-      {/* Radar chart container - takes up more space */}
-      <div className="relative flex-1 min-h-[300px]">
+      {/* Radar chart container - centered with max width */}
+      <div className="relative flex-1 min-h-[300px] mx-auto w-full max-w-md">
+        {/* Decorative intensity ring behind the radar */}
+        <div 
+          className="absolute inset-0 flex items-center justify-center pointer-events-none"
+          aria-hidden="true"
+        >
+          <div 
+            className="rounded-full opacity-20"
+            style={{
+              width: "85%",
+              height: "85%",
+              background: `radial-gradient(circle, transparent 60%, ${baseHex} 100%)`,
+            }}
+          />
+        </div>
+        
         <Radar
           data={data}
           options={{
-            ...options,
+            ...baseOptions,
             plugins: {
-              ...(options.plugins ?? {}),
+              ...(baseOptions.plugins ?? {}),
               heroGlow: {
                 enabled: style.hasGlow,
                 color: hexToRgba(color, 0.55),

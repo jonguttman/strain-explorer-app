@@ -30,34 +30,47 @@ type PageProps = {
 export default async function StrainExplorerPage({ searchParams }: PageProps) {
   const { key } = await searchParams;
 
-  // If no key param is present, show the Gateway screen
-  if (!key) {
-    return <Gateway />;
-  }
-
   // Load access keys data dynamically at request time
   const dataset = await loadAccessKeys();
   const settings = dataset.settings ?? DEFAULT_SETTINGS;
   const keys = dataset.keys ?? [];
-
-  // Check if gating is required
   const requireKeyForRoot = settings.requireKeyForRoot;
+
+  // If public access is enabled (no key required), go straight to strain explorer
+  if (!requireKeyForRoot) {
+    return (
+      <Suspense
+        fallback={
+          <div className="min-h-screen flex items-center justify-center bg-[#f6eddc] text-[#3f301f]">
+            Loading…
+          </div>
+        }
+      >
+        <StrainExplorerClient />
+      </Suspense>
+    );
+  }
+
+  // Key gating is enabled - if no key param, show the Gateway screen
+  if (!key) {
+    return <Gateway />;
+  }
 
   // Check if the provided key is valid and active
   const hasValidKey = keys.some((k) => k.id === key && k.isActive);
 
-  // If gating is enabled and no valid key, show the beta gate
-  if (requireKeyForRoot && !hasValidKey) {
+  // If key is invalid, show the beta gate
+  if (!hasValidKey) {
     return <BetaGate />;
   }
 
-  // Otherwise, render the strain explorer
+  // Valid key provided, render the strain explorer
   return (
     <Suspense
       fallback={
-      <div className="min-h-screen flex items-center justify-center bg-[#f6eddc] text-[#3f301f]">
-        Loading…
-      </div>
+        <div className="min-h-screen flex items-center justify-center bg-[#f6eddc] text-[#3f301f]">
+          Loading…
+        </div>
       }
     >
       <StrainExplorerClient />

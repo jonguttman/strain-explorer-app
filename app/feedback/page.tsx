@@ -1,5 +1,6 @@
 import { FeedbackFormClient } from "./FeedbackFormClient";
 import { getStrains, getDoseConfig, getTraitAxes, getStrainDoseData } from "@/data/strainData";
+import { getAllProducts } from "@/lib/productData";
 import type { DoseKey, TraitAxisId } from "@/lib/types";
 
 type FeedbackPageProps = {
@@ -18,6 +19,7 @@ export default async function FeedbackPage({ searchParams }: FeedbackPageProps) 
   const strains = getStrains();
   const { order: doseOrder, config: doseConfig } = getDoseConfig();
   const axes = getTraitAxes();
+  const allProducts = getAllProducts();
   
   // Build initial axis values from the strain/dose if valid
   const initialAxisValues: Partial<Record<TraitAxisId, number>> = {};
@@ -67,6 +69,7 @@ export default async function FeedbackPage({ searchParams }: FeedbackPageProps) 
           doseOptions={doseOptions}
           axes={axes}
           initialAxisValues={initialAxisValues}
+          allProducts={allProducts}
         />
       </div>
     </main>

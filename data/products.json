@@ -2,9 +2,14 @@
   "products": [
     {
       "id": "psilly-mighty-caps-gt",
-      "name": "Psilly Mighty Caps – Golden Teacher",
+      "name": "Mighty Caps",
       "brand": "The Original Psilly",
-      "strainId": "golden-teacher",
+      "strainIds": [
+        "penis-envy",
+        "amazonian",
+        "enigma",
+        "full-moon-party"
+      ],
       "doseKey": "macro",
       "shortDescription": "Gentle Golden Teacher microcapsule for color, clarity, and creative focus.",
       "imageUrl": "/products/psilly-mighty-caps-gt-1764490702917.png",
@@ -26,9 +31,14 @@
     },
     {
       "id": "psilly-hercules-enigma-1g",
-      "name": "Psilly Hercules – Enigma 1 g",
+      "name": "Hercules",
       "brand": "The Original Psilly",
-      "strainId": "enigma",
+      "strainIds": [
+        "enigma",
+        "penis-envy",
+        "amazonian",
+        "full-moon-party"
+      ],
       "doseKey": "hero",
       "shortDescription": "Single 1 g Enigma hero-dose capsule for deep, transcendent journeys.",
       "imageUrl": "/products/hercules-enigma-1g.png",
@@ -48,9 +58,16 @@
     },
     {
       "id": "psilly-stix-gt",
-      "name": "Psilly Stix – Golden Teacher",
+      "name": "Honey Stix",
       "brand": "The Original Psilly",
-      "strainId": "golden-teacher",
+      "strainIds": [
+        "golden-teacher",
+        "penis-envy",
+        "amazonian",
+        "enigma",
+        "cambodian",
+        "full-moon-party"
+      ],
       "shortDescription": "Golden Teacher–infused honey sticks for warm, sociable micro moments.",
       "imageUrl": "/products/psilly-stix-gt.png",
       "tags": [

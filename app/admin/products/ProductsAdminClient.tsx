@@ -1,16 +1,18 @@
 "use client";
 
-import { useState, Fragment, useRef } from "react";
+import { useState, Fragment, useRef, useEffect } from "react";
 import type { Product, ProductStatus, DoseKey } from "@/lib/types";
+import type { StrainOption } from "./page";
 
 type ProductsAdminClientProps = {
   initialProducts: Product[];
+  strainOptions: StrainOption[];
 };
 
 const DOSE_KEYS: DoseKey[] = ["micro", "mini", "macro", "museum", "mega", "hero"];
 const STATUS_OPTIONS: ProductStatus[] = ["active", "inactive"];
 
-export function ProductsAdminClient({ initialProducts }: ProductsAdminClientProps) {
+export function ProductsAdminClient({ initialProducts, strainOptions }: ProductsAdminClientProps) {
   const [products, setProducts] = useState<Product[]>(initialProducts);
   const [isSaving, setIsSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -19,7 +21,23 @@ export function ProductsAdminClient({ initialProducts }: ProductsAdminClientProp
   const [expandedId, setExpandedId] = useState<string | null>(null);
   const [uploadingId, setUploadingId] = useState<string | null>(null);
   const [uploadError, setUploadError] = useState<string | null>(null);
+  const [strainDropdownOpen, setStrainDropdownOpen] = useState<string | null>(null);
   const fileInputRefs = useRef<Record<string, HTMLInputElement | null>>({});
+  const strainDropdownRef = useRef<HTMLDivElement | null>(null);
+  
+  // Helper to get strain name by id
+  const getStrainName = (id: string) => strainOptions.find((s) => s.id === id)?.name ?? id;
+  
+  // Close strain dropdown when clicking outside
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (strainDropdownOpen && strainDropdownRef.current && !strainDropdownRef.current.contains(event.target as Node)) {
+        setStrainDropdownOpen(null);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [strainDropdownOpen]);
 
   const filteredProducts =
     statusFilter === "all"
@@ -31,12 +49,27 @@ export function ProductsAdminClient({ initialProducts }: ProductsAdminClientProp
       id: `psilly-product-${Date.now()}`,
       name: "",
       brand: "The Original Psilly",
+      strainIds: [],
       status: "active",
     };
     setProducts([...products, newProduct]);
     setExpandedId(newProduct.id); // Auto-expand new product
     setSuccess(null);
     setError(null);
+  };
+  
+  const handleToggleStrain = (productId: string, strainId: string) => {
+    setProducts((prev) =>
+      prev.map((p) => {
+        if (p.id !== productId) return p;
+        const currentStrainIds = p.strainIds ?? [];
+        const newStrainIds = currentStrainIds.includes(strainId)
+          ? currentStrainIds.filter((id) => id !== strainId)
+          : [...currentStrainIds, strainId];
+        return { ...p, strainIds: newStrainIds };
+      })
+    );
+    setSuccess(null);
   };
 
   const handleUpdateProduct = (
@@ -180,7 +213,7 @@ export function ProductsAdminClient({ initialProducts }: ProductsAdminClientProp
       )}
 
       {/* Products table */}
-      <div className="overflow-x-auto rounded-xl border border-slate-200 bg-white shadow-sm">
+      <div className="overflow-visible rounded-xl border border-slate-200 bg-white shadow-sm">
         <table className="w-full table-fixed divide-y divide-slate-200">
           <thead className="bg-slate-50">
             <tr>
@@ -193,8 +226,8 @@ export function ProductsAdminClient({ initialProducts }: ProductsAdminClientProp
               <th className="w-[130px] px-3 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-600">
                 Brand
               </th>
-              <th className="w-[120px] px-3 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-600">
-                Strain
+              <th className="w-[140px] px-3 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-600">
+                Strains
               </th>
               <th className="w-[90px] px-3 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-600">
                 Status
@@ -237,7 +270,7 @@ export function ProductsAdminClient({ initialProducts }: ProductsAdminClientProp
                             handleUpdateProduct(product.id, "name", e.target.value)
                           }
                           placeholder="Product name"
-                          className="w-full rounded border border-slate-300 px-2 py-1 text-sm focus:border-slate-500 focus:outline-none"
+                          className="w-full rounded border border-slate-300 px-2 py-1 text-sm text-slate-900 placeholder:text-slate-500 focus:border-slate-500 focus:outline-none"
                         />
                       </td>
                       <td className="px-3 py-2">
@@ -248,19 +281,54 @@ export function ProductsAdminClient({ initialProducts }: ProductsAdminClientProp
                             handleUpdateProduct(product.id, "brand", e.target.value)
                           }
                           placeholder="Brand"
-                          className="w-full rounded border border-slate-300 px-2 py-1 text-sm focus:border-slate-500 focus:outline-none"
+                          className="w-full rounded border border-slate-300 px-2 py-1 text-sm text-slate-900 placeholder:text-slate-500 focus:border-slate-500 focus:outline-none"
                         />
                       </td>
                       <td className="px-3 py-2">
-                        <input
-                          type="text"
-                          value={product.strainId ?? ""}
-                          onChange={(e) =>
-                            handleUpdateProduct(product.id, "strainId", e.target.value)
-                          }
-                          placeholder="e.g. golden-teacher"
-                          className="w-full rounded border border-slate-300 px-2 py-1 text-sm focus:border-slate-500 focus:outline-none"
-                        />
+                        <div className="relative" ref={strainDropdownOpen === product.id ? strainDropdownRef : null}>
+                          <button
+                            type="button"
+                            onClick={() => setStrainDropdownOpen(strainDropdownOpen === product.id ? null : product.id)}
+                            className="w-full rounded border border-slate-300 bg-white px-2 py-1 text-left text-sm text-slate-900 focus:border-slate-500 focus:outline-none"
+                          >
+                            {(product.strainIds?.length ?? 0) === 0 ? (
+                              <span className="text-slate-500 italic">All strains</span>
+                            ) : (
+                              <span className="truncate block">
+                                {product.strainIds.map(getStrainName).join(", ")}
+                              </span>
+                            )}
+                          </button>
+                          {strainDropdownOpen === product.id && (
+                            <div className="absolute left-0 top-full z-20 mt-1 w-52 rounded-md border border-slate-200 bg-white shadow-lg">
+                              <div className="max-h-72 overflow-y-auto p-1">
+                                {strainOptions.map((opt) => (
+                                  <label
+                                    key={opt.id}
+                                    className="flex cursor-pointer items-center gap-2 rounded px-2 py-1.5 text-sm text-slate-900 hover:bg-slate-50"
+                                  >
+                                    <input
+                                      type="checkbox"
+                                      checked={product.strainIds?.includes(opt.id) ?? false}
+                                      onChange={() => handleToggleStrain(product.id, opt.id)}
+                                      className="h-4 w-4 rounded border-slate-300 text-slate-900 focus:ring-slate-500"
+                                    />
+                                    <span className="font-medium">{opt.name}</span>
+                                  </label>
+                                ))}
+                              </div>
+                              <div className="border-t border-slate-100 p-1">
+                                <button
+                                  type="button"
+                                  onClick={() => setStrainDropdownOpen(null)}
+                                  className="w-full rounded px-2 py-1 text-xs font-medium text-slate-700 hover:bg-slate-50"
+                                >
+                                  Done
+                                </button>
+                              </div>
+                            </div>
+                          )}
+                        </div>
                       </td>
                       <td className="px-3 py-2">
                         <select
@@ -346,13 +414,38 @@ export function ProductsAdminClient({ initialProducts }: ProductsAdminClientProp
                                     }
                                     className="w-full rounded border border-slate-300 bg-white px-2 py-1.5 text-sm focus:border-slate-500 focus:outline-none"
                                   >
-                                    <option value="">— Select level —</option>
+                                    <option value="">— Any dose —</option>
                                     {DOSE_KEYS.map((dk) => (
                                       <option key={dk} value={dk}>
                                         {dk}
                                       </option>
                                     ))}
                                   </select>
+                                  <p className="mt-1 text-xs text-slate-500">
+                                    Only show this product for the selected dose level.
+                                  </p>
+                                </div>
+
+                                <div>
+                                  <label className="mb-1 block text-xs font-medium text-slate-600">
+                                    Dosing Direction
+                                  </label>
+                                  <input
+                                    type="text"
+                                    value={product.dosingDirection ?? ""}
+                                    onChange={(e) =>
+                                      handleUpdateProduct(
+                                        product.id,
+                                        "dosingDirection",
+                                        e.target.value
+                                      )
+                                    }
+                                    placeholder="e.g. Take two Mighty Caps"
+                                    className="w-full rounded border border-slate-300 px-2 py-1.5 text-sm text-slate-900 placeholder:text-slate-500 focus:border-slate-500 focus:outline-none"
+                                  />
+                                  <p className="mt-1 text-xs text-slate-500">
+                                    Shown in kiosk when product appears. Leave empty for default.
+                                  </p>
                                 </div>
 
                                 <div>
@@ -370,7 +463,7 @@ export function ProductsAdminClient({ initialProducts }: ProductsAdminClientProp
                                       )
                                     }
                                     placeholder="e.g. 200 mg per cap"
-                                    className="w-full rounded border border-slate-300 px-2 py-1.5 text-sm focus:border-slate-500 focus:outline-none"
+                                    className="w-full rounded border border-slate-300 px-2 py-1.5 text-sm text-slate-900 placeholder:text-slate-500 focus:border-slate-500 focus:outline-none"
                                   />
                                 </div>
 
@@ -443,7 +536,7 @@ export function ProductsAdminClient({ initialProducts }: ProductsAdminClientProp
                                           )
                                         }
                                         placeholder="/products/my-product.png"
-                                        className="w-full rounded border border-slate-300 px-2 py-1 text-xs text-slate-600 focus:border-slate-500 focus:outline-none"
+                                        className="w-full rounded border border-slate-300 px-2 py-1 text-xs text-slate-900 placeholder:text-slate-500 focus:border-slate-500 focus:outline-none"
                                       />
                                     </div>
                                   </div>
@@ -464,7 +557,7 @@ export function ProductsAdminClient({ initialProducts }: ProductsAdminClientProp
                                     }
                                     placeholder="Brief product description..."
                                     rows={2}
-                                    className="w-full rounded border border-slate-300 px-2 py-1.5 text-sm focus:border-slate-500 focus:outline-none"
+                                    className="w-full rounded border border-slate-300 px-2 py-1.5 text-sm text-slate-900 placeholder:text-slate-500 focus:border-slate-500 focus:outline-none"
                                   />
                                 </div>
                               </div>
@@ -486,7 +579,7 @@ export function ProductsAdminClient({ initialProducts }: ProductsAdminClientProp
                                       )
                                     }
                                     placeholder="https://..."
-                                    className="w-full rounded border border-slate-300 px-2 py-1.5 text-sm focus:border-slate-500 focus:outline-none"
+                                    className="w-full rounded border border-slate-300 px-2 py-1.5 text-sm text-slate-900 placeholder:text-slate-500 focus:border-slate-500 focus:outline-none"
                                   />
                                 </div>
 
@@ -505,7 +598,7 @@ export function ProductsAdminClient({ initialProducts }: ProductsAdminClientProp
                                     }
                                     placeholder="Internal notes..."
                                     rows={2}
-                                    className="w-full rounded border border-slate-300 px-2 py-1.5 text-sm focus:border-slate-500 focus:outline-none"
+                                    className="w-full rounded border border-slate-300 px-2 py-1.5 text-sm text-slate-900 placeholder:text-slate-500 focus:border-slate-500 focus:outline-none"
                                   />
                                 </div>
 

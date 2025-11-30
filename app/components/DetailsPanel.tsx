@@ -320,6 +320,19 @@ function ProductCard({
             )}
           </div>
 
+          {/* Dosing direction - shown prominently when available */}
+          {product.dosingDirection && (
+            <p
+              className="mt-1.5 rounded-lg px-2 py-1 text-xs font-medium"
+              style={{
+                backgroundColor: `${accentHex}10`,
+                color: accentHex,
+              }}
+            >
+              {product.dosingDirection}
+            </p>
+          )}
+
           {product.mushroomAmountPerUnit && (
             <p className="mt-1 text-[11px] font-medium text-[#6b5841]">
               Dose: {product.mushroomAmountPerUnit}

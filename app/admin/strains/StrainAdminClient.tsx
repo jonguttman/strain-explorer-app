@@ -12,10 +12,12 @@ import {
   type DoseSnapshot,
   type StrainMeta,
 } from "./types";
+import type { Product } from "@/lib/types";
 import { cloneDataset, formatAxisLabel, normalizeAccentHex } from "@/lib/utils";
 
 type Props = {
   initialData: EditorDataset;
+  allProducts: Product[];
 };
 
 const DEFAULT_ACCENT = "#4a371f";
@@ -29,7 +31,7 @@ const MiniRadarPreview = dynamic(() => import("./MiniRadarPreview"), {
   ),
 });
 
-export default function StrainAdminClient({ initialData }: Props) {
+export default function StrainAdminClient({ initialData, allProducts }: Props) {
   const [dataset, setDataset] = useState<EditorDataset>(() =>
     cloneDataset(initialData)
   );
@@ -47,10 +49,17 @@ export default function StrainAdminClient({ initialData }: Props) {
   >("idle");
   const [saveMessage, setSaveMessage] = useState("");
 
+  // Product linking state
+  const [productsState, setProductsState] = useState<Product[]>(allProducts);
+  const [productsSaveStatus, setProductsSaveStatus] = useState<
+    "idle" | "saving" | "success" | "error"
+  >("idle");
+
   // Collapsible section states
   const [strainsOpen, setStrainsOpen] = useState(true);
   const [doseSettingsOpen, setDoseSettingsOpen] = useState(false);
   const [radarOpen, setRadarOpen] = useState(true);
+  const [productsOpen, setProductsOpen] = useState(true);
 
   useEffect(() => {
     setNameDraft(selectedStrainName);
@@ -63,6 +72,60 @@ export default function StrainAdminClient({ initialData }: Props) {
   const doseIndex = dataset.doses.indexOf(selectedDose);
   const currentAccentHex =
     currentStrain?.visual?.[selectedDose]?.colorHex ?? DEFAULT_ACCENT;
+
+  // Product linking derived values
+  // Map strain name to slug for product linking
+  const STRAIN_NAME_TO_SLUG: Record<string, string> = {
+    "Golden Teacher": "golden-teacher",
+    "Penis Envy": "penis-envy",
+    "Amazonian": "amazonian",
+    "Enigma": "enigma",
+    "Cambodian": "cambodian",
+    "Full Moon Party": "full-moon-party",
+  };
+  const selectedStrainSlug = STRAIN_NAME_TO_SLUG[selectedStrainName] ?? selectedStrainName.toLowerCase().replace(/\s+/g, "-");
+  
+  const globalProducts = useMemo(
+    () => productsState.filter((p) => p.strainIds.length === 0),
+    [productsState]
+  );
+  const strainScopedProducts = useMemo(
+    () => productsState.filter((p) => p.strainIds.length > 0),
+    [productsState]
+  );
+  const isLinkedToCurrentStrain = (p: Product) =>
+    p.strainIds.includes(selectedStrainSlug);
+
+  const handleToggleProductLink = (productId: string, linked: boolean) => {
+    setProductsState((prev) =>
+      prev.map((p) => {
+        if (p.id !== productId) return p;
+        const newStrainIds = linked
+          ? [...p.strainIds.filter((id) => id !== selectedStrainSlug), selectedStrainSlug]
+          : p.strainIds.filter((id) => id !== selectedStrainSlug);
+        return { ...p, strainIds: newStrainIds };
+      })
+    );
+  };
+
+  const handleSaveProductLinks = async () => {
+    setProductsSaveStatus("saving");
+    try {
+      const res = await fetch("/api/admin/products", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ products: productsState }),
+      });
+      if (!res.ok) {
+        throw new Error(`Save failed: ${res.status}`);
+      }
+      setProductsSaveStatus("success");
+      setTimeout(() => setProductsSaveStatus("idle"), 2500);
+    } catch {
+      setProductsSaveStatus("error");
+      setTimeout(() => setProductsSaveStatus("idle"), 3000);
+    }
+  };
 
   const handleSelectStrain = (name: string) => {
     setSelectedStrainName(name);
@@ -287,6 +350,28 @@ export default function StrainAdminClient({ initialData }: Props) {
   return (
     <div className="flex h-full bg-slate-50 text-slate-900">
       <aside className="w-64 border-r border-slate-200 p-4 flex flex-col gap-2 overflow-y-auto">
+        {/* Dose Selector - Compact horizontal */}
+        <div className="rounded-xl border border-slate-200 bg-white p-2">
+          <div className="text-[10px] font-semibold uppercase tracking-wide text-slate-500 mb-1.5 px-1">
+            Dose
+          </div>
+          <div className="flex flex-wrap gap-1">
+            {dataset.doses.map((dose) => (
+              <button
+                key={dose}
+                onClick={() => setSelectedDose(dose)}
+                className={`rounded-full px-2 py-0.5 text-[11px] font-medium capitalize transition ${
+                  selectedDose === dose
+                    ? "bg-slate-900 text-white"
+                    : "bg-slate-100 text-slate-600 hover:bg-slate-200"
+                }`}
+              >
+                {dose}
+              </button>
+            ))}
+          </div>
+        </div>
+
         {/* Strains Section - Collapsible */}
         <section className="rounded-xl border border-slate-200 bg-white">
           <button
@@ -458,140 +543,274 @@ export default function StrainAdminClient({ initialData }: Props) {
         </div>
       </aside>
 
-      <main className="flex-1 overflow-y-auto p-6">
+      <main className="flex-1 overflow-y-auto p-4">
         {!currentStrain ? (
           <div className="text-slate-500">Select or add a strain to edit.</div>
         ) : (
-          <div className="space-y-6">
-            <div className="flex flex-col gap-2">
-              <label className="text-xs uppercase tracking-wide text-slate-500">
-                Strain Name
-              </label>
+          <div className="space-y-4">
+            {/* 1. SLIDERS - Compact 3-column grid */}
+            <section className="rounded-xl border border-slate-200 bg-white p-3">
+              <div className="grid gap-x-4 gap-y-2 md:grid-cols-3">
+                {dataset.axes.map((axis) => (
+                  <div key={axis} className="flex items-center gap-2">
+                    <span className="w-16 text-xs font-medium text-slate-600 truncate">
+                      {formatAxisLabel(axis)}
+                    </span>
+                    <input
+                      type="range"
+                      min={0}
+                      max={100}
+                      value={currentStrain.radar[axis][doseIndex] ?? 0}
+                      onChange={(e) => handleRadarChange(axis, Number(e.target.value))}
+                      className="flex-1 h-1.5"
+                    />
+                    <span className="w-6 text-xs text-slate-500 text-right">
+                      {currentStrain.radar[axis][doseIndex]?.toFixed(0)}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </section>
+
+            {/* 2. ACCENT COLOR - Compact inline */}
+            <div className="flex items-center gap-3 rounded-xl border border-slate-200 bg-white px-3 py-2">
+              <span className="text-xs font-medium text-slate-600">Accent</span>
               <input
-                className="w-full rounded border border-slate-300 px-3 py-2 text-lg font-semibold"
-                value={nameDraft}
-                onChange={(e) => setNameDraft(e.target.value)}
-                onBlur={handleRenameStrain}
+                type="color"
+                className="h-6 w-6 rounded border border-slate-300 bg-transparent p-0 cursor-pointer"
+                value={currentAccentHex}
+                onChange={(e) => handleAccentChange(e.target.value)}
+              />
+              <input
+                className="w-20 rounded border border-slate-300 px-2 py-1 text-xs font-mono text-slate-700"
+                value={currentAccentHex}
+                onChange={(e) => handleAccentChange(e.target.value)}
+              />
+              <div
+                className="h-4 flex-1 rounded"
+                style={{ backgroundColor: currentAccentHex }}
               />
             </div>
 
-            <div className="flex flex-wrap gap-2">
-              {dataset.doses.map((dose) => (
-                <button
-                  key={dose}
-                  onClick={() => setSelectedDose(dose)}
-                  className={`rounded-full px-4 py-2 text-sm capitalize ${
-                    selectedDose === dose
-                      ? "bg-slate-900 text-white"
-                      : "bg-white text-slate-700 border border-slate-200"
-                  }`}
-                >
-                  {dose}
-                </button>
-              ))}
+            {/* 3. BLURB */}
+            <div className="rounded-xl border border-slate-200 bg-white p-3">
+              <label className="mb-1 block text-xs font-medium text-slate-600">
+                Blurb
+              </label>
+              <input
+                className="w-full rounded border border-slate-300 px-2 py-1.5 text-sm"
+                value={currentStrain.blurb[selectedDose]}
+                onChange={(e) => handleContentChange("blurb", e.target.value)}
+                placeholder="Short description for this dose..."
+              />
             </div>
 
-            <section className="grid gap-4 rounded-xl border border-slate-200 bg-white p-4 md:grid-cols-2">
-              {dataset.axes.map((axis) => (
-                <div key={axis} className="space-y-2">
-                  <div className="flex items-center justify-between text-sm font-medium text-slate-700">
-                    <span>{formatAxisLabel(axis)}</span>
-                    <span>{currentStrain.radar[axis][doseIndex]?.toFixed(0)}</span>
-                  </div>
-                  <input
-                    type="range"
-                    min={0}
-                    max={100}
-                    value={currentStrain.radar[axis][doseIndex] ?? 0}
-                    onChange={(e) => handleRadarChange(axis, Number(e.target.value))}
-                    className="w-full"
-                  />
-                </div>
-              ))}
-            </section>
+            {/* 4. DETAILS */}
+            <div className="rounded-xl border border-slate-200 bg-white p-3">
+              <label className="mb-1 block text-xs font-medium text-slate-600">
+                Details
+              </label>
+              <textarea
+                className="w-full rounded border border-slate-300 px-2 py-1.5 text-sm"
+                rows={3}
+                value={currentStrain.details[selectedDose]}
+                onChange={(e) => handleContentChange("details", e.target.value)}
+                placeholder="Longer description of the experience..."
+              />
+            </div>
 
-            <section className="grid gap-4 rounded-xl border border-slate-200 bg-white p-4">
-              <div className="space-y-2">
-                <label className="text-sm font-medium text-slate-700">
-                  Blurb
-                </label>
-                <input
-                  className="w-full rounded border border-slate-300 px-3 py-2"
-                  value={currentStrain.blurb[selectedDose]}
-                  onChange={(e) => handleContentChange("blurb", e.target.value)}
-                />
-              </div>
-              <div className="space-y-2">
-                <label className="text-sm font-medium text-slate-700">
-                  Details
-                </label>
-                <textarea
-                  className="w-full rounded border border-slate-300 px-3 py-2"
-                  rows={4}
-                  value={currentStrain.details[selectedDose]}
-                  onChange={(e) => handleContentChange("details", e.target.value)}
-                />
-              </div>
-              <div className="space-y-2">
-                <label className="text-sm font-medium text-slate-700">
-                  Dose Accent Color
-                </label>
-                <div className="flex items-center gap-3">
-                  <input
-                    type="color"
-                    className="h-9 w-9 rounded border border-slate-300 bg-transparent p-0"
-                    value={currentAccentHex}
-                    onChange={(e) => handleAccentChange(e.target.value)}
-                  />
-                  <input
-                    className="flex-1 rounded border border-slate-300 px-3 py-2 text-sm font-mono"
-                    value={currentAccentHex}
-                    onChange={(e) => handleAccentChange(e.target.value)}
-                  />
+            {/* Suggested Products Panel */}
+            <section className="rounded-xl border border-slate-200 bg-white">
+              <button
+                type="button"
+                onClick={() => setProductsOpen(!productsOpen)}
+                className="flex w-full items-center justify-between px-4 py-3 text-left"
+              >
+                <div>
+                  <span className="text-sm font-medium text-slate-700">
+                    Suggested Products for {selectedStrainName}
+                  </span>
+                  <p className="text-xs text-slate-500 mt-0.5">
+                    Manage which products appear in the kiosk for this strain
+                  </p>
                 </div>
-                <p className="text-xs text-slate-500">
-                  This accent color is used by the kiosk radar and dose UI for this
-                  strain and dose.
-                </p>
-              </div>
-            </section>
-
-            <section className="rounded-xl border border-slate-200 bg-white p-4">
-              <div className="mb-3 flex items-center justify-between">
-                <span className="text-sm font-medium text-slate-700">
-                  Products
-                </span>
-                <button
-                  className="rounded bg-slate-900 px-3 py-1 text-xs text-white"
-                  onClick={handleAddProduct}
+                <svg
+                  className={`h-4 w-4 text-slate-400 transition-transform ${productsOpen ? "rotate-180" : ""}`}
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
                 >
-                  + Add Product
-                </button>
-              </div>
-              <div className="space-y-2">
-                {currentStrain.products[selectedDose].map((product, idx) => (
-                  <div key={idx} className="flex gap-2">
-                    <input
-                      className="flex-1 rounded border border-slate-300 px-3 py-2 text-sm"
-                      value={product}
-                      onChange={(e) => handleProductChange(idx, e.target.value)}
-                      placeholder="Product name / SKU"
-                    />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                </svg>
+              </button>
+
+              {productsOpen && (
+                <div className="px-4 pb-4 space-y-4">
+                  {/* Global Products */}
+                  <div>
+                    <div className="flex items-center gap-2 mb-2">
+                      <span className="text-xs font-semibold uppercase tracking-wide text-slate-500">
+                        Global Products
+                      </span>
+                      <span className="rounded-full bg-slate-100 px-2 py-0.5 text-[10px] font-medium text-slate-600">
+                        Always shown
+                      </span>
+                    </div>
+                    <p className="text-xs text-slate-500 mb-2">
+                      These appear for all strains automatically.
+                    </p>
+                    {globalProducts.length === 0 ? (
+                      <div className="text-xs text-slate-400 italic py-2">
+                        No global products. Create one in Products Admin with no strains selected.
+                      </div>
+                    ) : (
+                      <div className="space-y-1">
+                        {globalProducts.map((p) => (
+                          <div
+                            key={p.id}
+                            className="flex items-center justify-between rounded border border-slate-100 bg-slate-50 px-3 py-2"
+                          >
+                            <div className="flex flex-wrap items-center gap-2">
+                              <span className="text-sm font-medium text-slate-700">{p.name}</span>
+                              <span className="text-xs text-slate-400">{p.brand}</span>
+                              <span className="rounded-full bg-amber-100 px-1.5 py-0.5 text-[10px] font-medium text-amber-700">
+                                GLOBAL
+                              </span>
+                              {p.doseKey && (
+                                <span className="rounded-full bg-blue-100 px-1.5 py-0.5 text-[10px] font-medium text-blue-700 uppercase">
+                                  {p.doseKey}
+                                </span>
+                              )}
+                              {p.dosingDirection && (
+                                <span className="text-xs text-slate-500 italic">
+                                  &ldquo;{p.dosingDirection}&rdquo;
+                                </span>
+                              )}
+                            </div>
+                            <a
+                              href="/admin/products"
+                              className="text-xs text-slate-500 hover:text-slate-700 underline flex-shrink-0"
+                            >
+                              Edit
+                            </a>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Strain-linked Products */}
+                  <div>
+                    <div className="flex items-center gap-2 mb-2">
+                      <span className="text-xs font-semibold uppercase tracking-wide text-slate-500">
+                        Strain-specific Products
+                      </span>
+                    </div>
+                    <p className="text-xs text-slate-500 mb-2">
+                      Toggle which products show for {selectedStrainName}.
+                    </p>
+                    {strainScopedProducts.length === 0 ? (
+                      <div className="text-xs text-slate-400 italic py-2">
+                        No strain-specific products yet. Create one in Products Admin.
+                      </div>
+                    ) : (
+                      <div className="space-y-1">
+                        {strainScopedProducts
+                          .sort((a, b) => {
+                            // House picks first, then alphabetical
+                            if (a.isHousePick && !b.isHousePick) return -1;
+                            if (!a.isHousePick && b.isHousePick) return 1;
+                            return a.name.localeCompare(b.name);
+                          })
+                          .map((p) => {
+                            const isLinked = isLinkedToCurrentStrain(p);
+                            return (
+                              <div
+                                key={p.id}
+                                className={`flex items-center justify-between rounded border px-3 py-2 ${
+                                  isLinked
+                                    ? "border-emerald-200 bg-emerald-50"
+                                    : "border-slate-100 bg-white"
+                                }`}
+                              >
+                                <div className="flex flex-wrap items-center gap-2">
+                                  <span className="text-sm font-medium text-slate-700">{p.name}</span>
+                                  <span className="text-xs text-slate-400">{p.brand}</span>
+                                  {p.doseKey && (
+                                    <span className="rounded-full bg-blue-100 px-1.5 py-0.5 text-[10px] font-medium text-blue-700 uppercase">
+                                      {p.doseKey}
+                                    </span>
+                                  )}
+                                  {p.isHousePick && (
+                                    <span className="rounded-full bg-amber-100 px-1.5 py-0.5 text-[10px] font-medium text-amber-700">
+                                      HOUSE PICK
+                                    </span>
+                                  )}
+                                  {isLinked && (
+                                    <span className="rounded-full bg-emerald-100 px-1.5 py-0.5 text-[10px] font-medium text-emerald-700">
+                                      LINKED
+                                    </span>
+                                  )}
+                                  {p.dosingDirection && (
+                                    <span className="text-xs text-slate-500 italic">
+                                      &ldquo;{p.dosingDirection}&rdquo;
+                                    </span>
+                                  )}
+                                </div>
+                                <label className="flex items-center gap-2 cursor-pointer flex-shrink-0">
+                                  <span className="text-xs text-slate-500">
+                                    {isLinked ? "Showing" : "Hidden"}
+                                  </span>
+                                  <input
+                                    type="checkbox"
+                                    checked={isLinked}
+                                    onChange={(e) => handleToggleProductLink(p.id, e.target.checked)}
+                                    className="h-4 w-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500"
+                                  />
+                                </label>
+                              </div>
+                            );
+                          })}
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Save button */}
+                  <div className="flex items-center justify-between pt-2 border-t border-slate-100">
+                    <div className="text-xs text-slate-500">
+                      {productsSaveStatus === "success" && (
+                        <span className="text-emerald-600">✓ Product links saved</span>
+                      )}
+                      {productsSaveStatus === "error" && (
+                        <span className="text-rose-600">Failed to save. Try again.</span>
+                      )}
+                    </div>
                     <button
-                      className="rounded border border-slate-300 px-2 text-xs text-slate-600"
-                      onClick={() => handleRemoveProduct(idx)}
+                      onClick={handleSaveProductLinks}
+                      disabled={productsSaveStatus === "saving"}
+                      className="rounded bg-slate-900 px-4 py-2 text-sm text-white hover:bg-slate-800 disabled:opacity-50"
                     >
-                      Remove
+                      {productsSaveStatus === "saving" ? "Saving…" : "Save Product Links"}
                     </button>
                   </div>
-                ))}
-                {currentStrain.products[selectedDose].length === 0 && (
-                  <div className="text-xs text-slate-500">
-                    No products for this dose yet.
-                  </div>
-                )}
-              </div>
+                </div>
+              )}
             </section>
+
+            {/* 6. STRAIN NAME - Rarely used, at bottom */}
+            <div className="rounded-xl border border-slate-200 bg-white p-3">
+              <div className="flex items-center gap-3">
+                <label className="text-xs font-medium text-slate-500 whitespace-nowrap">
+                  Strain Name
+                </label>
+                <input
+                  className="flex-1 rounded border border-slate-300 px-2 py-1 text-sm font-medium text-slate-900"
+                  value={nameDraft}
+                  onChange={(e) => setNameDraft(e.target.value)}
+                  onBlur={handleRenameStrain}
+                />
+              </div>
+            </div>
 
             {exportText && (
               <section className="rounded-xl border border-emerald-300 bg-emerald-50 p-4">

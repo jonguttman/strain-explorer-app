@@ -6,7 +6,9 @@ const dataset = rawProducts as ProductDataset;
 /**
  * Returns active products matching a given strain, optionally filtered by dose.
  * - Filters by status === "active"
- * - Matches strainId (case-sensitive)
+ * - Matches strainIds array:
+ *   - If product.strainIds is empty, treat as "global" (matches any strain)
+ *   - Otherwise, require product.strainIds.includes(strainId)
  * - If doseKey is provided, prefers products with matching doseKey
  * - Sorts: isHousePick first, then by match weights, then by name
  * - Returns at most 4 products
@@ -15,9 +17,12 @@ export function getProductsForStrainAndDose(
   strainId: string,
   doseKey?: DoseKey | null
 ): Product[] {
-  // Start with active products that match the strainId
+  // Start with active products that match the strain
+  // Empty strainIds means "global" - matches all strains
   const activeProducts = dataset.products.filter(
-    (p) => p.status === "active" && p.strainId === strainId
+    (p) =>
+      p.status === "active" &&
+      (p.strainIds.length === 0 || p.strainIds.includes(strainId))
   );
 
   if (activeProducts.length === 0) {

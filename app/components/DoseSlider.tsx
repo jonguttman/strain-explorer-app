@@ -88,15 +88,15 @@ export function DoseSlider({
           height={20}
           className="opacity-60"
         />
-        <div className="space-y-1">
-          <p>Version {KIOSK_VERSION}</p>
-          <p className="text-[9px]">
+        <div className="space-y-1.5">
+          <p className="text-xs">Version {KIOSK_VERSION}</p>
+          <p className="text-xs">
             On iPhone, use &quot;Add to Home Screen&quot; for the best kiosk experience.
           </p>
-          <p className="text-[9px]">
+          <p className="text-xs">
             © {currentYear} The Original Psilly. All rights reserved.
           </p>
-          <p className="text-[8px] leading-snug text-stone-400 uppercase tracking-wide max-w-xs mt-2">
+          <p className="text-[11px] leading-snug text-stone-400 uppercase tracking-wide max-w-sm mt-2">
             CONFIDENTIAL BETA. This application contains proprietary methodology, trade secrets, and confidential business information. Unauthorized disclosure, distribution, or reproduction is strictly prohibited.
           </p>
         </div>
