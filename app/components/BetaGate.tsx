@@ -6,8 +6,8 @@ export function BetaGate() {
   return (
     <div className="min-h-screen bg-[#f6eddc] flex flex-col items-center justify-center px-4 py-12">
       <div className="w-full max-w-md">
-        {/* Logo */}
-        <div className="flex justify-center mb-8">
+        {/* Logo + Product Lockup */}
+        <div className="flex flex-col items-center mb-8">
           <Image
             src="/TOPsilly2026.svg"
             alt="The Original Psilly"
@@ -15,6 +15,14 @@ export function BetaGate() {
             height={30}
             className="opacity-80"
           />
+          <div className="mt-4 text-center">
+            <h1 className="text-2xl font-bold tracking-tight text-[#3f301f]">
+              Tripdar™
+            </h1>
+            <p className="text-xs text-[#6b5841] mt-1">
+              Trip radar powered by Fungapedia
+            </p>
+          </div>
         </div>
 
         {/* Main card */}
@@ -36,14 +44,13 @@ export function BetaGate() {
             </svg>
           </div>
 
-          <h1 className="text-xl font-semibold text-[#3f301f] mb-3">
+          <h2 className="text-xl font-semibold text-[#3f301f] mb-3">
             Confidential beta – invite only
-          </h1>
+          </h2>
 
           <p className="text-sm text-[#6b5841] leading-relaxed mb-4">
-            This version of the Strain Explorer is part of a private beta program
-            for partners of The Original Psilly. To protect our proprietary
-            methodology and content, access is limited to invited testers.
+            Tripdar is part of a private beta program for partners of The Original Psilly. 
+            To protect our proprietary Fungapedia methodology and content, access is limited to invited testers.
           </p>
 
           <p className="text-sm text-[#8b7a5c] leading-relaxed mb-6">
@@ -56,7 +63,7 @@ export function BetaGate() {
           </p>
 
           <a
-            href="mailto:hello@theoriginalpsilly.com?subject=Strain%20Explorer%20Beta%20Invite%20Request"
+            href="mailto:hello@theoriginalpsilly.com?subject=Tripdar%20Beta%20Invite%20Request"
             className="inline-flex items-center justify-center rounded-full bg-[#3f301f] px-6 py-3 text-sm font-semibold text-[#f6eddc] hover:bg-[#2d1d12] transition shadow-sm"
           >
             Request a beta invite
@@ -66,12 +73,11 @@ export function BetaGate() {
         {/* Footer */}
         <div className="mt-8 text-center space-y-2">
           <p className="text-[9px] text-stone-400">
-            © {currentYear} The Original Psilly. All rights reserved.
+            © {currentYear} The Original Psilly. Tripdar™ powered by Fungapedia. All rights reserved.
           </p>
           <p className="text-[8px] leading-snug text-stone-400 uppercase tracking-wide max-w-sm mx-auto">
-            CONFIDENTIAL BETA. This application contains proprietary methodology,
-            trade secrets, and confidential business information. Unauthorized
-            disclosure, distribution, or reproduction is strictly prohibited.
+            CONFIDENTIAL BETA. Tripdar™ and the underlying Fungapedia dataset are proprietary and intended only for authorized Psilly partners.
+            Unauthorized disclosure, distribution, or reproduction is strictly prohibited.
           </p>
         </div>
       </div>

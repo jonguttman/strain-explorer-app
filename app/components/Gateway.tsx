@@ -62,8 +62,8 @@ export function Gateway() {
   return (
     <div className="min-h-screen bg-[#f6eddc] flex items-center justify-center p-4">
       <div className="w-full max-w-4xl">
-        {/* Logo */}
-        <div className="flex justify-center mb-8">
+        {/* Logo + Product Lockup */}
+        <div className="flex flex-col items-center mb-8">
           <Image
             src="/TOPsilly2026.svg"
             alt="The Original Psilly"
@@ -71,18 +71,29 @@ export function Gateway() {
             height={36}
             priority
           />
+          <div className="mt-4 text-center">
+            <h1 className="text-3xl font-bold tracking-tight text-[#3f301f]">
+              Tripdar™
+            </h1>
+            <p className="text-sm text-[#6b5841] mt-1">
+              Trip radar powered by Fungapedia
+            </p>
+            <p className="text-[10px] text-stone-400 mt-1 uppercase tracking-wide">
+              In partnership with The Original Psilly
+            </p>
+          </div>
         </div>
 
         {/* Main card with two columns */}
         <div className="bg-white rounded-3xl border border-[#ddcbaa] shadow-lg overflow-hidden">
           <div className="grid md:grid-cols-2 divide-y md:divide-y-0 md:divide-x divide-[#e8dcc4]">
-            {/* Left: Launch Kiosk */}
+            {/* Left: Launch Tripdar Kiosk */}
             <div className="p-8">
               <h2 className="text-xl font-semibold text-[#3f301f] mb-2">
-                Launch Kiosk
+                Launch Tripdar Kiosk
               </h2>
               <p className="text-sm text-stone-600 mb-6">
-                Have an invite link? Enter your access key below to open the Strain Explorer kiosk.
+                Have an access link? Enter your access key to open the Tripdar experience browser.
               </p>
 
               <form onSubmit={handleKioskLaunch} className="space-y-4">
@@ -116,13 +127,13 @@ export function Gateway() {
               </p>
             </div>
 
-            {/* Right: Psilly Guides - Magic Link */}
+            {/* Right: Tripdar Guides - Magic Link */}
             <div className="p-8 bg-[#fdfbf7]">
               <h2 className="text-xl font-semibold text-[#3f301f] mb-2">
-                Psilly Guides
+                Tripdar Guides
               </h2>
               <p className="text-sm text-stone-600 mb-6">
-                Staff and certified guides can sign in to access training materials and the guide portal.
+                Staff and certified guides can sign in to access training materials and their engagement portal.
               </p>
 
               <form onSubmit={handleRequestMagicLink} className="space-y-4">
@@ -176,9 +187,14 @@ export function Gateway() {
         </div>
 
         {/* Footer */}
-        <p className="mt-6 text-center text-xs text-stone-500">
-          © {new Date().getFullYear()} The Original Psilly. All rights reserved.
-        </p>
+        <div className="mt-6 text-center space-y-2">
+          <p className="text-xs text-stone-500">
+            © {new Date().getFullYear()} The Original Psilly. Tripdar™ powered by Fungapedia. All rights reserved.
+          </p>
+          <p className="text-[9px] text-stone-400 uppercase tracking-wide max-w-md mx-auto">
+            CONFIDENTIAL BETA. Tripdar™ and the underlying Fungapedia dataset are proprietary and intended only for authorized Psilly partners.
+          </p>
+        </div>
       </div>
     </div>
   );

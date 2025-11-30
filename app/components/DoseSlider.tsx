@@ -25,30 +25,31 @@ export function DoseSlider({
   }
 
   const currentYear = new Date().getFullYear();
+  const activeLabel = (config[selected]?.label ?? selected).toUpperCase();
 
   return (
-    <div className="w-full max-w-xl mx-auto">
-      {/* Apothecary Dose Meter - full width */}
-      <ApothecaryDoseMeter
-        doseKey={selected}
-        strainName={strainName}
-        onChangeDoseKey={onSelect}
-      />
+    <div className="w-full max-w-[600px] mx-auto mb-6">
+      {/* Section title */}
+      <p 
+        className="text-[11px] font-semibold tracking-[0.14em] uppercase text-center mb-1"
+        style={{ color: "var(--ink-subtle)" }}
+      >
+        Dose
+      </p>
 
-      {/* Dose label buttons aligned with tick marks */}
+      {/* Dose label row - ABOVE the slider */}
       <div
-        className="mt-1 flex items-center text-center"
+        className="flex justify-between text-[10px] sm:text-[11px] leading-tight tracking-[0.14em] uppercase mb-1"
         style={{
           // Match the SVG padding: X_START=20, X_END=480 out of 500 total
-          // That's 4% on left and 4% on right
           paddingLeft: "4%",
           paddingRight: "4%",
+          color: "var(--ink-subtle)",
         }}
       >
         {order.map((key, idx) => {
           const label = (config[key]?.label ?? key).toUpperCase();
           const isActive = key === selected;
-          // Calculate flex positioning to center each button on its tick
           const isFirst = idx === 0;
           const isLast = idx === order.length - 1;
 
@@ -58,29 +59,49 @@ export function DoseSlider({
               key={key}
               onClick={() => onSelect(key)}
               className={`
-                flex-1 py-1 text-[10px] sm:text-xs font-medium uppercase tracking-wider transition-all duration-200
-                focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#3f301f]
-                ${isActive
-                  ? "text-[#3f301f] font-semibold"
-                  : "text-stone-400 hover:text-stone-600"
-                }
+                flex-1 py-0.5 font-medium transition-all duration-200
+                focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2
                 ${isFirst ? "text-left" : isLast ? "text-right" : "text-center"}
               `}
+              style={{
+                color: isActive ? "var(--accent)" : "var(--ink-subtle)",
+                fontWeight: isActive ? 600 : 500,
+              }}
             >
-              {isActive ? (
-                <span className="inline-flex items-center justify-center rounded-full border border-[#3f301f] bg-white px-2 py-0.5 shadow-sm">
-                  {label}
-                </span>
-              ) : (
-                label
-              )}
+              {label}
             </button>
           );
         })}
       </div>
 
+      {/* Apothecary Dose Meter - brass slider */}
+      <div className="h-[80px] sm:h-[90px]">
+        <ApothecaryDoseMeter
+          doseKey={selected}
+          strainName={strainName}
+          onChangeDoseKey={onSelect}
+        />
+      </div>
+
+      {/* Active dose pill */}
+      <div className="mt-2 flex justify-center">
+        <span 
+          className="inline-flex items-center justify-center rounded-full border px-4 py-1.5 shadow-sm font-semibold text-sm"
+          style={{
+            background: "var(--accent-pill)",
+            borderColor: "var(--accent)",
+            color: "var(--accent)",
+          }}
+        >
+          {activeLabel}
+        </span>
+      </div>
+
       {/* Footer: Logo, Version, Add-to-Home, Copyright */}
-      <div className="mt-4 flex flex-col items-center gap-2 text-center text-[10px] text-stone-400">
+      <div 
+        className="mt-4 flex flex-col items-center gap-2 text-center text-[10px]"
+        style={{ color: "var(--ink-subtle)" }}
+      >
         <Image
           src="/TOPsilly2026.svg"
           alt="The Original Psilly"
@@ -94,10 +115,13 @@ export function DoseSlider({
             On iPhone, use &quot;Add to Home Screen&quot; for the best kiosk experience.
           </p>
           <p className="text-xs">
-            © {currentYear} The Original Psilly. All rights reserved.
+            © {currentYear} The Original Psilly. Tripdar™ powered by Fungapedia. All rights reserved.
           </p>
-          <p className="text-[11px] leading-snug text-stone-400 uppercase tracking-wide max-w-sm mt-2">
-            CONFIDENTIAL BETA. This application contains proprietary methodology, trade secrets, and confidential business information. Unauthorized disclosure, distribution, or reproduction is strictly prohibited.
+          <p 
+            className="text-[11px] leading-snug uppercase tracking-wide max-w-sm mt-2"
+            style={{ color: "var(--ink-subtle)" }}
+          >
+            CONFIDENTIAL BETA. Tripdar™ and the underlying Fungapedia dataset are proprietary and intended only for authorized Psilly partners. Unauthorized disclosure, distribution, or reproduction is strictly prohibited.
           </p>
         </div>
       </div>

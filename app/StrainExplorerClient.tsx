@@ -282,13 +282,19 @@ export function StrainExplorerClient() {
 
       <div className="flex-1 w-full px-4 pb-10 sm:px-6 lg:px-8">
         <div
-          className="mx-auto flex h-full w-full max-w-xl flex-col gap-3"
+          className="mx-auto flex h-full w-full max-w-xl flex-col gap-2"
           style={accentStyle}
         >
-          <section className="mt-6 flex flex-1 flex-col rounded-3xl border border-[#ddcbaa] shadow-sm overflow-hidden">
+          <section 
+            className="mt-4 flex flex-1 flex-col rounded-3xl border shadow-sm overflow-hidden"
+            style={{ 
+              background: "var(--card-bg)", 
+              borderColor: "var(--card-border)" 
+            }}
+          >
             {mode === "visual" ? (
               showFeedbackQR ? (
-                <div className="flex-1 flex flex-col bg-white">
+                <div className="flex-1 flex flex-col" style={{ background: "var(--card-bg)" }}>
                   <div className="flex-1 flex items-center justify-center px-4 py-6">
                     <div className="h-64 w-full md:h-80 lg:h-96">
                       <FeedbackOverlay
@@ -302,7 +308,7 @@ export function StrainExplorerClient() {
                       />
                     </div>
                   </div>
-                  <div className="border-t border-[#e2d3b5]/70 py-2">
+                  <div className="py-3" style={{ borderTop: "1px solid var(--card-border)" }}>
                     <div className="flex items-center justify-center">
                       <ModeSwitch mode={mode} onChange={setMode} />
                     </div>
@@ -319,7 +325,7 @@ export function StrainExplorerClient() {
                 />
               )
             ) : (
-              <div className="flex-1 flex flex-col bg-white">
+              <div className="flex-1 flex flex-col" style={{ background: "var(--card-bg)" }}>
                 <div className="flex-1 px-4 py-6 overflow-auto">
                   <DetailsPanel
                     content={doseData.content}
@@ -334,7 +340,7 @@ export function StrainExplorerClient() {
                     products={productsForSelection}
                   />
                 </div>
-                <div className="border-t border-[#e2d3b5]/70 py-2">
+                <div className="py-3" style={{ borderTop: "1px solid var(--card-border)" }}>
                   <div className="flex items-center justify-center">
                     <ModeSwitch mode={mode} onChange={setMode} />
                   </div>

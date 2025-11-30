@@ -1,4 +1,4 @@
-// Shared types for the strain explorer application
+// Shared types for the Tripdar application (trip radar powered by Fungapedia)
 // This is the single source of truth for all type definitions
 
 export type DoseKey = "micro" | "mini" | "macro" | "museum" | "mega" | "hero";

@@ -14,7 +14,6 @@ import {
 import type { DoseKey, TraitAxisId, DoseTraits, StrainExperienceMeta, ExperienceLevel } from "@/lib/types";
 import { formatAxisLabel, hexToRgba } from "@/lib/utils";
 import { DOSE_STYLE, heroGlowPlugin } from "./strainConstants";
-import { getApothecaryRadarOptions, getMainRadarDatasetStyle } from "@/lib/radarTheme";
 
 ChartJS.register(RadialLinearScale, PointElement, LineElement, Filler, Tooltip);
 
@@ -25,14 +24,6 @@ type RadarPanelProps = {
   doseKey: DoseKey;
   experienceMeta?: StrainExperienceMeta;
   modeSwitch?: React.ReactNode;
-};
-
-// Warm apothecary colors
-const WARM = {
-  dark: "#3f301f",      // Deep warm brown
-  medium: "#6b5841",    // Medium brown  
-  light: "#8b7a5c",     // Light brown
-  cream: "#f6eddc",     // Warm cream
 };
 
 // Helper to get level styling config - warm tones
@@ -48,17 +39,20 @@ function getLevelConfig(level?: ExperienceLevel) {
   }
 }
 
-// Internal Chip component for metadata display - warm cream with brown text
+// Internal Chip component for metadata display - uses CSS variables
 function Chip({ children }: { children: React.ReactNode }) {
   return (
     <span 
-      className="inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs uppercase tracking-[0.1em] shadow-sm"
+      className="inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-[11px] font-medium uppercase tracking-[0.1em]"
       style={{ 
-        backgroundColor: WARM.cream, 
-        color: WARM.medium,
-        border: `1px solid ${WARM.light}40`
+        background: "var(--accent-pill)", 
+        color: "var(--ink-soft)",
       }}
     >
+      <span 
+        className="w-1.5 h-1.5 rounded-full" 
+        style={{ background: "var(--accent)" }} 
+      />
       {children}
     </span>
   );
@@ -67,9 +61,6 @@ function Chip({ children }: { children: React.ReactNode }) {
 export function RadarPanel({ color, traits, axisLabels, doseKey, experienceMeta, modeSwitch }: RadarPanelProps) {
   const style = DOSE_STYLE[doseKey] ?? DOSE_STYLE.macro;
   const baseHex = doseKey === "micro" ? "#c4c4c4" : color;
-  
-  // Use shared theme for dataset styling
-  const datasetStyle = getMainRadarDatasetStyle(baseHex, style.fillAlpha);
 
   const data = useMemo(() => {
     const labels = axisLabels.map(formatAxisLabel);
@@ -79,51 +70,111 @@ export function RadarPanel({ color, traits, axisLabels, doseKey, experienceMeta,
       datasets: [
         {
           data: values,
-          ...datasetStyle,
+          backgroundColor: hexToRgba(baseHex, style.fillAlpha),
+          borderColor: hexToRgba(baseHex, 0.85),
+          borderWidth: 2.5,
+          pointRadius: 5,
+          pointHoverRadius: 7,
+          pointBackgroundColor: hexToRgba(baseHex, 0.9),
+          pointBorderColor: "#fff",
+          pointBorderWidth: 2,
         },
       ],
     };
-  }, [traits, axisLabels, datasetStyle]);
+  }, [traits, axisLabels, baseHex, style.fillAlpha]);
 
-  // Use shared Apothecary radar options
-  const baseOptions = useMemo(() => getApothecaryRadarOptions({ max: 100 }), []);
+  // Premium radar chart options using CSS variable colors
+  const chartOptions = useMemo<ChartOptions<"radar">>(() => ({
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: { display: false },
+      tooltip: { enabled: false },
+      heroGlow: {
+        enabled: style.hasGlow,
+        color: hexToRgba(color, 0.55),
+        blur: 32,
+        lineWidth: 2.5,
+      },
+    } as ChartOptions<"radar">["plugins"],
+    animation: {
+      duration: 400,
+      easing: "easeOutQuad" as const,
+    },
+    scales: {
+      r: {
+        beginAtZero: true,
+        min: 0,
+        suggestedMax: 100,
+        ticks: {
+          display: false,
+          stepSize: 20,
+        },
+        grid: {
+          color: "#e5d4bf", // --radar-grid
+          lineWidth: 1,
+        },
+        angleLines: {
+          color: "rgba(0,0,0,0.04)", // Very subtle
+          lineWidth: 1,
+        },
+        pointLabels: {
+          font: {
+            size: 13,
+            weight: 600,
+            family: "'Libre Baskerville', Georgia, serif",
+          },
+          color: "#8a6c4a", // --radar-axis
+          padding: 10,
+        },
+      },
+    },
+  }), [style.hasGlow, color]);
 
   const levelCfg = getLevelConfig(experienceMeta?.experienceLevel);
 
-  // Create radial gradient - white center over radar, transitions through labels to accent color
-  const gradientBg = `radial-gradient(circle at 50% 45%, 
-    white 0%, 
-    white 35%, 
-    ${hexToRgba(baseHex, 0.08)} 55%, 
-    ${hexToRgba(baseHex, 0.15)} 100%)`;
-
   return (
     <div 
-      className="w-full flex flex-col px-4 pt-3 pb-0"
-      style={{ background: gradientBg }}
+      className="w-full flex flex-col px-4 sm:px-8 pt-4 sm:pt-6 pb-0 relative overflow-hidden"
+      style={{ 
+        backgroundColor: "var(--card-inner)",
+      }}
     >
+      {/* Premium sunburst pattern background */}
+      <div 
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          backgroundImage: "url('/sunburst-pattern.svg')",
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          opacity: 0.5,
+        }}
+      />
       {/* Top row: Trip profile on left, Balanced badge on right */}
       {experienceMeta && (
-        <div className="flex items-start justify-between gap-4 px-2 mb-1">
+        <div className="flex items-start justify-between gap-4 px-2 mb-2 relative z-10">
           {/* Left: Trip profile + tagline */}
           <div className="flex-shrink-0">
-            <p className="text-base font-medium" style={{ color: WARM.medium }}>
-              Trip profile
+            <p 
+              className="text-xs font-bold tracking-[0.1em] uppercase"
+              style={{ color: "var(--accent)" }}
+            >
+              Tripdar · Trip profile
             </p>
             {experienceMeta.effectTagline && (
-              <p className="mt-0.5 text-sm max-w-[200px]" style={{ color: WARM.dark }}>
+              <p 
+                className="mt-1 text-sm leading-relaxed max-w-[220px]"
+                style={{ color: "var(--ink-main)" }}
+              >
                 {experienceMeta.effectTagline}
               </p>
             )}
           </div>
 
-          {/* Right: Intensity badge - warm cream pill */}
+          {/* Right: Intensity badge */}
           <div 
-            className="inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-medium shadow-sm"
-            style={{ 
-              backgroundColor: WARM.cream,
-              border: `1px solid ${WARM.light}40`
-            }}
+            className="inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-medium"
+            style={{ background: "var(--accent-pill)" }}
           >
             <span className={`h-2 w-2 rounded-full ${levelCfg.dotClass}`} />
             <span className={levelCfg.textClass}>{levelCfg.label}</span>
@@ -131,29 +182,18 @@ export function RadarPanel({ color, traits, axisLabels, doseKey, experienceMeta,
         </div>
       )}
 
-      {/* Radar chart container - explicit height for proper sizing */}
-      <div className="relative mx-auto w-full max-w-[520px] h-[320px] sm:h-[360px]">
+      {/* Radar chart container - enlarged */}
+      <div className="relative z-10 mx-auto w-full max-w-[540px] h-[320px] sm:h-[380px]">
         <Radar
           data={data}
-          options={{
-            ...baseOptions,
-            plugins: {
-              ...(baseOptions.plugins ?? {}),
-              heroGlow: {
-                enabled: style.hasGlow,
-                color: hexToRgba(color, 0.55),
-                blur: 32,
-                lineWidth: 2.5,
-              },
-            } as ChartOptions<"radar">["plugins"],
-          }}
+          options={chartOptions}
           plugins={[heroGlowPlugin]}
         />
       </div>
 
       {/* Timeline chips below radar */}
       {experienceMeta?.timeline && (
-        <div className="flex justify-center gap-3 py-1">
+        <div className="relative z-10 flex justify-center gap-3 py-2">
           <Chip>
             {experienceMeta.timeline.peakMinHours}–{experienceMeta.timeline.peakMaxHours}hr peak
           </Chip>
@@ -165,7 +205,7 @@ export function RadarPanel({ color, traits, axisLabels, doseKey, experienceMeta,
 
       {/* Mode switch at bottom */}
       {modeSwitch && (
-        <div className="py-2" style={{ borderTop: `1px solid ${WARM.light}30` }}>
+        <div className="relative z-10 py-3" style={{ borderTop: "1px solid var(--card-border)" }}>
           <div className="flex items-center justify-center">
             {modeSwitch}
           </div>

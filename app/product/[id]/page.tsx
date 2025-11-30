@@ -80,7 +80,7 @@ export default async function ProductPage({
                 d="M15 19l-7-7 7-7"
               />
             </svg>
-            Back to Strain Explorer
+            Back to Tripdar
           </Link>
           {product.status && (
             <span

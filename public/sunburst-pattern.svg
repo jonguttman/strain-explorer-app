@@ -1,0 +1,120 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="800" viewBox="0 0 800 800">
+  <defs>
+    <!-- Main center burst - slightly more visible -->
+    <g id="sunburst-main">
+      <g stroke="#c4b49a" stroke-width="0.8" fill="none" opacity="0.35">
+        <line x1="0" y1="0" x2="0" y2="-100"/>
+        <line x1="0" y1="0" x2="13" y2="-99" transform="rotate(7.5)"/>
+        <line x1="0" y1="0" x2="26" y2="-97" transform="rotate(15)"/>
+        <line x1="0" y1="0" x2="38" y2="-92" transform="rotate(22.5)"/>
+        <line x1="0" y1="0" x2="50" y2="-87" transform="rotate(30)"/>
+        <line x1="0" y1="0" x2="61" y2="-79" transform="rotate(37.5)"/>
+        <line x1="0" y1="0" x2="71" y2="-71" transform="rotate(45)"/>
+        <line x1="0" y1="0" x2="79" y2="-61" transform="rotate(52.5)"/>
+        <line x1="0" y1="0" x2="87" y2="-50" transform="rotate(60)"/>
+        <line x1="0" y1="0" x2="92" y2="-38" transform="rotate(67.5)"/>
+        <line x1="0" y1="0" x2="97" y2="-26" transform="rotate(75)"/>
+        <line x1="0" y1="0" x2="99" y2="-13" transform="rotate(82.5)"/>
+        <line x1="0" y1="0" x2="100" y2="0" transform="rotate(90)"/>
+        <line x1="0" y1="0" x2="99" y2="13" transform="rotate(97.5)"/>
+        <line x1="0" y1="0" x2="97" y2="26" transform="rotate(105)"/>
+        <line x1="0" y1="0" x2="92" y2="38" transform="rotate(112.5)"/>
+        <line x1="0" y1="0" x2="87" y2="50" transform="rotate(120)"/>
+        <line x1="0" y1="0" x2="79" y2="61" transform="rotate(127.5)"/>
+        <line x1="0" y1="0" x2="71" y2="71" transform="rotate(135)"/>
+        <line x1="0" y1="0" x2="61" y2="79" transform="rotate(142.5)"/>
+        <line x1="0" y1="0" x2="50" y2="87" transform="rotate(150)"/>
+        <line x1="0" y1="0" x2="38" y2="92" transform="rotate(157.5)"/>
+        <line x1="0" y1="0" x2="26" y2="97" transform="rotate(165)"/>
+        <line x1="0" y1="0" x2="13" y2="99" transform="rotate(172.5)"/>
+        <line x1="0" y1="0" x2="0" y2="100" transform="rotate(180)"/>
+        <line x1="0" y1="0" x2="-13" y2="99" transform="rotate(187.5)"/>
+        <line x1="0" y1="0" x2="-26" y2="97" transform="rotate(195)"/>
+        <line x1="0" y1="0" x2="-38" y2="92" transform="rotate(202.5)"/>
+        <line x1="0" y1="0" x2="-50" y2="87" transform="rotate(210)"/>
+        <line x1="0" y1="0" x2="-61" y2="79" transform="rotate(217.5)"/>
+        <line x1="0" y1="0" x2="-71" y2="71" transform="rotate(225)"/>
+        <line x1="0" y1="0" x2="-79" y2="61" transform="rotate(232.5)"/>
+        <line x1="0" y1="0" x2="-87" y2="50" transform="rotate(240)"/>
+        <line x1="0" y1="0" x2="-92" y2="38" transform="rotate(247.5)"/>
+        <line x1="0" y1="0" x2="-97" y2="26" transform="rotate(255)"/>
+        <line x1="0" y1="0" x2="-99" y2="13" transform="rotate(262.5)"/>
+        <line x1="0" y1="0" x2="-100" y2="0" transform="rotate(270)"/>
+        <line x1="0" y1="0" x2="-99" y2="-13" transform="rotate(277.5)"/>
+        <line x1="0" y1="0" x2="-97" y2="-26" transform="rotate(285)"/>
+        <line x1="0" y1="0" x2="-92" y2="-38" transform="rotate(292.5)"/>
+        <line x1="0" y1="0" x2="-87" y2="-50" transform="rotate(300)"/>
+        <line x1="0" y1="0" x2="-79" y2="-61" transform="rotate(307.5)"/>
+        <line x1="0" y1="0" x2="-71" y2="-71" transform="rotate(315)"/>
+        <line x1="0" y1="0" x2="-61" y2="-79" transform="rotate(322.5)"/>
+        <line x1="0" y1="0" x2="-50" y2="-87" transform="rotate(330)"/>
+        <line x1="0" y1="0" x2="-38" y2="-92" transform="rotate(337.5)"/>
+        <line x1="0" y1="0" x2="-26" y2="-97" transform="rotate(345)"/>
+        <line x1="0" y1="0" x2="-13" y2="-99" transform="rotate(352.5)"/>
+      </g>
+    </g>
+    <!-- Corner bursts - very subtle, just a whisper -->
+    <g id="sunburst-corner">
+      <g stroke="#c4b49a" stroke-width="0.6" fill="none" opacity="0.18">
+        <line x1="0" y1="0" x2="0" y2="-100"/>
+        <line x1="0" y1="0" x2="13" y2="-99" transform="rotate(7.5)"/>
+        <line x1="0" y1="0" x2="26" y2="-97" transform="rotate(15)"/>
+        <line x1="0" y1="0" x2="38" y2="-92" transform="rotate(22.5)"/>
+        <line x1="0" y1="0" x2="50" y2="-87" transform="rotate(30)"/>
+        <line x1="0" y1="0" x2="61" y2="-79" transform="rotate(37.5)"/>
+        <line x1="0" y1="0" x2="71" y2="-71" transform="rotate(45)"/>
+        <line x1="0" y1="0" x2="79" y2="-61" transform="rotate(52.5)"/>
+        <line x1="0" y1="0" x2="87" y2="-50" transform="rotate(60)"/>
+        <line x1="0" y1="0" x2="92" y2="-38" transform="rotate(67.5)"/>
+        <line x1="0" y1="0" x2="97" y2="-26" transform="rotate(75)"/>
+        <line x1="0" y1="0" x2="99" y2="-13" transform="rotate(82.5)"/>
+        <line x1="0" y1="0" x2="100" y2="0" transform="rotate(90)"/>
+        <line x1="0" y1="0" x2="99" y2="13" transform="rotate(97.5)"/>
+        <line x1="0" y1="0" x2="97" y2="26" transform="rotate(105)"/>
+        <line x1="0" y1="0" x2="92" y2="38" transform="rotate(112.5)"/>
+        <line x1="0" y1="0" x2="87" y2="50" transform="rotate(120)"/>
+        <line x1="0" y1="0" x2="79" y2="61" transform="rotate(127.5)"/>
+        <line x1="0" y1="0" x2="71" y2="71" transform="rotate(135)"/>
+        <line x1="0" y1="0" x2="61" y2="79" transform="rotate(142.5)"/>
+        <line x1="0" y1="0" x2="50" y2="87" transform="rotate(150)"/>
+        <line x1="0" y1="0" x2="38" y2="92" transform="rotate(157.5)"/>
+        <line x1="0" y1="0" x2="26" y2="97" transform="rotate(165)"/>
+        <line x1="0" y1="0" x2="13" y2="99" transform="rotate(172.5)"/>
+        <line x1="0" y1="0" x2="0" y2="100" transform="rotate(180)"/>
+        <line x1="0" y1="0" x2="-13" y2="99" transform="rotate(187.5)"/>
+        <line x1="0" y1="0" x2="-26" y2="97" transform="rotate(195)"/>
+        <line x1="0" y1="0" x2="-38" y2="92" transform="rotate(202.5)"/>
+        <line x1="0" y1="0" x2="-50" y2="87" transform="rotate(210)"/>
+        <line x1="0" y1="0" x2="-61" y2="79" transform="rotate(217.5)"/>
+        <line x1="0" y1="0" x2="-71" y2="71" transform="rotate(225)"/>
+        <line x1="0" y1="0" x2="-79" y2="61" transform="rotate(232.5)"/>
+        <line x1="0" y1="0" x2="-87" y2="50" transform="rotate(240)"/>
+        <line x1="0" y1="0" x2="-92" y2="38" transform="rotate(247.5)"/>
+        <line x1="0" y1="0" x2="-97" y2="26" transform="rotate(255)"/>
+        <line x1="0" y1="0" x2="-99" y2="13" transform="rotate(262.5)"/>
+        <line x1="0" y1="0" x2="-100" y2="0" transform="rotate(270)"/>
+        <line x1="0" y1="0" x2="-99" y2="-13" transform="rotate(277.5)"/>
+        <line x1="0" y1="0" x2="-97" y2="-26" transform="rotate(285)"/>
+        <line x1="0" y1="0" x2="-92" y2="-38" transform="rotate(292.5)"/>
+        <line x1="0" y1="0" x2="-87" y2="-50" transform="rotate(300)"/>
+        <line x1="0" y1="0" x2="-79" y2="-61" transform="rotate(307.5)"/>
+        <line x1="0" y1="0" x2="-71" y2="-71" transform="rotate(315)"/>
+        <line x1="0" y1="0" x2="-61" y2="-79" transform="rotate(322.5)"/>
+        <line x1="0" y1="0" x2="-50" y2="-87" transform="rotate(330)"/>
+        <line x1="0" y1="0" x2="-38" y2="-92" transform="rotate(337.5)"/>
+        <line x1="0" y1="0" x2="-26" y2="-97" transform="rotate(345)"/>
+        <line x1="0" y1="0" x2="-13" y2="-99" transform="rotate(352.5)"/>
+      </g>
+    </g>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="800" height="800" fill="#faf6ef"/>
+  
+  <!-- Main center burst -->
+  <use href="#sunburst-main" transform="translate(400, 380) scale(1.8)"/>
+  
+  <!-- Corner frame bursts - positioned at edges, very subtle -->
+  <use href="#sunburst-corner" transform="translate(760, 40) scale(1.1)"/>
+  <use href="#sunburst-corner" transform="translate(40, 760) scale(1.1)"/>
+</svg>

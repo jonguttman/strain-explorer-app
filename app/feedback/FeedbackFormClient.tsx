@@ -547,12 +547,12 @@ export function FeedbackFormClient({
                     />
                     
                     {/* Range input */}
-                    <input
-                      type="range"
-                      id={`axis-${axis}`}
-                      min={0}
-                      max={10}
-                      step={1}
+              <input
+                type="range"
+                id={`axis-${axis}`}
+                min={0}
+                max={10}
+                step={1}
                       value={felt}
                       onChange={(e) => handleSliderChange(axis, Number(e.target.value))}
                       className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
@@ -561,12 +561,12 @@ export function FeedbackFormClient({
                     {/* Custom thumb */}
                     <div 
                       className="absolute top-1/2 -translate-y-1/2 w-4 h-4 rounded-full border-2 border-white shadow-sm pointer-events-none z-20"
-                      style={{ 
+                style={{
                         left: `calc(${(felt / 10) * 100}% - 8px)`,
                         backgroundColor: diff !== 0 ? diffColor : "#6b5841",
-                      }}
-                    />
-                  </div>
+                }}
+              />
+            </div>
                 </div>
               );
             })}

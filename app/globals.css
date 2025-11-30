@@ -3,6 +3,22 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  
+  /* Psilly Warm Palette */
+  --shell-bg: #f5eee1;        /* page background */
+  --card-bg: #fdf7ec;         /* main content cards */
+  --card-inner: #fbf1e0;      /* subtle inner panel / radar backdrop */
+  --card-border: #e0cbaa;
+  --ink-main: #3f3024;        /* main text */
+  --ink-soft: #7e6a55;        /* muted labels */
+  --ink-subtle: #b39a7b;
+  --accent: #8b5a2b;          /* primary cocoa brown */
+  --accent-soft: #f1d5a2;     /* soft accent background */
+  --accent-pill: #f7ebd6;     /* pills / tabs background */
+  --radar-fill: rgba(212, 145, 63, 0.26);
+  --radar-stroke: #d4913f;
+  --radar-grid: #e5d4bf;
+  --radar-axis: #8a6c4a;
 }
 
 @theme inline {
@@ -20,8 +36,8 @@
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
+  background: var(--shell-bg);
+  color: var(--ink-main);
   font-family: Arial, Helvetica, sans-serif;
 }
 
@@ -30,7 +46,7 @@ body {
   -webkit-appearance: none;
   appearance: none;
   height: 6px;
-  background: linear-gradient(to right, #d3c3a2 0%, #e8dcc8 100%);
+  background: linear-gradient(to right, var(--card-border) 0%, var(--card-inner) 100%);
   border-radius: 999px;
   outline: none;
   cursor: pointer;
@@ -38,7 +54,7 @@ body {
 }
 
 .dose-slider:hover {
-  background: linear-gradient(to right, #c4b393 0%, #ddd0b8 100%);
+  background: linear-gradient(to right, var(--ink-subtle) 0%, var(--card-border) 100%);
 }
 
 /* Webkit (Chrome, Safari, Edge) */
@@ -48,27 +64,27 @@ body {
   width: 22px;
   height: 22px;
   background: white;
-  border: 2px solid #3f301f;
+  border: 2px solid var(--accent);
   border-radius: 50%;
   cursor: pointer;
   box-shadow: 
-    0 2px 6px rgba(63, 48, 31, 0.25),
-    0 0 0 4px rgba(63, 48, 31, 0.08);
+    0 2px 6px rgba(139, 90, 43, 0.25),
+    0 0 0 4px rgba(139, 90, 43, 0.08);
   transition: all 0.2s ease;
 }
 
 .dose-slider::-webkit-slider-thumb:hover {
   transform: scale(1.1);
   box-shadow: 
-    0 3px 10px rgba(63, 48, 31, 0.3),
-    0 0 0 6px rgba(63, 48, 31, 0.1);
+    0 3px 10px rgba(139, 90, 43, 0.3),
+    0 0 0 6px rgba(139, 90, 43, 0.1);
 }
 
 .dose-slider::-webkit-slider-thumb:active {
   transform: scale(1.05);
   box-shadow: 
-    0 2px 8px rgba(63, 48, 31, 0.35),
-    0 0 0 8px rgba(63, 48, 31, 0.12);
+    0 2px 8px rgba(139, 90, 43, 0.35),
+    0 0 0 8px rgba(139, 90, 43, 0.12);
 }
 
 /* Firefox */
@@ -76,24 +92,24 @@ body {
   width: 22px;
   height: 22px;
   background: white;
-  border: 2px solid #3f301f;
+  border: 2px solid var(--accent);
   border-radius: 50%;
   cursor: pointer;
   box-shadow: 
-    0 2px 6px rgba(63, 48, 31, 0.25),
-    0 0 0 4px rgba(63, 48, 31, 0.08);
+    0 2px 6px rgba(139, 90, 43, 0.25),
+    0 0 0 4px rgba(139, 90, 43, 0.08);
   transition: all 0.2s ease;
 }
 
 .dose-slider::-moz-range-thumb:hover {
   transform: scale(1.1);
   box-shadow: 
-    0 3px 10px rgba(63, 48, 31, 0.3),
-    0 0 0 6px rgba(63, 48, 31, 0.1);
+    0 3px 10px rgba(139, 90, 43, 0.3),
+    0 0 0 6px rgba(139, 90, 43, 0.1);
 }
 
 .dose-slider::-moz-range-track {
   height: 6px;
-  background: linear-gradient(to right, #d3c3a2 0%, #e8dcc8 100%);
+  background: linear-gradient(to right, var(--card-border) 0%, var(--card-inner) 100%);
   border-radius: 999px;
 }

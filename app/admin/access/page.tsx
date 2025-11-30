@@ -34,7 +34,7 @@ export default async function AccessAdminPage() {
       <AdminNav active="access" title="Access Keys & Invite Links" />
       <div className="mx-auto max-w-5xl px-4 py-6 space-y-4">
         <p className="text-sm text-slate-600">
-          Manage partner access links, beta keys, and referral tracking for the Strain Explorer kiosk.
+          Manage partner access links, beta keys, and referral tracking for the Tripdar kiosk.
         </p>
 
         <div className="rounded-xl border border-slate-200 bg-white/90 shadow-sm p-5 space-y-3">

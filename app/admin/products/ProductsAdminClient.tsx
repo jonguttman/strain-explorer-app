@@ -173,7 +173,7 @@ export function ProductsAdminClient({ initialProducts, strainOptions }: Products
         <div>
           <h1 className="text-lg font-semibold text-slate-900">Products</h1>
           <p className="text-sm text-slate-500">
-            Manage product catalog entries that appear on the Strain Explorer details screen.
+            Manage product catalog entries that appear on the Tripdar details screen.
           </p>
         </div>
         <button

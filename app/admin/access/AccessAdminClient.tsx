@@ -84,7 +84,7 @@ export function AccessAdminClient({ initialKeys, initialSettings }: AccessAdminC
               <code className="px-1.5 py-0.5 rounded bg-slate-100 text-xs font-mono">
                 ?key=…
               </code>{" "}
-              or they&apos;ll see a private beta invite screen instead of the Strain Explorer.
+              or they&apos;ll see a private beta invite screen instead of Tripdar.
             </p>
           </div>
           <label className="relative inline-flex items-center cursor-pointer flex-shrink-0">
@@ -109,12 +109,12 @@ export function AccessAdminClient({ initialKeys, initialSettings }: AccessAdminC
       </section>
 
       {/* Access Keys Table */}
-      <section className="rounded-2xl bg-white shadow-sm border border-slate-200 p-6">
-        <div className="flex items-baseline justify-between gap-4 mb-4">
-          <div>
-            <h2 className="text-base font-semibold text-slate-900">
-              Current Access Keys
-            </h2>
+    <section className="rounded-2xl bg-white shadow-sm border border-slate-200 p-6">
+      <div className="flex items-baseline justify-between gap-4 mb-4">
+        <div>
+          <h2 className="text-base font-semibold text-slate-900">
+            Current Access Keys
+          </h2>
           <p className="mt-1 text-sm text-slate-600">
             These keys can be used as{" "}
             <code className="px-1.5 py-0.5 rounded bg-slate-100 text-xs font-mono">

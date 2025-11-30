@@ -1,4 +1,4 @@
-// Shared utility functions for the strain explorer application
+// Shared utility functions for the Tripdar application
 
 import type { EditorDataset } from "./types";
 
