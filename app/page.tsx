@@ -20,7 +20,9 @@ import type {
   StrainMeta,
   DoseConfig,
   AccessKey,
+  Product,
 } from "@/lib/types";
+import { getProductsForStrainAndDose } from "@/lib/productData";
 import { StrainHeader } from "./components/StrainHeader";
 import { StrainScroller } from "./components/StrainScroller";
 import { RadarPanel } from "./components/RadarPanel";
@@ -99,6 +101,12 @@ function StrainExplorerPageContent() {
         "--dose-accent-soft": accentSoft,
       }) as CSSProperties,
     [accentHex, accentSoft]
+  );
+
+  // Compute products for current strain/dose selection
+  const productsForSelection = useMemo<Product[]>(
+    () => getProductsForStrainAndDose(selectedStrainId, selectedDoseKey),
+    [selectedStrainId, selectedDoseKey]
   );
 
   useEffect(() => {
@@ -310,6 +318,7 @@ function StrainExplorerPageContent() {
                   accentHex={accentHex}
                   testimonials={doseData.testimonials ?? []}
                   accessKeyId={accessKeyParam ?? undefined}
+                  products={productsForSelection}
                 />
               )}
             </div>

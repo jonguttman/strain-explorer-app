@@ -144,3 +144,38 @@ export type FeedbackDataset = {
   entries: FeedbackEntry[];
 };
 
+// Product catalog types (read-only for now)
+export type ProductStatus = "active" | "inactive";
+
+export type ProductWhereToBuy = {
+  label: string;
+  url?: string;
+  address?: string;
+  notes?: string;
+};
+
+export type Product = {
+  id: string;                      // e.g. "psilly-mighty-caps-gt"
+  name: string;                    // e.g. "Psilly Mighty Caps – Golden Teacher"
+  brand: string;                   // e.g. "The Original Psilly"
+  strainId?: string;               // strain slug, e.g. "golden-teacher"
+  doseKey?: DoseKey;               // optional: micro/mini/macro/museum/mega/hero
+  shortDescription?: string;
+  imageUrl?: string;               // path under /public, e.g. "/products/mighty-caps-gt.png"
+  tags?: string[];
+  status: ProductStatus;
+  isHousePick?: boolean;
+  whereToBuy?: ProductWhereToBuy[];
+  externalUrl?: string;            // optional link to external PDP
+  createdAt?: string;
+  updatedAt?: string;
+  notes?: string;
+  strainMatchWeight?: number;      // optional, for future ranking
+  doseMatchWeight?: number;        // optional, for future ranking
+  partnerId?: string;              // optional: which partner this product is for
+};
+
+export type ProductDataset = {
+  products: Product[];
+};
+

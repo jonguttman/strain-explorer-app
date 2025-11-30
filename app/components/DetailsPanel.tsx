@@ -1,5 +1,6 @@
 import Link from "next/link";
-import type { DoseContent, DoseSnapshot, StrainMeta } from "@/lib/types";
+import Image from "next/image";
+import type { DoseContent, DoseSnapshot, StrainMeta, Product } from "@/lib/types";
 
 type DetailsPanelProps = {
   content: DoseContent;
@@ -11,6 +12,7 @@ type DetailsPanelProps = {
   accentHex: string;
   testimonials?: string[];
   accessKeyId?: string;
+  products?: Product[];
 };
 
 export function DetailsPanel({
@@ -23,6 +25,7 @@ export function DetailsPanel({
   accentHex,
   testimonials,
   accessKeyId,
+  products,
 }: DetailsPanelProps) {
   const gramDisplay =
     grams != null ? `${grams.toFixed(grams % 1 === 0 ? 0 : 1)} g` : null;
@@ -33,7 +36,7 @@ export function DetailsPanel({
   const idealSettings = snapshot?.setting?.filter((item) => item?.trim()) ?? [];
   const detailsText = content.details?.trim();
   const blurb = content.blurb?.trim();
-  const products = content.products ?? [];
+  const legacyProducts = content.products ?? [];
   const testimonialList =
     testimonials?.map((quote: string) => quote?.trim()).filter(Boolean) ?? [];
 
@@ -144,13 +147,24 @@ export function DetailsPanel({
           </section>
         ) : null}
 
-        {products.length ? (
-          <section className="mb-4">
-            <h4 className="mb-1 text-xs font-semibold uppercase tracking-wide text-stone-900">
-              SUGGESTED PRODUCTS
-            </h4>
+        <section className="mb-4">
+          <h4 className="mb-1 text-xs font-semibold uppercase tracking-wide text-stone-900">
+            SUGGESTED PRODUCTS
+          </h4>
+          {products && products.length > 0 ? (
+            <div className="space-y-3">
+              {products.slice(0, 4).map((product) => (
+                <ProductCard
+                  key={product.id}
+                  product={product}
+                  accentHex={accentHex}
+                  accessKeyId={accessKeyId}
+                />
+              ))}
+            </div>
+          ) : legacyProducts.length > 0 ? (
             <div className="flex flex-wrap gap-2">
-              {products.map((product) => (
+              {legacyProducts.map((product) => (
                 <span
                   key={product}
                   className="rounded-full border px-3 py-1 text-xs font-medium text-[#2d1d12]"
@@ -160,8 +174,12 @@ export function DetailsPanel({
                 </span>
               ))}
             </div>
-          </section>
-        ) : null}
+          ) : (
+            <p className="text-sm text-[#6b5841] italic">
+              Ask a guide for recommendations for this dose.
+            </p>
+          )}
+        </section>
 
         {testimonialList.length ? (
           <section className="mb-2">
@@ -220,6 +238,102 @@ function SnapshotFact({ label, value }: { label: string; value?: string }) {
       <div className="text-sm font-medium text-[#2d1d12]">
         {value?.trim() || "—"}
       </div>
+    </div>
+  );
+}
+
+function ProductCard({
+  product,
+  accentHex,
+  accessKeyId,
+}: {
+  product: Product;
+  accentHex: string;
+  accessKeyId?: string;
+}) {
+  const initials = product.name
+    .split(" ")
+    .slice(0, 2)
+    .map((w) => w[0])
+    .join("")
+    .toUpperCase();
+
+  const firstWhereToBuy = product.whereToBuy?.[0];
+  const href = accessKeyId
+    ? `/product/${product.id}?key=${accessKeyId}`
+    : `/product/${product.id}`;
+
+  return (
+    <div className="rounded-xl border border-[#e2d3b5] bg-white shadow-sm transition hover:border-[#d3c3a2] hover:shadow-md">
+      <Link href={href} className="flex gap-3 p-3">
+        {/* Thumbnail or initials */}
+        <div className="flex-shrink-0">
+          {product.imageUrl ? (
+            <div className="relative h-14 w-14 overflow-hidden rounded-lg bg-[#f6eddc]">
+              <Image
+                src={product.imageUrl}
+                alt={product.name}
+                fill
+                className="object-cover"
+                onError={(e) => {
+                  // Hide broken image and show initials fallback
+                  e.currentTarget.style.display = "none";
+                }}
+              />
+              {/* Fallback initials shown behind image */}
+              <div className="absolute inset-0 flex items-center justify-center text-sm font-semibold text-[#8b7a5c]">
+                {initials}
+              </div>
+            </div>
+          ) : (
+            <div
+              className="flex h-14 w-14 items-center justify-center rounded-lg text-sm font-semibold"
+              style={{
+                backgroundColor: `${accentHex}15`,
+                color: accentHex,
+              }}
+            >
+              {initials}
+            </div>
+          )}
+        </div>
+
+        {/* Content */}
+        <div className="min-w-0 flex-1">
+          <div className="flex items-start justify-between gap-2">
+            <div className="min-w-0">
+              <h5 className="truncate text-sm font-semibold text-[#2d1d12]">
+                {product.name}
+              </h5>
+              <p className="text-xs text-[#6b5841]">{product.brand}</p>
+            </div>
+            {product.isHousePick && (
+              <span
+                className="flex-shrink-0 rounded-full px-2 py-0.5 text-[0.6rem] font-semibold uppercase tracking-wide"
+                style={{
+                  backgroundColor: `${accentHex}20`,
+                  color: accentHex,
+                }}
+              >
+                House pick
+              </span>
+            )}
+          </div>
+
+          {product.shortDescription && (
+            <p className="mt-1 line-clamp-2 text-xs leading-relaxed text-[#4c3926]">
+              {product.shortDescription}
+            </p>
+          )}
+
+          {firstWhereToBuy && (
+            <p className="mt-1.5 text-[0.65rem] text-[#8b7a5c]">
+              <span className="font-medium">Where to buy:</span>{" "}
+              {firstWhereToBuy.label}
+            </p>
+          )}
+        </div>
+      </Link>
     </div>
   );
 }
