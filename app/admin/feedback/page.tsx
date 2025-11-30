@@ -40,7 +40,6 @@ async function loadStrainNames(): Promise<Record<string, string>> {
     const names: Record<string, string> = {};
     if (data && data.strains && typeof data.strains === "object") {
       for (const [id] of Object.entries(data.strains)) {
-        // The strain name might be in the key or a name field
         names[id] = formatStrainId(id);
       }
     }
@@ -66,14 +65,11 @@ export default async function FeedbackAdminPage() {
 
   return (
     <div className="min-h-screen bg-slate-50">
-      <AdminNav active="feedback" />
-      <div className="mx-auto max-w-7xl px-4 py-8 space-y-6">
-        <div>
-          <h1 className="text-3xl font-bold text-slate-900">Feedback Explorer</h1>
-          <p className="mt-2 text-sm text-slate-600">
-            View and analyze feedback submissions from the kiosk.
-          </p>
-        </div>
+      <AdminNav active="feedback" title="Feedback Explorer" />
+      <div className="mx-auto max-w-7xl px-4 py-6 space-y-4">
+        <p className="text-sm text-slate-600">
+          View and analyze feedback submissions from the kiosk.
+        </p>
 
         <FeedbackAdminClient
           initialEntries={feedbackData.entries}

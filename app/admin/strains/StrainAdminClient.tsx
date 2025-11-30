@@ -47,6 +47,11 @@ export default function StrainAdminClient({ initialData }: Props) {
   >("idle");
   const [saveMessage, setSaveMessage] = useState("");
 
+  // Collapsible section states
+  const [strainsOpen, setStrainsOpen] = useState(true);
+  const [doseSettingsOpen, setDoseSettingsOpen] = useState(false);
+  const [radarOpen, setRadarOpen] = useState(true);
+
   useEffect(() => {
     setNameDraft(selectedStrainName);
   }, [selectedStrainName]);
@@ -280,75 +285,139 @@ export default function StrainAdminClient({ initialData }: Props) {
   };
 
   return (
-    <div className="flex h-screen bg-slate-50 text-slate-900">
-      <aside className="w-64 border-r border-slate-200 p-4 flex flex-col gap-4">
-        <div className="flex items-center justify-between">
-          <h1 className="text-lg font-semibold">Strains</h1>
+    <div className="flex h-full bg-slate-50 text-slate-900">
+      <aside className="w-64 border-r border-slate-200 p-4 flex flex-col gap-2 overflow-y-auto">
+        {/* Strains Section - Collapsible */}
+        <section className="rounded-xl border border-slate-200 bg-white">
           <button
-            className="rounded bg-slate-900 px-2 py-1 text-sm text-white"
-            onClick={handleAddStrain}
+            type="button"
+            onClick={() => setStrainsOpen(!strainsOpen)}
+            className="flex w-full items-center justify-between px-3 py-2 text-left"
           >
-            + Add
-          </button>
-        </div>
-        <section className="rounded-xl border border-slate-200 bg-white p-3">
-          <div className="text-sm font-semibold text-slate-800 mb-2">
-            Dose Settings
-          </div>
-          <div className="space-y-3 max-h-48 overflow-y-auto pr-1">
-            {dataset.doses.map((dose) => {
-              const config = dataset.doseConfig[dose] ?? {
-                label: dose,
-                grams: 0,
-              };
-              return (
-                <div key={dose} className="space-y-1">
-                  <div className="text-xs uppercase tracking-wide text-slate-500">
-                    {dose}
-                  </div>
-                  <div className="flex gap-2">
-                    <input
-                      className="flex-1 rounded border border-slate-300 px-2 py-1 text-sm"
-                      value={config.label}
-                      onChange={(e) =>
-                        handleDoseConfigChange(dose, "label", e.target.value)
-                      }
-                    />
-                    <input
-                      type="number"
-                      step="0.1"
-                      className="w-20 rounded border border-slate-300 px-2 py-1 text-sm"
-                      value={config.grams ?? 0}
-                      onChange={(e) =>
-                        handleDoseConfigChange(dose, "grams", e.target.value)
-                      }
-                    />
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        </section>
-        <div className="flex-1 min-h-0 space-y-2 overflow-y-auto">
-          {strainNames.map((name) => (
-            <button
-              key={name}
-              onClick={() => handleSelectStrain(name)}
-              className={`w-full rounded px-3 py-2 text-left text-sm ${
-                name === selectedStrainName
-                  ? "bg-slate-900 text-white"
-                  : "bg-white hover:bg-slate-100"
-              }`}
+            <span className="text-xs font-semibold uppercase tracking-wide text-slate-500">
+              Strains
+            </span>
+            <svg
+              className={`h-4 w-4 text-slate-400 transition-transform ${strainsOpen ? "rotate-180" : ""}`}
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
             >
-              {name}
-            </button>
-          ))}
-        </div>
-        <MiniRadarPreview
-          axes={dataset.axes}
-          strain={currentStrain}
-          doseIndex={doseIndex}
-        />
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+            </svg>
+          </button>
+          {strainsOpen && (
+            <div className="px-3 pb-3 space-y-2">
+              <div className="space-y-1 max-h-48 overflow-y-auto">
+                {strainNames.map((name) => (
+                  <button
+                    key={name}
+                    onClick={() => handleSelectStrain(name)}
+                    className={`w-full rounded px-3 py-2 text-left text-sm ${
+                      name === selectedStrainName
+                        ? "bg-slate-900 text-white"
+                        : "bg-slate-50 hover:bg-slate-100 border border-slate-200"
+                    }`}
+                  >
+                    {name}
+                  </button>
+                ))}
+              </div>
+              <button
+                className="w-full rounded border border-dashed border-slate-300 px-3 py-1.5 text-xs text-slate-500 hover:border-slate-400 hover:text-slate-600 transition"
+                onClick={handleAddStrain}
+              >
+                + Add New Strain
+              </button>
+            </div>
+          )}
+        </section>
+
+        {/* Dose Settings - Collapsible */}
+        <section className="rounded-xl border border-slate-200 bg-white">
+          <button
+            type="button"
+            onClick={() => setDoseSettingsOpen(!doseSettingsOpen)}
+            className="flex w-full items-center justify-between px-3 py-2 text-left"
+          >
+            <span className="text-xs font-semibold uppercase tracking-wide text-slate-500">
+              Dose Settings
+            </span>
+            <svg
+              className={`h-4 w-4 text-slate-400 transition-transform ${doseSettingsOpen ? "rotate-180" : ""}`}
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+            </svg>
+          </button>
+          {doseSettingsOpen && (
+            <div className="px-3 pb-3 space-y-3 max-h-56 overflow-y-auto">
+              {dataset.doses.map((dose) => {
+                const config = dataset.doseConfig[dose] ?? {
+                  label: dose,
+                  grams: 0,
+                };
+                return (
+                  <div key={dose} className="space-y-1">
+                    <div className="text-xs uppercase tracking-wide text-slate-500">
+                      {dose}
+                    </div>
+                    <div className="flex gap-2">
+                      <input
+                        className="flex-1 rounded border border-slate-300 px-2 py-1 text-sm"
+                        value={config.label}
+                        onChange={(e) =>
+                          handleDoseConfigChange(dose, "label", e.target.value)
+                        }
+                      />
+                      <input
+                        type="number"
+                        step="0.1"
+                        className="w-16 rounded border border-slate-300 px-2 py-1 text-sm"
+                        value={config.grams ?? 0}
+                        onChange={(e) =>
+                          handleDoseConfigChange(dose, "grams", e.target.value)
+                        }
+                      />
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          )}
+        </section>
+
+        {/* Radar Preview - Collapsible */}
+        <section className="rounded-xl border border-slate-200 bg-white">
+          <button
+            type="button"
+            onClick={() => setRadarOpen(!radarOpen)}
+            className="flex w-full items-center justify-between px-3 py-2 text-left"
+          >
+            <span className="text-xs font-semibold uppercase tracking-wide text-slate-500">
+              Radar Preview
+            </span>
+            <svg
+              className={`h-4 w-4 text-slate-400 transition-transform ${radarOpen ? "rotate-180" : ""}`}
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+            </svg>
+          </button>
+          {radarOpen && (
+            <div className="px-2 pb-2">
+              <MiniRadarPreview
+                axes={dataset.axes}
+                strain={currentStrain}
+                doseIndex={doseIndex}
+              />
+            </div>
+          )}
+        </section>
         <div className="space-y-2">
           <button
             className="w-full rounded border border-slate-300 px-3 py-2 text-sm"

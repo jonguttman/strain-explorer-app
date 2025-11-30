@@ -11,10 +11,8 @@ export function StrainScroller({
   selectedId,
   onSelect,
 }: StrainScrollerProps) {
-  const selectedStrain = strains.find((s) => s.id === selectedId);
-
   return (
-    <div className="w-full border-y border-[#d3c3a2] bg-[#f2e4cc] py-3">
+    <div className="w-full border-y border-[#d3c3a2] bg-[#fdfbf7] py-3">
       {/* Desktop: horizontal buttons */}
       <div className="hidden sm:flex mx-auto max-w-4xl flex-wrap items-center justify-center gap-2 px-4">
         {strains.map((strain) => {
@@ -25,8 +23,8 @@ export function StrainScroller({
               onClick={() => onSelect(strain.id)}
               className={`whitespace-nowrap rounded-full px-4 py-2 text-sm border transition md:text-base ${
                 isActive
-                  ? "bg-[#3f301f] text-[#f6eddc] border-[#3f301f] shadow-sm"
-                  : "bg-[#fbf4e3] text-[#3f301f] border-[#d3c3a2] hover:bg-[#f5ebd6]"
+                  ? "bg-[#3f301f] text-white border-[#3f301f] shadow-sm"
+                  : "bg-white text-[#3f301f] border-[#d3c3a2] hover:bg-[#f5ebe0]"
               }`}
             >
               {strain.name}
@@ -40,7 +38,7 @@ export function StrainScroller({
         <select
           value={selectedId}
           onChange={(e) => onSelect(e.target.value)}
-          className="w-full rounded-full border border-[#d3c3a2] bg-[#fbf4e3] px-4 py-2 text-sm font-medium text-[#3f301f] shadow-sm focus:outline-none focus:ring-2 focus:ring-[#3f301f] focus:ring-offset-2 appearance-none bg-[url('data:image/svg+xml;charset=utf-8,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 fill=%27none%27 viewBox=%270 0 20 20%27%3E%3Cpath stroke=%27%233f301f%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27 stroke-width=%271.5%27 d=%27m6 8 4 4 4-4%27/%3E%3C/svg%3E')] bg-[length:1.25rem] bg-[right_0.5rem_center] bg-no-repeat pr-10"
+          className="w-full rounded-full border border-[#d3c3a2] bg-white px-4 py-2 text-sm font-medium text-[#3f301f] shadow-sm focus:outline-none focus:ring-2 focus:ring-[#3f301f] focus:ring-offset-2 appearance-none bg-[url('data:image/svg+xml;charset=utf-8,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 fill=%27none%27 viewBox=%270 0 20 20%27%3E%3Cpath stroke=%27%233f301f%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27 stroke-width=%271.5%27 d=%27m6 8 4 4 4-4%27/%3E%3C/svg%3E')] bg-[length:1.25rem] bg-[right_0.5rem_center] bg-no-repeat pr-10"
         >
           {strains.map((strain) => (
             <option key={strain.id} value={strain.id}>
@@ -52,4 +50,3 @@ export function StrainScroller({
     </div>
   );
 }
-

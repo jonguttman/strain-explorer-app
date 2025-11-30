@@ -1,3 +1,3 @@
 // Kiosk version for display in the UI
-export const KIOSK_VERSION = "0.1.0";
+export const KIOSK_VERSION = "0.1.1";
 

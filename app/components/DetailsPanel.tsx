@@ -42,16 +42,13 @@ export function DetailsPanel({
       <div className="space-y-4 text-sm leading-relaxed text-[#4c3926] md:pr-1">
         <section className="mb-2">
           <div className="flex flex-wrap items-baseline justify-between gap-2">
-            <h2 className="text-xl font-semibold tracking-wide text-[#2d1d12]">
+            <h2 className="text-xl font-semibold tracking-wide text-[#3f301f]">
               {strainName}
             </h2>
-            <div
-              className="inline-flex items-center rounded-full border px-3 py-1 text-xs font-medium uppercase tracking-wide"
-              style={{ borderColor: accentHex, color: accentHex }}
-            >
+            <span className="inline-flex items-center rounded-full border border-[#d3c3a2] bg-[#fdfbf7] px-3 py-1.5 text-xs font-semibold uppercase tracking-wide text-[#3f301f]">
               {doseLabel}
               {gramDisplay ? ` · ${gramDisplay}` : ""}
-            </div>
+            </span>
           </div>
           {tagSubtitle ? (
             <p className="mt-1 text-xs text-[#6b5841]">{tagSubtitle}</p>

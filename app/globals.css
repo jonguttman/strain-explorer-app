@@ -24,3 +24,76 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+/* Dose Slider Styling */
+.dose-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 6px;
+  background: linear-gradient(to right, #d3c3a2 0%, #e8dcc8 100%);
+  border-radius: 999px;
+  outline: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.dose-slider:hover {
+  background: linear-gradient(to right, #c4b393 0%, #ddd0b8 100%);
+}
+
+/* Webkit (Chrome, Safari, Edge) */
+.dose-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 22px;
+  height: 22px;
+  background: white;
+  border: 2px solid #3f301f;
+  border-radius: 50%;
+  cursor: pointer;
+  box-shadow: 
+    0 2px 6px rgba(63, 48, 31, 0.25),
+    0 0 0 4px rgba(63, 48, 31, 0.08);
+  transition: all 0.2s ease;
+}
+
+.dose-slider::-webkit-slider-thumb:hover {
+  transform: scale(1.1);
+  box-shadow: 
+    0 3px 10px rgba(63, 48, 31, 0.3),
+    0 0 0 6px rgba(63, 48, 31, 0.1);
+}
+
+.dose-slider::-webkit-slider-thumb:active {
+  transform: scale(1.05);
+  box-shadow: 
+    0 2px 8px rgba(63, 48, 31, 0.35),
+    0 0 0 8px rgba(63, 48, 31, 0.12);
+}
+
+/* Firefox */
+.dose-slider::-moz-range-thumb {
+  width: 22px;
+  height: 22px;
+  background: white;
+  border: 2px solid #3f301f;
+  border-radius: 50%;
+  cursor: pointer;
+  box-shadow: 
+    0 2px 6px rgba(63, 48, 31, 0.25),
+    0 0 0 4px rgba(63, 48, 31, 0.08);
+  transition: all 0.2s ease;
+}
+
+.dose-slider::-moz-range-thumb:hover {
+  transform: scale(1.1);
+  box-shadow: 
+    0 3px 10px rgba(63, 48, 31, 0.3),
+    0 0 0 6px rgba(63, 48, 31, 0.1);
+}
+
+.dose-slider::-moz-range-track {
+  height: 6px;
+  background: linear-gradient(to right, #d3c3a2 0%, #e8dcc8 100%);
+  border-radius: 999px;
+}

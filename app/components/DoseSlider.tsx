@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { KIOSK_VERSION } from "@/lib/version";
 import type { DoseKey, DoseConfig } from "@/lib/types";
 
@@ -43,15 +44,16 @@ export function DoseSlider({
               onClick={() => onSelect(key)}
               className={
                 isActive
-                  ? "inline-flex items-center rounded-full border px-3 py-1 text-[11px] font-semibold uppercase tracking-wide focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#3f301f]"
-                  : "text-[11px] uppercase tracking-wide text-stone-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#3f301f]"
+                  ? "inline-flex items-center rounded-full border px-3 py-1.5 text-sm font-semibold uppercase tracking-wide shadow-sm transition-all duration-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#3f301f]"
+                  : "text-sm uppercase tracking-wide text-stone-400 transition-all duration-200 hover:text-stone-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#3f301f]"
               }
               style={
                 isActive
                   ? {
-                      borderColor: "var(--dose-accent)",
-                      color: "var(--dose-accent)",
-                      backgroundColor: "var(--dose-accent-soft)",
+                      borderColor: "#3f301f",
+                      color: "#3f301f",
+                      backgroundColor: "white",
+                      boxShadow: "0 2px 8px rgba(63, 48, 31, 0.15)",
                     }
                   : undefined
               }
@@ -81,25 +83,34 @@ export function DoseSlider({
           {order.map((key, idx) => (
             <div
               key={key}
-              className={`h-2 w-[2px] rounded-full ${
+              className={`rounded-full transition-all duration-200 ${
                 idx === sliderIndex
-                  ? "bg-[color:var(--dose-accent)]"
-                  : "bg-[color:var(--dose-accent-soft)]"
+                  ? "h-3 w-1 bg-[#3f301f]"
+                  : "h-2 w-0.5 bg-[#c4b393]"
               }`}
             />
           ))}
         </div>
       </div>
 
-      {/* Footer: Version, Add-to-Home, Copyright */}
-      <div className="mt-6 space-y-1 text-center text-[10px] text-stone-400">
-        <p>Version {KIOSK_VERSION}</p>
-        <p className="text-[9px]">
-          On iPhone, use &quot;Add to Home Screen&quot; for the best kiosk experience.
-        </p>
-        <p className="text-[9px]">
-          © {currentYear} The Original Psilly. All rights reserved.
-        </p>
+      {/* Footer: Logo, Version, Add-to-Home, Copyright */}
+      <div className="mt-6 flex flex-col items-center gap-2 text-center text-[10px] text-stone-400">
+        <Image
+          src="/TOPsilly2026.svg"
+          alt="The Original Psilly"
+          width={120}
+          height={20}
+          className="opacity-60"
+        />
+        <div className="space-y-1">
+          <p>Version {KIOSK_VERSION}</p>
+          <p className="text-[9px]">
+            On iPhone, use &quot;Add to Home Screen&quot; for the best kiosk experience.
+          </p>
+          <p className="text-[9px]">
+            © {currentYear} The Original Psilly. All rights reserved.
+          </p>
+        </div>
       </div>
     </div>
   );

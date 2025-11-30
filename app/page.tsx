@@ -274,7 +274,7 @@ function StrainExplorerPageContent() {
           className="mx-auto flex h-full w-full max-w-xl flex-col gap-6"
           style={accentStyle}
         >
-          <section className="mt-6 flex min-h-[26rem] flex-1 flex-col rounded-3xl border border-[#ddcbaa] bg-[#fdfbf7] px-4 py-6 shadow-sm sm:min-h-[32rem]">
+          <section className="mt-6 flex min-h-[26rem] flex-1 flex-col rounded-3xl border border-[#ddcbaa] bg-white px-4 py-6 shadow-sm sm:min-h-[32rem]">
             <div className="flex-1 overflow-hidden">
               {mode === "visual" ? (
                 <div className="flex h-full w-full items-center justify-center">

@@ -6,13 +6,11 @@ export default function StrainsAdminPage() {
   const initialData = getEditableDataset();
 
   return (
-    <div className="min-h-screen bg-slate-50">
-      <AdminNav active="strains" />
-      <div className="mx-auto max-w-7xl px-4 py-8 space-y-6">
-        <h1 className="text-3xl font-bold text-slate-900">Strain Admin</h1>
+    <div className="flex flex-col h-screen bg-slate-50">
+      <AdminNav active="strains" title="Strain Admin" />
+      <div className="flex-1 min-h-0">
         <StrainAdminClient initialData={initialData} />
       </div>
     </div>
   );
 }
-

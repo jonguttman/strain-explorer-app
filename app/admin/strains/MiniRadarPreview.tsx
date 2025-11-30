@@ -11,9 +11,18 @@ import {
   Tooltip,
 } from "chart.js";
 import type { StrainJsonEntry, TraitAxisId } from "./types";
-import { formatAxisLabel } from "@/lib/utils";
 
 ChartJS.register(RadialLinearScale, PointElement, LineElement, Filler, Tooltip);
+
+// Abbreviated axis labels for the mini preview
+const AXIS_LABEL_SHORT: Record<TraitAxisId, string> = {
+  visuals: "Vis",
+  euphoria: "Euph",
+  introspection: "Intro",
+  creativity: "Creat",
+  spiritual_depth: "Spirit",
+  sociability: "Soc",
+};
 
 type MiniRadarProps = {
   axes: TraitAxisId[];
@@ -31,14 +40,14 @@ export default function MiniRadarPreview({
   const data = useMemo(() => {
     if (!strain || doseIndex < 0) return null;
     return {
-      labels: axes.map(formatAxisLabel),
+      labels: axes.map((axis) => AXIS_LABEL_SHORT[axis] ?? axis),
       datasets: [
         {
           data: axes.map((axis) => strain.radar[axis]?.[doseIndex] ?? 0),
           backgroundColor: "rgba(15, 23, 42, 0.25)",
           borderColor: "#0f172a",
-          borderWidth: 1,
-          pointRadius: 1.5,
+          borderWidth: 1.5,
+          pointRadius: 2,
           pointBackgroundColor: "#0f172a",
         },
       ],
@@ -47,7 +56,7 @@ export default function MiniRadarPreview({
 
   if (!isClient) {
     return (
-      <div className="shrink-0 rounded-lg border border-slate-200 bg-white px-3 py-4 text-center text-xs text-slate-500">
+      <div className="text-center text-xs text-slate-500 py-4">
         Loading preview…
       </div>
     );
@@ -55,7 +64,7 @@ export default function MiniRadarPreview({
 
   if (!data) {
     return (
-      <div className="shrink-0 rounded-lg border border-slate-200 bg-white px-3 py-4 text-center text-xs text-slate-500">
+      <div className="text-center text-xs text-slate-500 py-4">
         No preview
       </div>
     );
@@ -74,7 +83,7 @@ export default function MiniRadarPreview({
         angleLines: { color: "rgba(148, 163, 184, 0.6)" },
         grid: { color: "rgba(148, 163, 184, 0.3)" },
         pointLabels: {
-          font: { size: 9 },
+          font: { size: 9, weight: 500 },
           color: "#475569",
         },
       },
@@ -82,13 +91,8 @@ export default function MiniRadarPreview({
   } as const;
 
   return (
-    <div className="shrink-0 rounded-lg border border-slate-200 bg-white p-3">
-      <div className="mb-2 text-xs font-semibold uppercase tracking-wide text-slate-500">
-        Preview
-      </div>
-      <div className="h-40 w-full">
-        <Radar data={data} options={options} />
-      </div>
+    <div className="h-44 w-full">
+      <Radar data={data} options={options} />
     </div>
   );
 }
