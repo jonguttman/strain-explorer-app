@@ -1,0 +1,230 @@
+{
+  "doses": ["micro", "mini", "macro", "museum", "mega", "hero"],
+  "axes": [
+    "visuals",
+    "euphoria",
+    "introspection",
+    "creativity",
+    "spiritual_depth",
+    "sociability"
+  ],
+  "doseConfig": {
+    "micro": { "label": "Micro", "grams": 0.1 },
+    "mini": { "label": "Mini", "grams": 0.5 },
+    "macro": { "label": "Macro", "grams": 1.5 },
+    "museum": { "label": "Museum", "grams": 3 },
+    "mega": { "label": "Mega", "grams": 5 },
+    "hero": { "label": "Hero", "grams": 10 }
+  },
+  "strains": {
+    "Golden Teacher": {
+      "radar": {
+        "visuals":         [10, 30, 55, 70, 75, 75],
+        "euphoria":        [20, 45, 70, 78, 60, 40],
+        "introspection":   [25, 45, 70, 85, 90, 95],
+        "creativity":      [30, 60, 80, 75, 55, 30],
+        "spiritual_depth": [10, 30, 55, 80, 90, 95],
+        "sociability":     [65, 90, 85, 30, 10, 3]
+      },
+      "blurb": {
+        "micro": "Clean, uplifted clarity with a gentle emotional lift.",
+        "mini": "Warm, friendly energy with a creative spark.",
+        "macro": "Balanced visuals and introspection with glowing euphoria.",
+        "museum": "Classic Golden Teacher journey — vivid, wise, and heart-centered.",
+        "mega": "Deeply introspective with pronounced emotional insight.",
+        "hero": "A profound ego-softening journey rooted in warmth and spiritual openness."
+      },
+      "details": {
+        "micro": "Golden Teacher microdoses offer clean, bright mental clarity with a gentle boost in optimism and emotional balance. Perfect for productivity, creativity, and mood regulation.",
+        "mini": "A mini-dose enhances color, warmth, and sociability—great for creativity or mindful outings.",
+        "macro": "Expect soft visuals, emotional insight, and creativity. A perfect entry-level journey.",
+        "museum": "A fuller Golden Teacher experience: flowing visuals, meaning-making, and emotional connection.",
+        "mega": "Introspective, spiritually resonant, and deeply personal. You may explore buried emotions.",
+        "hero": "Classic 'teacher' energy: ego dissolution and a profound sense of guidance or inner wisdom."
+      },
+      "products": {
+        "micro": ["Apollo 200mg", "Aphrodite 200mg"],
+        "mini": ["Apollo 2-pack", "Psilly Stix"],
+        "macro": ["Mighty Caps 0.75g"],
+        "museum": ["Hercules GT 1g"],
+        "mega": ["Hercules GT 2-pack"],
+        "hero": ["Hercules GT 5-pack"]
+      }
+    },
+
+    "Penis Envy": {
+      "radar": {
+        "visuals":         [20, 45, 65, 85, 95, 100],
+        "euphoria":        [15, 35, 55, 65, 45, 20],
+        "introspection":   [35, 60, 80, 95, 100, 100],
+        "creativity":      [20, 45, 55, 30, 15, 5],
+        "spiritual_depth": [25, 45, 70, 95, 100, 100],
+        "sociability":     [40, 55, 25, 8, 3, 1]
+      },
+      "blurb": {
+        "micro": "Deep focus with a grounded, body-centered clarity.",
+        "mini": "Calm introspection with subtle emotional depth.",
+        "macro": "Strong body sensations and inward reflection.",
+        "museum": "Profound insights and rich sensory detail.",
+        "mega": "Heavy introspection and deep emotional processing.",
+        "hero": "One of the most intense journeys available—ego dissolution is common."
+      },
+      "details": {
+        "micro": "Penis Envy microdoses bring a grounded clarity with a slightly more somatic presence than other strains.",
+        "mini": "Expect emotional depth and calm thinking, ideal for journaling or quiet reflection.",
+        "macro": "Body sensations intensify along with deep self-examination.",
+        "museum": "Strong visuals, emotional catharsis, and meaning-rich inner work.",
+        "mega": "A powerful inward-facing journey where profound realizations surface.",
+        "hero": "This is a full surrender dose—expect ego-death territory and intense spiritual insight."
+      },
+      "products": {
+        "micro": ["Aphrodite PE 200mg"],
+        "mini": ["Aphrodite 2-pack"],
+        "macro": ["Hercules PE 1g"],
+        "museum": ["Hercules PE 2-pack"],
+        "mega": ["Hercules PE 4-pack"],
+        "hero": ["Hercules PE 5-pack"]
+      }
+    },
+
+    "Amazonian": {
+      "radar": {
+        "visuals":         [25, 55, 75, 85, 95, 100],
+        "euphoria":        [30, 55, 75, 85, 70, 45],
+        "introspection":   [25, 40, 60, 80, 95, 100],
+        "creativity":      [35, 65, 80, 70, 50, 30],
+        "spiritual_depth": [20, 35, 60, 85, 95, 100],
+        "sociability":     [55, 75, 70, 40, 15, 5]
+      },
+      "blurb": {
+        "micro": "Energetic clarity with a bright, motivating lift.",
+        "mini": "A social, euphoric spark with enhanced colors.",
+        "macro": "Bold visuals and uplifting emotional energy.",
+        "museum": "Expansive, adventurous, and vibrant.",
+        "mega": "Strong visuals with meaningful introspective weight.",
+        "hero": "A full-spectrum mystical voyage with cosmic depth."
+      },
+      "details": {
+        "micro": "Amazonian microdoses create a crisp mental uplift—ideal for physical activity and creativity.",
+        "mini": "Expect a euphoric boost, bright colors, and a socially easygoing effect.",
+        "macro": "A psychedelic sweet spot with clear visuals and energized exploration.",
+        "museum": "Adventure mode—expect vibrant visuals and a sense of exploration.",
+        "mega": "A strong, emotional, spiritually meaningful journey.",
+        "hero": "A deep cosmic encounter with vibrant visuals and intense spiritual depth."
+      },
+      "products": {
+        "micro": ["Apollo Amazonian 200mg"],
+        "mini": ["Apollo 2-pack"],
+        "macro": ["Hercules AMAZ 1g"],
+        "museum": ["Hercules AMAZ 2-pack"],
+        "mega": ["Hercules AMAZ 4-pack"],
+        "hero": ["Hercules AMAZ 5-pack"]
+      }
+    },
+
+    "Enigma": {
+      "radar": {
+        "visuals":         [15, 30, 55, 75, 90, 100],
+        "euphoria":        [15, 30, 45, 55, 40, 20],
+        "introspection":   [35, 55, 75, 95, 100, 100],
+        "creativity":      [20, 40, 60, 50, 30, 10],
+        "spiritual_depth": [30, 50, 75, 95, 100, 100],
+        "sociability":     [50, 60, 30, 10, 3, 1]
+      },
+      "blurb": {
+        "micro": "Clean focus with a dreamy undertone.",
+        "mini": "A surreal creative buzz with light visuals.",
+        "macro": "Reality-bending perspectives and gentle euphoria.",
+        "museum": "Inception-like distortions and deep surreal insight.",
+        "mega": "Waves of visual distortion and profound emotional depth.",
+        "hero": "A multidimensional, transcendent, time-dilating journey."
+      },
+      "details": {
+        "micro": "Enigma microdoses feel crisp and slightly dreamy, good for creative tasks.",
+        "mini": "A surreal creative mood with gentle bending of perception.",
+        "macro": "The classic Enigma warp—soft visuals and unusual thought patterns.",
+        "museum": "Expect identity-looping, dreamlike themes, and surreal insights.",
+        "mega": "Vivid distortions, emotional depth, and nonlinear time.",
+        "hero": "A transcendent, multidimensional experience—very ‘Inception’ in tone."
+      },
+      "products": {
+        "micro": ["Pandora Enigma 200mg"],
+        "mini": ["Pandora 2-pack"],
+        "macro": ["Hercules Enigma 1g"],
+        "museum": ["Hercules Enigma 2-pack"],
+        "mega": ["Hercules Enigma 4-pack"],
+        "hero": ["Hercules Enigma 5-pack"]
+      }
+    },
+
+    "Cambodian": {
+      "radar": {
+        "visuals": [8, 22, 45, 65, 80, 90],
+        "euphoria": [30, 55, 75, 85, 90, 92],
+        "introspection": [12, 28, 48, 65, 78, 88],
+        "creativity": [35, 60, 75, 80, 82, 85],
+        "spiritual_depth": [10, 28, 50, 70, 85, 92],
+        "sociability": [45, 65, 65, 55, 40, 28]
+      },
+      "blurb": {
+        "micro": "Bright energy and social ease.",
+        "mini": "Euphoric warmth with creative flow.",
+        "macro": "Joyful exploration with clarity.",
+        "museum": "Energetic deep dive.",
+        "mega": "Powerful euphoric waves.",
+        "hero": "Transcendent bliss."
+      },
+      "details": {
+        "micro": "Known for uplifting, energetic effects.",
+        "mini": "Great for daytime adventures and socializing.",
+        "macro": "Active trip—dancing, hiking, creating.",
+        "museum": "High energy even at deeper doses.",
+        "mega": "Euphoria peaks here.",
+        "hero": "Ecstatic dissolution."
+      },
+      "products": {
+        "micro": ["Cambodian Capsules 0.1g"],
+        "mini": ["Cambodian Chocolates 0.5g"],
+        "macro": ["Cambodian Dried 1.5g"],
+        "museum": ["Cambodian Dried 3g"],
+        "mega": ["Cambodian Dried 5g"],
+        "hero": ["Cambodian Dried 10g"]
+      }
+    },
+
+    "Full Moon Party": {
+      "radar": {
+        "visuals": [15, 38, 62, 80, 92, 98],
+        "euphoria": [35, 60, 80, 88, 92, 95],
+        "introspection": [10, 25, 42, 58, 72, 85],
+        "creativity": [40, 65, 78, 82, 85, 88],
+        "spiritual_depth": [8, 22, 45, 65, 82, 92],
+        "sociability": [50, 70, 72, 60, 45, 30]
+      },
+      "blurb": {
+        "micro": "Party-ready mood enhancement.",
+        "mini": "Social magic with visual sparkle.",
+        "macro": "The celebration begins.",
+        "museum": "Ecstatic visual feast.",
+        "mega": "Full moon intensity.",
+        "hero": "Lunar transformation."
+      },
+      "details": {
+        "micro": "Perfect pre-party microdose.",
+        "mini": "Ideal for festivals and gatherings.",
+        "macro": "Dance floor ready—music sounds incredible.",
+        "museum": "Visual fireworks with social warmth.",
+        "mega": "The full moon rises within.",
+        "hero": "Complete surrender to the rhythm."
+      },
+      "products": {
+        "micro": ["FMP Capsules 0.1g"],
+        "mini": ["FMP Gummies 0.5g"],
+        "macro": ["FMP Dried 1.5g"],
+        "museum": ["FMP Dried 3g"],
+        "mega": ["FMP Dried 5g"],
+        "hero": ["FMP Dried 10g"]
+      }
+    }
+  }
+}

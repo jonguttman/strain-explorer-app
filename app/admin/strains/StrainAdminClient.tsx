@@ -1,5 +1,3 @@
-<<<<<<< Current (Your changes)
-=======
 "use client";
 
 import dynamic from "next/dynamic";
@@ -626,4 +624,3 @@ function createBlankStrain(
   };
 }
 
->>>>>>> Incoming (Background Agent changes)

@@ -1,5 +1,3 @@
-<<<<<<< Current (Your changes)
-=======
 // Admin types - re-exporting from lib/types.ts for convenience
 export type {
   DoseKey,
@@ -13,4 +11,3 @@ export type {
   DoseConfigMap,
   EditorDataset,
 } from "@/lib/types";
->>>>>>> Incoming (Background Agent changes)

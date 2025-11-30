@@ -15,8 +15,6 @@ export function DoseSlider({
   config,
   selected,
   onSelect,
-  currentDoseLabel,
-  currentGrams,
 }: DoseSliderProps) {
   if (!order.length) {
     return null;
@@ -27,6 +25,7 @@ export function DoseSlider({
     order.findIndex((key) => key === selected)
   );
   const sliderMax = Math.max(0, order.length - 1);
+  const currentYear = new Date().getFullYear();
 
   return (
     <div className="mt-6 w-full max-w-xl mx-auto">
@@ -52,6 +51,7 @@ export function DoseSlider({
                   ? {
                       borderColor: "var(--dose-accent)",
                       color: "var(--dose-accent)",
+                      backgroundColor: "var(--dose-accent-soft)",
                     }
                   : undefined
               }
@@ -90,10 +90,17 @@ export function DoseSlider({
           ))}
         </div>
       </div>
-      <div className="mt-3 text-center text-[11px] text-stone-400">
-        Version {KIOSK_VERSION}
+
+      {/* Footer: Version, Add-to-Home, Copyright */}
+      <div className="mt-6 space-y-1 text-center text-[10px] text-stone-400">
+        <p>Version {KIOSK_VERSION}</p>
+        <p className="text-[9px]">
+          On iPhone, use &quot;Add to Home Screen&quot; for the best kiosk experience.
+        </p>
+        <p className="text-[9px]">
+          © {currentYear} The Original Psilly. All rights reserved.
+        </p>
       </div>
     </div>
   );
 }
-

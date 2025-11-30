@@ -1,5 +1,3 @@
-<<<<<<< Current (Your changes)
-=======
 "use client";
 
 import { useMemo } from "react";
@@ -94,5 +92,3 @@ export default function MiniRadarPreview({
     </div>
   );
 }
-
->>>>>>> Incoming (Background Agent changes)

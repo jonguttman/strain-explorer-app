@@ -1,5 +1,5 @@
-import type { DoseContent, DoseSnapshot, StrainMeta, Product } from "@/lib/types";
 import Link from "next/link";
+import type { DoseContent, DoseSnapshot, StrainMeta } from "@/lib/types";
 
 type DetailsPanelProps = {
   content: DoseContent;
@@ -10,8 +10,7 @@ type DetailsPanelProps = {
   snapshot?: DoseSnapshot | null;
   accentHex: string;
   testimonials?: string[];
-  products?: Product[];
-  accessKeyId?: string | null;
+  accessKeyId?: string;
 };
 
 export function DetailsPanel({
@@ -23,7 +22,6 @@ export function DetailsPanel({
   snapshot,
   accentHex,
   testimonials,
-  products,
   accessKeyId,
 }: DetailsPanelProps) {
   const gramDisplay =
@@ -149,30 +147,13 @@ export function DetailsPanel({
           </section>
         ) : null}
 
-        {/* Rich product cards if products array is provided, otherwise fallback to simple text */}
-        {products && products.length > 0 ? (
-          <section className="mb-4">
-            <h4 className="mb-2 text-xs font-semibold uppercase tracking-wide text-stone-900">
-              SUGGESTED PRODUCTS
-            </h4>
-            <div className="space-y-3">
-              {products.map((product) => (
-                <ProductCard
-                  key={product.id}
-                  product={product}
-                  accentHex={accentHex}
-                  accessKeyId={accessKeyId}
-                />
-              ))}
-            </div>
-          </section>
-        ) : content.products && content.products.length > 0 ? (
+        {products.length ? (
           <section className="mb-4">
             <h4 className="mb-1 text-xs font-semibold uppercase tracking-wide text-stone-900">
               SUGGESTED PRODUCTS
             </h4>
             <div className="flex flex-wrap gap-2">
-              {content.products.map((product) => (
+              {products.map((product) => (
                 <span
                   key={product}
                   className="rounded-full border px-3 py-1 text-xs font-medium text-[#2d1d12]"
@@ -200,7 +181,7 @@ export function DetailsPanel({
                   className="rounded-2xl border border-[#e2d3b5] bg-white/80 p-3 text-sm text-[#3c291b] shadow-sm"
                 >
                   <span className="block text-lg leading-none text-[#d3c3a2]">
-                    "
+                    &ldquo;
                   </span>
                   <blockquote className="-mt-3 text-sm leading-relaxed">
                     {quote}
@@ -210,6 +191,24 @@ export function DetailsPanel({
             </div>
           </section>
         ) : null}
+
+        {/* Resource links */}
+        <section className="mt-4 pt-4 border-t border-[#e2d3b5]/50">
+          <div className="flex flex-wrap gap-x-4 gap-y-2 text-xs">
+            <Link
+              href={accessKeyId ? `/dose-levels?key=${accessKeyId}` : "/dose-levels"}
+              className="text-[#6b5841] underline decoration-[#d3c3a2] underline-offset-2 hover:text-[#3f301f] hover:decoration-[#3f301f] transition"
+            >
+              Learn about dose levels
+            </Link>
+            <Link
+              href={accessKeyId ? `/partner-training?key=${accessKeyId}` : "/partner-training"}
+              className="text-[#6b5841] underline decoration-[#d3c3a2] underline-offset-2 hover:text-[#3f301f] hover:decoration-[#3f301f] transition"
+            >
+              Partner training
+            </Link>
+          </div>
+        </section>
       </div>
     </div>
   );

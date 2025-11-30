@@ -1,47 +1,41 @@
-// app/admin/AdminNav.tsx
-// Shared navigation for admin pages
-
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
 
-export function AdminNav() {
-  const pathname = usePathname();
+type AdminNavProps = {
+  active: "strains" | "access" | "feedback";
+};
 
+export function AdminNav({ active }: AdminNavProps) {
   const links = [
-    { href: "/admin/strains", label: "Strains" },
-    { href: "/admin/products", label: "Products" },
-    { href: "/admin/access", label: "Access Keys" },
-    { href: "/admin/feedback", label: "Feedback" },
+    { href: "/admin/strains", label: "Strains", key: "strains" as const },
+    { href: "/admin/access", label: "Access Keys", key: "access" as const },
+    { href: "/admin/feedback", label: "Feedback", key: "feedback" as const },
   ];
 
   return (
-    <nav className="border-b border-[#e2d3b5] bg-[#fdfbf7] px-6 py-4">
-      <div className="flex items-center gap-6">
-        <Link
-          href="/"
-          className="text-xl font-semibold text-[#2d1d12] hover:text-[#4c3926]"
-        >
-          Psilly Admin
-        </Link>
-        <div className="flex gap-4">
-          {links.map((link) => {
-            const isActive = pathname?.startsWith(link.href);
-            return (
-              <Link
-                key={link.href}
-                href={link.href}
-                className={`rounded-lg px-4 py-2 text-sm font-medium transition ${
-                  isActive
-                    ? "bg-[#4c3926] text-[#fdf6ec]"
-                    : "text-[#4c3926] hover:bg-[#f6eddc]"
-                }`}
-              >
-                {link.label}
-              </Link>
-            );
-          })}
+    <nav className="border-b border-slate-200 bg-white">
+      <div className="mx-auto max-w-7xl px-4 py-4">
+        <div className="flex items-center gap-6">
+          <h2 className="text-lg font-semibold text-slate-900">Admin</h2>
+          <div className="flex gap-4">
+            {links.map((link) => {
+              const isActive = link.key === active;
+              return (
+                <Link
+                  key={link.key}
+                  href={link.href}
+                  className={`text-sm font-medium transition ${
+                    isActive
+                      ? "text-slate-900 border-b-2 border-slate-900 pb-1"
+                      : "text-slate-600 hover:text-slate-900"
+                  }`}
+                >
+                  {link.label}
+                </Link>
+              );
+            })}
+          </div>
         </div>
       </div>
     </nav>

@@ -103,76 +103,44 @@ export type StrainDataset = {
 export type AccessKeyType = "master" | "partner" | "staff" | "test";
 
 export type AccessKey = {
-  id: string;           // e.g. "master", "dani-top"
-  label: string;        // human-friendly name, e.g. "Master test link" or "Dani @ The Other Path"
+  id: string;           // URL-safe key, e.g. "dani-top"
+  label: string;        // Human-readable label, e.g. "Dani @ The Other Path"
   type: AccessKeyType;
   isActive: boolean;
   notes?: string;
-  createdAt: string;    // ISO string
-  expiresAt?: string;   // optional
-  maxUses?: number;     // optional, not enforced yet
-  useCount: number;     // can be derived but keep for convenience
+  createdAt: string;    // ISO timestamp
+  updatedAt: string;    // ISO timestamp
 };
 
 export type AccessKeyDataset = {
   keys: AccessKey[];
 };
 
-// Product types for the product catalog module
-export type ProductForm =
-  | "capsules"
-  | "gummies"
-  | "tea"
-  | "tincture"
-  | "chocolate"
-  | "honey"
-  | "other";
+// Feedback entry types
 
-export type ProductStatus = "draft" | "live" | "archived";
+// One numeric score per radar axis (0–10)
+export type AxisExperienceScores = Partial<Record<TraitAxisId, number>>;
 
-export type ProductWhereToBuy = {
-  venueId: string;        // e.g. "the-other-path"
-  venueName: string;      // e.g. "The Other Path"
-  city?: string;          // e.g. "Sherman Oaks"
-  url?: string;           // Store page or Google Maps link
-};
-
-export type Product = {
-  id: string;             // "psilly-mighty-caps-gt"
-  name: string;           // "Mighty Caps"
-  brand: string;          // "The Original Psilly"
-  strainId?: string;      // "golden-teacher"
-  strainName?: string;    // "Golden Teacher" (optional convenience; can be derived)
-  displayName?: string;   // e.g. "Psilly Mighty Caps – Golden Teacher"
-  form: ProductForm;
-  imageUrl?: string;
-  shortDescription?: string;
-  longDescription?: string;
-  bestDoseLevels?: DoseKey[];   // ["micro", "mini"]
-  tags?: string[];              // ["Focus", "Beginner-friendly"]
-  whereToBuy?: ProductWhereToBuy[];
-  // Soft partner targeting: if set, only show for those partner keys
-  partnerIds?: string[];        // e.g. ["the-other-path", "leaf-shop"]
-  featured?: boolean;           // gets surfaced/promoted first
-  housePick?: boolean;          // special badge / emphasis
-  status: ProductStatus;        // "draft", "live", "archived"
-  createdAt?: string;
-  updatedAt?: string;
-};
-
-export type ProductDataset = {
-  products: Product[];
-};
-
-// Feedback types (extend existing or add if not present)
 export type FeedbackEntry = {
   id: string;
-  strainId: string;
-  doseKey: DoseKey;
-  rating?: number;
-  comments?: string;
-  productIds?: string[];      // ids of products used during this experience
+  strainId?: string;
+  doseKey?: string;
   accessKeyId?: string;
-  timestamp: string;
+  ctaKey?: string;
+  overallExperience?: number;       // 1-5 rating
+  intensityRating?: number;         // 1-5 rating
+  testimonial?: string;
+  bestFor?: string[];
+  setting?: string[];
+  contact?: string;
+  createdAt: string;                // ISO timestamp
+  // User's felt experience by axis
+  feltAxes?: AxisExperienceScores;
+  // Snapshot of expected axes at time of submission (computed server-side)
+  expectedAxes?: AxisExperienceScores;
+};
+
+export type FeedbackDataset = {
+  entries: FeedbackEntry[];
 };
 

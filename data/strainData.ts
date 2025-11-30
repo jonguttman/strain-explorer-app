@@ -1,5 +1,3 @@
-<<<<<<< Current (Your changes)
-=======
 // data/strainData.ts
 // SERVER-ONLY canonical dataset for strain + dose values & text.
 
@@ -161,4 +159,3 @@ export function getStrainDoseData(
 export function getEditableDataset(): StrainDataset {
   return JSON.parse(JSON.stringify(dataset));
 }
->>>>>>> Incoming (Background Agent changes)

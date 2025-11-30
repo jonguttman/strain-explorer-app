@@ -5,8 +5,10 @@ import {
   useMemo,
   useEffect,
   useRef,
+  Suspense,
   type CSSProperties,
 } from "react";
+import { useSearchParams } from "next/navigation";
 import { CTA_VARIANTS } from "@/lib/feedbackCtas";
 import { hexToRgba } from "@/lib/utils";
 import type {
@@ -17,6 +19,7 @@ import type {
   DoseSnapshot,
   StrainMeta,
   DoseConfig,
+  AccessKey,
 } from "@/lib/types";
 import { StrainHeader } from "./components/StrainHeader";
 import { StrainScroller } from "./components/StrainScroller";
@@ -45,7 +48,10 @@ type StrainDosePayload = {
   testimonials?: string[];
 };
 
-export default function StrainExplorerPage() {
+function StrainExplorerPageContent() {
+  const searchParams = useSearchParams();
+  const accessKeyParam = searchParams.get("key");
+
   const [selectedStrainId, setSelectedStrainId] = useState<string>(
     "golden-teacher"
   );
@@ -57,6 +63,7 @@ export default function StrainExplorerPage() {
   );
   const [mode, setMode] = useState<"visual" | "details">("visual");
   const [showFeedbackQR, setShowFeedbackQR] = useState(false);
+  const [welcomeLabel, setWelcomeLabel] = useState<string | undefined>(undefined);
   const activeCta = useMemo(
     () => CTA_VARIANTS[Math.floor(Math.random() * CTA_VARIANTS.length)],
     []
@@ -101,6 +108,30 @@ export default function StrainExplorerPage() {
       });
     }
   }, []);
+
+  useEffect(() => {
+    async function loadAccessKeyLabel() {
+      if (!accessKeyParam) {
+        setWelcomeLabel(undefined);
+        return;
+      }
+      try {
+        const res = await fetch("/api/access-keys");
+        if (!res.ok) return;
+        const data = await res.json() as { keys: AccessKey[] };
+        const match = data.keys.find(k => k.id === accessKeyParam && k.isActive);
+        if (match) {
+          setWelcomeLabel(match.label);
+        } else {
+          setWelcomeLabel(undefined);
+        }
+      } catch {
+        // fail silently; no welcome label if API fails
+        setWelcomeLabel(undefined);
+      }
+    }
+    loadAccessKeyLabel();
+  }, [accessKeyParam]);
 
   useEffect(() => {
     let cancelled = false;
@@ -229,6 +260,7 @@ export default function StrainExplorerPage() {
         ctaLabel={activeCta.label}
         onShowFeedback={() => setShowFeedbackQR(true)}
         feedbackActive={showFeedbackQR}
+        welcomeLabel={welcomeLabel}
       />
 
       <StrainScroller
@@ -254,6 +286,7 @@ export default function StrainExplorerPage() {
                         doseKey={selectedDoseKey}
                         ctaKey={activeCta.key}
                         ctaLabel={activeCta.label}
+                        accessKeyId={accessKeyParam ?? undefined}
                         onClose={() => setShowFeedbackQR(false)}
                       />
                     ) : (
@@ -276,6 +309,7 @@ export default function StrainExplorerPage() {
                   snapshot={doseData.snapshot ?? null}
                   accentHex={accentHex}
                   testimonials={doseData.testimonials ?? []}
+                  accessKeyId={accessKeyParam ?? undefined}
                 />
               )}
             </div>
@@ -297,5 +331,17 @@ export default function StrainExplorerPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function StrainExplorerPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen flex items-center justify-center bg-[#f6eddc] text-[#3f301f]">
+        Loading…
+      </div>
+    }>
+      <StrainExplorerPageContent />
+    </Suspense>
   );
 }

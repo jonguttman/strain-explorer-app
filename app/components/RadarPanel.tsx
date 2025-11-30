@@ -77,7 +77,8 @@ export function RadarPanel({ color, traits, axisLabels, doseKey }: RadarPanelPro
           },
           pointLabels: {
             font: {
-              size: 11,
+              size: 13,
+              weight: 600,
               family: "serif",
             },
             color: "#5e4a30",

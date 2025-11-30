@@ -1,0 +1,13 @@
+{
+  "keys": [
+    {
+      "id": "master",
+      "label": "Internal Master Link",
+      "type": "master",
+      "isActive": true,
+      "notes": "Default internal link for testing and demos.",
+      "createdAt": "2025-01-01T00:00:00.000Z",
+      "updatedAt": "2025-01-01T00:00:00.000Z"
+    }
+  ]
+}
