@@ -166,10 +166,12 @@ export function FeedbackFormClient({
     }
   }, [selectedStrainId, selectedDoseKey, axes, initialStrainId, initialDoseKey]);
 
-  // Track "warned" state for lowering below expected (friction effect on minus button)
-  const [warnedAxis, setWarnedAxis] = useState<TraitAxisId | null>(null);
-  const warnedTimeRef = useRef<number>(0);
-  const WARN_WINDOW_MS = 1200; // Time window to confirm lowering
+  // Track double-tap state for lowering below expected (silent friction)
+  const lastTapAxisRef = useRef<TraitAxisId | null>(null);
+  const lastTapTimeRef = useRef<number>(0);
+  const tapCountRef = useRef<number>(0);
+  const DOUBLE_TAP_MS = 500; // Time window for double-tap
+  const FORCE_THROUGH_TAPS = 5; // Number of taps to force through without double-tap
 
   function toggleOption(value: string, list: string[], setList: (v: string[]) => void) {
     if (list.includes(value)) {
@@ -179,13 +181,30 @@ export function FeedbackFormClient({
     }
   }
 
-  // Direct change from slider drag - no friction
+  // Slider drag - applies silent friction when first going below expected
   function handleSliderChange(axis: TraitAxisId, value: number) {
-    setWarnedAxis(null); // Clear any warning when dragging
+    const expected = expectedAxes[axis] ?? 5;
+    const current = feltAxes[axis] ?? expected;
+    
+    // If trying to go below expected (and not already below), snap back silently
+    if (value < expected && current >= expected) {
+      const now = Date.now();
+      const isDoubleTap = lastTapAxisRef.current === axis && (now - lastTapTimeRef.current) < DOUBLE_TAP_MS;
+      
+      if (!isDoubleTap) {
+        // First attempt: silently snap back to expected
+        lastTapAxisRef.current = axis;
+        lastTapTimeRef.current = now;
+        setFeltAxes(prev => ({ ...prev, [axis]: expected }));
+        return;
+      }
+      // Double-tap: allow the change
+    }
+    
     setFeltAxes(prev => ({ ...prev, [axis]: value }));
   }
 
-  // Button tap to decrease - applies friction if going below expected
+  // Button tap to decrease - requires double-tap OR 5 taps to go below expected (no visual feedback)
   function handleDecrease(axis: TraitAxisId) {
     const expected = expectedAxes[axis] ?? 5;
     const current = feltAxes[axis] ?? expected;
@@ -194,34 +213,36 @@ export function FeedbackFormClient({
     // If trying to go below expected (and not already below)
     if (newValue < expected && current >= expected) {
       const now = Date.now();
-      const wasRecentlyWarned = warnedAxis === axis && (now - warnedTimeRef.current) < WARN_WINDOW_MS;
+      const isSameAxis = lastTapAxisRef.current === axis;
+      const isDoubleTap = isSameAxis && (now - lastTapTimeRef.current) < DOUBLE_TAP_MS;
       
-      if (!wasRecentlyWarned) {
-        // First attempt: show warning, don't change value
-        setWarnedAxis(axis);
-        warnedTimeRef.current = now;
-        // Clear warning after animation
-        setTimeout(() => {
-          setWarnedAxis((prev) => (prev === axis ? null : prev));
-        }, 600);
-        return; // Block the change
+      // Track tap count for this axis
+      if (isSameAxis) {
+        tapCountRef.current += 1;
+      } else {
+        tapCountRef.current = 1;
       }
-      // Second attempt within window: allow the change
-    }
-    
-    // Clear warning if value is now at or above expected
-    if (warnedAxis === axis && newValue >= expected) {
-      setWarnedAxis(null);
+      
+      // Allow if double-tap OR reached force-through count
+      if (!isDoubleTap && tapCountRef.current < FORCE_THROUGH_TAPS) {
+        // Record tap, don't change value
+        lastTapAxisRef.current = axis;
+        lastTapTimeRef.current = now;
+        return;
+      }
+      
+      // Reset tap count when allowing through
+      tapCountRef.current = 0;
     }
     
     setFeltAxes(prev => ({ ...prev, [axis]: newValue }));
   }
 
   // Button tap to increase - no friction ever
+  // Button tap to increase - always single tap, no friction
   function handleIncrease(axis: TraitAxisId) {
     const current = feltAxes[axis] ?? 5;
     const newValue = Math.min(10, current + 1);
-    setWarnedAxis(null); // Clear any warning
     setFeltAxes(prev => ({ ...prev, [axis]: newValue }));
   }
 
@@ -457,7 +478,6 @@ export function FeedbackFormClient({
               const diff = felt - expected;
               const diffColor = diff > 0 ? "#b45309" : diff < 0 ? "#0369a1" : "#6b5841";
               const diffLabel = diff > 0 ? `+${diff}` : diff < 0 ? `${diff}` : "";
-              const isWarned = warnedAxis === axis;
               
               // Calculate the colored bar position (between expected and felt)
               const minPos = Math.min(expected, felt);
@@ -469,32 +489,27 @@ export function FeedbackFormClient({
                 <div key={axis} className="space-y-1">
                   {/* Label row with +/- buttons */}
                   <div className="flex items-center justify-between">
-                    <span className={`text-xs font-medium transition-colors ${isWarned ? "text-[#0369a1]" : "text-[#3f301f]"}`}>
+                    <span className="text-xs font-medium text-[#3f301f]">
                       {AXIS_LABELS[axis]}
                     </span>
                     <div className="flex items-center gap-1">
-                      {/* Minus button */}
+                      {/* Minus button - requires double-tap to go below expected */}
                       <button
                         type="button"
                         onClick={() => handleDecrease(axis)}
                         disabled={felt <= 0}
-                        className={`w-5 h-5 flex items-center justify-center rounded text-xs font-bold transition-all
-                          ${isWarned 
-                            ? "bg-[#0369a1] text-white animate-pulse" 
-                            : "bg-[#e5ddd0] text-[#6b5841] hover:bg-[#d5cdc0]"
-                          }
-                          disabled:opacity-30 disabled:cursor-not-allowed`}
+                        className="w-5 h-5 flex items-center justify-center rounded text-xs font-bold bg-[#e5ddd0] text-[#6b5841] hover:bg-[#d5cdc0] disabled:opacity-30 disabled:cursor-not-allowed"
                       >
                         −
                       </button>
                       {/* Value/Diff */}
                       <span 
                         className="w-6 text-[10px] font-bold tabular-nums text-center"
-                        style={{ color: isWarned ? "#0369a1" : diffColor }}
+                        style={{ color: diffColor }}
                       >
-                        {isWarned ? "×2" : (diffLabel || felt)}
+                        {diffLabel || felt}
                       </span>
-                      {/* Plus button */}
+                      {/* Plus button - single tap */}
                       <button
                         type="button"
                         onClick={() => handleIncrease(axis)}
@@ -509,7 +524,7 @@ export function FeedbackFormClient({
                   {/* Slider - full width */}
                   <div className="relative h-5">
                     {/* Track background */}
-                    <div className={`absolute inset-y-1.5 inset-x-0 rounded-full transition-colors ${isWarned ? "bg-[#bfdbfe]" : "bg-[#e5ddd0]"}`} />
+                    <div className="absolute inset-y-1.5 inset-x-0 rounded-full bg-[#e5ddd0]" />
                     
                     {/* Colored bar showing difference (between expected and felt) */}
                     {diff !== 0 && (
@@ -524,22 +539,9 @@ export function FeedbackFormClient({
                       />
                     )}
                     
-                    {/* Warning flash when trying to go below */}
-                    {isWarned && (
-                      <div 
-                        className="absolute inset-y-0.5 rounded-full animate-pulse"
-                        style={{ 
-                          left: `${(felt / 10) * 100}%`,
-                          right: `${100 - (expected / 10) * 100}%`,
-                          backgroundColor: "#0369a1",
-                          opacity: 0.3,
-                        }}
-                      />
-                    )}
-                    
                     {/* Ghost marker for expected */}
                     <div 
-                      className={`absolute top-1/2 -translate-y-1/2 w-1 h-3 rounded-sm z-10 transition-all ${isWarned ? "bg-[#0369a1] opacity-90 scale-y-125" : "bg-[#a89b84] opacity-70"}`}
+                      className="absolute top-1/2 -translate-y-1/2 w-1 h-3 rounded-sm z-10 bg-[#a89b84] opacity-70"
                       style={{ left: `calc(${(expected / 10) * 100}% - 2px)` }}
                       title={`Expected: ${expected}`}
                     />

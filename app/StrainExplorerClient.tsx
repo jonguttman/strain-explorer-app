@@ -285,12 +285,12 @@ export function StrainExplorerClient() {
           className="mx-auto flex h-full w-full max-w-xl flex-col gap-3"
           style={accentStyle}
         >
-          <section className="mt-6 flex min-h-[26rem] flex-1 flex-col rounded-3xl border border-[#ddcbaa] bg-white px-4 py-6 shadow-sm sm:min-h-[32rem]">
-            <div className="flex-1 overflow-hidden">
-              {mode === "visual" ? (
-                <div className="flex h-full w-full items-center justify-center">
-                  <div className="h-64 w-full md:h-80 lg:h-96">
-                    {showFeedbackQR ? (
+          <section className="mt-6 flex flex-1 flex-col rounded-3xl border border-[#ddcbaa] shadow-sm overflow-hidden">
+            {mode === "visual" ? (
+              showFeedbackQR ? (
+                <div className="flex-1 flex flex-col bg-white">
+                  <div className="flex-1 flex items-center justify-center px-4 py-6">
+                    <div className="h-64 w-full md:h-80 lg:h-96">
                       <FeedbackOverlay
                         accentHex={accentHex}
                         strainId={selectedStrainId}
@@ -300,37 +300,47 @@ export function StrainExplorerClient() {
                         accessKeyId={accessKeyParam ?? undefined}
                         onClose={() => setShowFeedbackQR(false)}
                       />
-                    ) : (
-                      <RadarPanel
-                        color={accentHex}
-                        traits={doseData.traits}
-                        axisLabels={doseData.axisLabels}
-                        doseKey={selectedDoseKey}
-                        experienceMeta={doseData.experienceMeta ?? undefined}
-                      />
-                    )}
+                    </div>
+                  </div>
+                  <div className="border-t border-[#e2d3b5]/70 py-2">
+                    <div className="flex items-center justify-center">
+                      <ModeSwitch mode={mode} onChange={setMode} />
+                    </div>
                   </div>
                 </div>
               ) : (
-                <DetailsPanel
-                  content={doseData.content}
-                  strainName={strainDisplayName}
-                  doseLabel={currentDoseLabel}
-                  grams={currentDoseGrams}
-                  meta={doseData.meta ?? null}
-                  snapshot={doseData.snapshot ?? null}
-                  accentHex={accentHex}
-                  testimonials={doseData.testimonials ?? []}
-                  accessKeyId={accessKeyParam ?? undefined}
-                  products={productsForSelection}
+                <RadarPanel
+                  color={accentHex}
+                  traits={doseData.traits}
+                  axisLabels={doseData.axisLabels}
+                  doseKey={selectedDoseKey}
+                  experienceMeta={doseData.experienceMeta ?? undefined}
+                  modeSwitch={<ModeSwitch mode={mode} onChange={setMode} />}
                 />
-              )}
-            </div>
-            <div className="mt-4 h-[56px] border-t border-[#e2d3b5]/70 pt-3">
-              <div className="flex h-full items-center justify-center">
-                <ModeSwitch mode={mode} onChange={setMode} />
+              )
+            ) : (
+              <div className="flex-1 flex flex-col bg-white">
+                <div className="flex-1 px-4 py-6 overflow-auto">
+                  <DetailsPanel
+                    content={doseData.content}
+                    strainName={strainDisplayName}
+                    doseLabel={currentDoseLabel}
+                    grams={currentDoseGrams}
+                    meta={doseData.meta ?? null}
+                    snapshot={doseData.snapshot ?? null}
+                    accentHex={accentHex}
+                    testimonials={doseData.testimonials ?? []}
+                    accessKeyId={accessKeyParam ?? undefined}
+                    products={productsForSelection}
+                  />
+                </div>
+                <div className="border-t border-[#e2d3b5]/70 py-2">
+                  <div className="flex items-center justify-center">
+                    <ModeSwitch mode={mode} onChange={setMode} />
+                  </div>
+                </div>
               </div>
-            </div>
+            )}
           </section>
 
           <DoseSlider
