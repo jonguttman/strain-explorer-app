@@ -46,3 +46,9 @@ node_modules
 data/feedback.json
 data/betaRequests.json
 
+node_modules
+.next
+.env.local
+.env
+data/feedback.json
+data/betaRequests.json
