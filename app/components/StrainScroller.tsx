@@ -12,40 +12,25 @@ export function StrainScroller({
   onSelect,
 }: StrainScrollerProps) {
   return (
-    <div className="w-full border-y border-[#d3c3a2] bg-[#fdfbf7] py-3">
-      {/* Desktop: horizontal buttons */}
-      <div className="hidden sm:flex mx-auto max-w-4xl flex-wrap items-center justify-center gap-2 px-4">
+    <div className="hidden sm:block w-full border-b border-[var(--card-border)] bg-[var(--shell-bg)]">
+      {/* Desktop: centered underline tabs */}
+      <div className="mx-auto max-w-5xl flex flex-wrap justify-center items-center gap-1 px-4 sm:px-8 pt-1 pb-0">
         {strains.map((strain) => {
           const isActive = strain.id === selectedId;
           return (
             <button
               key={strain.id}
               onClick={() => onSelect(strain.id)}
-              className={`whitespace-nowrap rounded-full px-4 py-2 text-sm border transition md:text-base ${
+              className={`whitespace-nowrap px-3 py-2 text-[14px] transition border-b-2 ${
                 isActive
-                  ? "bg-[#3f301f] text-white border-[#3f301f] shadow-sm"
-                  : "bg-white text-[#3f301f] border-[#d3c3a2] hover:bg-[#f5ebe0]"
+                  ? "font-semibold text-[var(--accent)] border-[var(--accent)]"
+                  : "text-[var(--ink-soft)] border-transparent hover:text-[var(--ink-main)] hover:border-[var(--card-border)]"
               }`}
             >
               {strain.name}
             </button>
           );
         })}
-      </div>
-
-      {/* Mobile: elegant dropdown */}
-      <div className="sm:hidden mx-auto max-w-md px-4">
-        <select
-          value={selectedId}
-          onChange={(e) => onSelect(e.target.value)}
-          className="w-full rounded-full border border-[#d3c3a2] bg-white px-4 py-2 text-sm font-medium text-[#3f301f] shadow-sm focus:outline-none focus:ring-2 focus:ring-[#3f301f] focus:ring-offset-2 appearance-none bg-[url('data:image/svg+xml;charset=utf-8,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 fill=%27none%27 viewBox=%270 0 20 20%27%3E%3Cpath stroke=%27%233f301f%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27 stroke-width=%271.5%27 d=%27m6 8 4 4 4-4%27/%3E%3C/svg%3E')] bg-[length:1.25rem] bg-[right_0.5rem_center] bg-no-repeat pr-10"
-        >
-          {strains.map((strain) => (
-            <option key={strain.id} value={strain.id}>
-              {strain.name}
-            </option>
-          ))}
-        </select>
       </div>
     </div>
   );

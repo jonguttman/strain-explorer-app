@@ -67,6 +67,7 @@ export function StrainExplorerClient() {
   const [mode, setMode] = useState<"visual" | "details">("visual");
   const [showFeedbackQR, setShowFeedbackQR] = useState(false);
   const [welcomeLabel, setWelcomeLabel] = useState<string | undefined>(undefined);
+  const [isStrainSheetOpen, setIsStrainSheetOpen] = useState(false);
   const activeCta = useMemo(
     () => CTA_VARIANTS[Math.floor(Math.random() * CTA_VARIANTS.length)],
     []
@@ -274,6 +275,21 @@ export function StrainExplorerClient() {
         effectWord={doseData.experienceMeta?.effectWord}
       />
 
+      {/* Mobile: strain selector pill */}
+      <div className="sm:hidden px-4 pb-3 bg-[var(--shell-bg)] border-b border-[var(--card-border)]">
+        <button
+          type="button"
+          onClick={() => setIsStrainSheetOpen(true)}
+          className="inline-flex items-center rounded-full border border-[var(--card-border)] bg-[var(--card-bg)] px-4 py-2 text-[14px] font-medium text-[var(--ink-main)] shadow-sm"
+        >
+          {strainDisplayName}
+          <svg className="ml-2 h-4 w-4 text-[var(--ink-soft)]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+          </svg>
+        </button>
+      </div>
+
+      {/* Desktop: strain tabs */}
       <StrainScroller
         strains={STRAINS}
         selectedId={selectedStrainId}
@@ -322,6 +338,10 @@ export function StrainExplorerClient() {
                   doseKey={selectedDoseKey}
                   experienceMeta={doseData.experienceMeta ?? undefined}
                   modeSwitch={<ModeSwitch mode={mode} onChange={setMode} />}
+                  strainName={strainDisplayName}
+                  effectWord={doseData.experienceMeta?.effectWord}
+                  doseLabel={currentDoseLabel}
+                  grams={currentDoseGrams}
                 />
               )
             ) : (
@@ -360,6 +380,76 @@ export function StrainExplorerClient() {
           />
         </div>
       </div>
+
+      {/* Mobile: strain selection bottom sheet */}
+      {isStrainSheetOpen && (
+        <div className="sm:hidden fixed inset-0 z-50">
+          {/* Backdrop */}
+          <div 
+            className="absolute inset-0 bg-black/30"
+            onClick={() => setIsStrainSheetOpen(false)}
+          />
+          
+          {/* Sheet */}
+          <div className="absolute inset-x-0 bottom-0 rounded-t-2xl bg-[var(--card-bg)] border-t border-[var(--card-border)] shadow-xl max-h-[70vh] overflow-hidden flex flex-col">
+            {/* Header */}
+            <div className="flex items-center justify-between px-4 py-3 border-b border-[var(--card-border)]">
+              <h2 className="text-[16px] font-semibold text-[var(--ink-main)]">
+                Choose a strain
+              </h2>
+              <button
+                type="button"
+                onClick={() => setIsStrainSheetOpen(false)}
+                className="text-[var(--ink-soft)] hover:text-[var(--ink-main)] p-1"
+              >
+                <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+
+            {/* Strain list */}
+            <div className="flex-1 overflow-y-auto">
+              {STRAINS.map((strain) => {
+                const isSelected = strain.id === selectedStrainId;
+                // Get effect word from cache if available
+                const cacheKey = `${strain.id}:${selectedDoseKey}`;
+                const cachedData = cacheRef.current[cacheKey];
+                const effectWord = cachedData?.experienceMeta?.effectWord;
+
+                return (
+                  <button
+                    key={strain.id}
+                    type="button"
+                    onClick={() => {
+                      setSelectedStrainId(strain.id);
+                      setIsStrainSheetOpen(false);
+                    }}
+                    className="w-full flex items-center justify-between px-4 py-3 hover:bg-[var(--accent-pill)] transition"
+                  >
+                    <div className="flex flex-col items-start">
+                      <span className={`text-[15px] ${isSelected ? "font-semibold text-[var(--accent)]" : "text-[var(--ink-main)]"}`}>
+                        {strain.name}
+                      </span>
+                      {effectWord && (
+                        <span className="text-[12px] text-[var(--ink-soft)]">
+                          {effectWord}
+                        </span>
+                      )}
+                    </div>
+                    {isSelected && (
+                      <div 
+                        className="h-2 w-2 rounded-full"
+                        style={{ backgroundColor: "var(--accent)" }}
+                      />
+                    )}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

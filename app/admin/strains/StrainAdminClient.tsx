@@ -551,24 +551,24 @@ export default function StrainAdminClient({ initialData, allProducts }: Props) {
             {/* 1. SLIDERS - Compact 3-column grid */}
             <section className="rounded-xl border border-slate-200 bg-white p-3">
               <div className="grid gap-x-4 gap-y-2 md:grid-cols-3">
-                {dataset.axes.map((axis) => (
+              {dataset.axes.map((axis) => (
                   <div key={axis} className="flex items-center gap-2">
                     <span className="w-16 text-xs font-medium text-slate-600 truncate">
                       {formatAxisLabel(axis)}
                     </span>
-                    <input
-                      type="range"
-                      min={0}
-                      max={100}
-                      value={currentStrain.radar[axis][doseIndex] ?? 0}
-                      onChange={(e) => handleRadarChange(axis, Number(e.target.value))}
+                  <input
+                    type="range"
+                    min={0}
+                    max={100}
+                    value={currentStrain.radar[axis][doseIndex] ?? 0}
+                    onChange={(e) => handleRadarChange(axis, Number(e.target.value))}
                       className="flex-1 h-1.5"
-                    />
+                  />
                     <span className="w-6 text-xs text-slate-500 text-right">
                       {currentStrain.radar[axis][doseIndex]?.toFixed(0)}
                     </span>
-                  </div>
-                ))}
+                </div>
+              ))}
               </div>
             </section>
 
@@ -595,29 +595,29 @@ export default function StrainAdminClient({ initialData, allProducts }: Props) {
             {/* 3. BLURB */}
             <div className="rounded-xl border border-slate-200 bg-white p-3">
               <label className="mb-1 block text-xs font-medium text-slate-600">
-                Blurb
-              </label>
-              <input
+                  Blurb
+                </label>
+                <input
                 className="w-full rounded border border-slate-300 px-2 py-1.5 text-sm"
-                value={currentStrain.blurb[selectedDose]}
-                onChange={(e) => handleContentChange("blurb", e.target.value)}
+                  value={currentStrain.blurb[selectedDose]}
+                  onChange={(e) => handleContentChange("blurb", e.target.value)}
                 placeholder="Short description for this dose..."
-              />
-            </div>
+                />
+              </div>
 
             {/* 4. DETAILS */}
             <div className="rounded-xl border border-slate-200 bg-white p-3">
               <label className="mb-1 block text-xs font-medium text-slate-600">
-                Details
-              </label>
-              <textarea
+                  Details
+                </label>
+                <textarea
                 className="w-full rounded border border-slate-300 px-2 py-1.5 text-sm"
                 rows={3}
-                value={currentStrain.details[selectedDose]}
-                onChange={(e) => handleContentChange("details", e.target.value)}
+                  value={currentStrain.details[selectedDose]}
+                  onChange={(e) => handleContentChange("details", e.target.value)}
                 placeholder="Longer description of the experience..."
-              />
-            </div>
+                />
+              </div>
 
             {/* Suggested Products Panel */}
             <section className="rounded-xl border border-slate-200 bg-white">
@@ -642,7 +642,7 @@ export default function StrainAdminClient({ initialData, allProducts }: Props) {
                 >
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                 </svg>
-              </button>
+                </button>
 
               {productsOpen && (
                 <div className="px-4 pb-4 space-y-4">
@@ -756,12 +756,12 @@ export default function StrainAdminClient({ initialData, allProducts }: Props) {
                                       &ldquo;{p.dosingDirection}&rdquo;
                                     </span>
                                   )}
-                                </div>
+              </div>
                                 <label className="flex items-center gap-2 cursor-pointer flex-shrink-0">
                                   <span className="text-xs text-slate-500">
                                     {isLinked ? "Showing" : "Hidden"}
                                   </span>
-                                  <input
+                    <input
                                     type="checkbox"
                                     checked={isLinked}
                                     onChange={(e) => handleToggleProductLink(p.id, e.target.checked)}
@@ -793,8 +793,8 @@ export default function StrainAdminClient({ initialData, allProducts }: Props) {
                       {productsSaveStatus === "saving" ? "Saving…" : "Save Product Links"}
                     </button>
                   </div>
-                </div>
-              )}
+                  </div>
+                )}
             </section>
 
             {/* 6. STRAIN NAME - Rarely used, at bottom */}

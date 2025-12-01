@@ -13,105 +13,36 @@ type StrainHeaderProps = {
 };
 
 export function StrainHeader({
-  strainName,
-  grams,
-  doseLabel,
-  accentHex: _accentHex,
   ctaLabel,
   onShowFeedback,
   feedbackActive,
-  welcomeLabel,
-  effectWord,
 }: StrainHeaderProps) {
-  // _accentHex kept for API compatibility but using unified cream color scheme
   return (
-    <header className="px-6 pt-5 pb-4 md:pb-5" style={{ background: "var(--shell-bg)" }}>
-      {/* Outer: two-column layout with stretch for vertical alignment */}
-      <div className="flex items-stretch justify-between gap-4">
-        
-        {/* LEFT CLUSTER: PsillyMark + strain text column */}
-        <div className="flex items-stretch gap-3 flex-1 min-w-0">
-          {/* PsillyMark icon */}
-          <div className="flex-shrink-0">
-            <PsillyMark size={72} />
-          </div>
-
-          {/* Strain text column: top = name, bottom = dose pill */}
-          <div className="flex flex-col justify-between py-0.5 min-w-0">
-            {/* TOP: Strain name + effect word + welcome */}
-            <div>
-              <h1 className="flex flex-wrap items-baseline gap-x-2">
-                <span 
-                  className="text-[28px] sm:text-[32px] font-semibold tracking-tight leading-none"
-                  style={{ color: "var(--ink-main)" }}
-                >
-                  {strainName}
-                </span>
-                {effectWord && (
-                  <span 
-                    className="text-[24px] sm:text-[28px] font-normal"
-                    style={{ color: "var(--ink-soft)" }}
-                  >
-                    {effectWord}
-                  </span>
-                )}
-              </h1>
-              {welcomeLabel && (
-                <p 
-                  className="mt-0.5 text-xs font-medium uppercase tracking-wide"
-                  style={{ color: "var(--ink-subtle)" }}
-                >
-                  Welcome back {welcomeLabel}
-                </p>
-              )}
-            </div>
-
-            {/* BOTTOM: Dose pill */}
-            <span 
-              className="inline-flex items-center self-start rounded-full border px-4 py-1.5 text-sm font-semibold uppercase tracking-wide"
-              style={{ 
-                borderColor: "var(--card-border)", 
-                background: "var(--accent-pill)",
-                color: "var(--ink-main)" 
-              }}
-            >
-              {doseLabel}
-              {grams != null
-                ? ` · ${grams.toFixed(grams % 1 === 0 ? 0 : 1)} g`
-                : ""}
-            </span>
-          </div>
+    <header className="bg-[var(--shell-bg)] border-b border-[var(--card-border)]">
+      <div className="mx-auto max-w-5xl px-4 sm:px-8 py-2 flex items-center gap-3">
+        {/* Left: Psilly mark - flex-1 to balance with right side */}
+        <div className="flex-1 flex justify-start">
+          <PsillyMark size={28} className="sm:hidden" />
+          <PsillyMark size={32} className="hidden sm:block" />
         </div>
 
-        {/* RIGHT CLUSTER: Tripdar lockup (top) + CTA button (bottom) */}
-        <div className="flex flex-col justify-between items-end py-0.5 flex-shrink-0">
-          {/* TOP: Tripdar lockup */}
-          <div className="text-right leading-tight">
-            <p 
-              className="text-xs font-bold tracking-[0.08em]"
-              style={{ color: "var(--accent)" }}
-            >
-              Tripdar™
-            </p>
-            <p 
-              className="text-[9px] leading-tight"
-              style={{ color: "var(--ink-subtle)" }}
-            >
-              Trip radar by Fungapedia
-            </p>
-          </div>
+        {/* Center: Tripdar lockup - truly centered */}
+        <div className="flex flex-col items-center leading-tight">
+          <span className="text-[10px] sm:text-[11px] font-semibold tracking-[0.22em] uppercase text-[var(--ink-main)]">
+            TRIPDAR™
+          </span>
+          <span className="text-[8px] sm:text-[10px] text-[var(--ink-soft)] tracking-wide mt-[1px]">
+            Trip radar by Fungapedia
+          </span>
+        </div>
 
-          {/* BOTTOM: CTA button */}
+        {/* Right: CTA button - flex-1 to balance with left side */}
+        <div className="flex-1 flex justify-end">
           <button
             type="button"
             onClick={onShowFeedback}
             aria-pressed={feedbackActive}
-            className="inline-flex items-center rounded-full border px-3 py-1.5 text-sm font-semibold transition whitespace-nowrap shadow-sm hover:shadow focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2"
-            style={{ 
-              borderColor: "var(--accent)", 
-              background: "var(--accent-pill)",
-              color: "var(--accent)",
-            }}
+            className="rounded-full border border-[var(--accent)] px-4 py-[6px] sm:px-5 sm:py-2 text-[12px] sm:text-[13px] font-medium text-[var(--accent)] bg-[var(--card-bg)] shadow-sm transition hover:shadow focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2"
           >
             {ctaLabel}
           </button>
@@ -120,4 +51,3 @@ export function StrainHeader({
     </header>
   );
 }
-

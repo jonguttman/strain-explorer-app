@@ -24,6 +24,11 @@ type RadarPanelProps = {
   doseKey: DoseKey;
   experienceMeta?: StrainExperienceMeta;
   modeSwitch?: React.ReactNode;
+  // Strain info for card header
+  strainName?: string;
+  effectWord?: string;
+  doseLabel?: string;
+  grams?: number | null;
 };
 
 // Helper to get level styling config - warm tones
@@ -58,7 +63,7 @@ function Chip({ children }: { children: React.ReactNode }) {
   );
 }
 
-export function RadarPanel({ color, traits, axisLabels, doseKey, experienceMeta, modeSwitch }: RadarPanelProps) {
+export function RadarPanel({ color, traits, axisLabels, doseKey, experienceMeta, modeSwitch, strainName, effectWord, doseLabel, grams }: RadarPanelProps) {
   const style = DOSE_STYLE[doseKey] ?? DOSE_STYLE.macro;
   const baseHex = doseKey === "micro" ? "#c4c4c4" : color;
 
@@ -85,11 +90,11 @@ export function RadarPanel({ color, traits, axisLabels, doseKey, experienceMeta,
 
   // Premium radar chart options using CSS variable colors
   const chartOptions = useMemo<ChartOptions<"radar">>(() => ({
-    responsive: true,
-    maintainAspectRatio: false,
-    plugins: {
-      legend: { display: false },
-      tooltip: { enabled: false },
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: { enabled: false },
       heroGlow: {
         enabled: style.hasGlow,
         color: hexToRgba(color, 0.55),
@@ -97,41 +102,39 @@ export function RadarPanel({ color, traits, axisLabels, doseKey, experienceMeta,
         lineWidth: 2.5,
       },
     } as ChartOptions<"radar">["plugins"],
-    animation: {
+      animation: {
       duration: 400,
-      easing: "easeOutQuad" as const,
-    },
-    scales: {
-      r: {
-        beginAtZero: true,
-        min: 0,
+        easing: "easeOutQuad" as const,
+      },
+      scales: {
+        r: {
+          beginAtZero: true,
+          min: 0,
         suggestedMax: 100,
-        ticks: {
-          display: false,
+          ticks: {
+            display: false,
           stepSize: 20,
-        },
-        grid: {
+          },
+          grid: {
           color: "#e5d4bf", // --radar-grid
           lineWidth: 1,
-        },
-        angleLines: {
+          },
+          angleLines: {
           color: "rgba(0,0,0,0.04)", // Very subtle
           lineWidth: 1,
-        },
-        pointLabels: {
-          font: {
-            size: 13,
-            weight: 600,
-            family: "'Libre Baskerville', Georgia, serif",
           },
+          pointLabels: {
+            font: {
+            size: 13,
+              weight: 600,
+            family: "'Libre Baskerville', Georgia, serif",
+            },
           color: "#8a6c4a", // --radar-axis
           padding: 10,
+          },
         },
       },
-    },
   }), [style.hasGlow, color]);
-
-  const levelCfg = getLevelConfig(experienceMeta?.experienceLevel);
 
   return (
     <div 
@@ -150,35 +153,36 @@ export function RadarPanel({ color, traits, axisLabels, doseKey, experienceMeta,
           opacity: 0.5,
         }}
       />
-      {/* Top row: Trip profile on left, Balanced badge on right */}
-      {experienceMeta && (
-        <div className="flex items-start justify-between gap-4 px-2 mb-2 relative z-10">
-          {/* Left: Trip profile + tagline */}
-          <div className="flex-shrink-0">
-            <p 
-              className="text-xs font-bold tracking-[0.1em] uppercase"
-              style={{ color: "var(--accent)" }}
-            >
-              Tripdar · Trip profile
+
+      {/* Strain header: name + metadata on left, trip profile on right */}
+      {strainName && (
+        <div className="flex items-start justify-between gap-4 px-2 mb-3 sm:mb-4 relative z-10">
+          {/* Left: Strain name + metadata */}
+          <div>
+            <h2 className="text-[18px] sm:text-[20px] font-semibold leading-tight text-[var(--ink-main)]">
+              {strainName}
+            </h2>
+            <p className="text-[13px] sm:text-[14px] text-[var(--ink-soft)]">
+              {[effectWord, doseLabel, grams != null ? `${grams.toFixed(grams % 1 === 0 ? 0 : 1)} g` : null].filter(Boolean).join(" · ")}
             </p>
-            {experienceMeta.effectTagline && (
+          </div>
+          {/* Right: Trip profile + tagline */}
+          {experienceMeta?.effectTagline && (
+            <div className="text-right">
               <p 
-                className="mt-1 text-sm leading-relaxed max-w-[220px]"
+                className="text-[13px] sm:text-[14px] font-medium"
+                style={{ color: "var(--ink-soft)" }}
+              >
+                Trip profile
+              </p>
+              <p 
+                className="mt-0.5 text-[12px] sm:text-[13px] leading-snug max-w-[160px] sm:max-w-[200px]"
                 style={{ color: "var(--ink-main)" }}
               >
                 {experienceMeta.effectTagline}
               </p>
-            )}
-          </div>
-
-          {/* Right: Intensity badge */}
-          <div 
-            className="inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-medium"
-            style={{ background: "var(--accent-pill)" }}
-          >
-            <span className={`h-2 w-2 rounded-full ${levelCfg.dotClass}`} />
-            <span className={levelCfg.textClass}>{levelCfg.label}</span>
-          </div>
+            </div>
+          )}
         </div>
       )}
 
@@ -191,12 +195,25 @@ export function RadarPanel({ color, traits, axisLabels, doseKey, experienceMeta,
         />
       </div>
 
-      {/* Timeline chips below radar */}
+      {/* Timeline chips + intensity badge below radar */}
       {experienceMeta?.timeline && (
-        <div className="relative z-10 flex justify-center gap-3 py-2">
+        <div className="relative z-10 flex justify-center items-center gap-2 sm:gap-3 py-2 flex-wrap">
           <Chip>
             {experienceMeta.timeline.peakMinHours}–{experienceMeta.timeline.peakMaxHours}hr peak
           </Chip>
+          {/* Intensity badge centered between timeline chips */}
+          {experienceMeta.experienceLevel && (
+            <span 
+              className="inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-[11px] font-medium uppercase tracking-[0.1em]"
+              style={{ 
+                background: "var(--accent-pill)", 
+                color: "var(--ink-soft)",
+              }}
+            >
+              <span className={`w-1.5 h-1.5 rounded-full ${getLevelConfig(experienceMeta.experienceLevel).dotClass}`} />
+              {getLevelConfig(experienceMeta.experienceLevel).label}
+            </span>
+          )}
           <Chip>
             {experienceMeta.timeline.onsetMinMinutes}–{experienceMeta.timeline.onsetMaxMinutes}min onset
           </Chip>
