@@ -214,20 +214,6 @@ export default function StrainAdminClient({ initialData, allProducts }: Props) {
     }));
   };
 
-  const handleProductChange = (index: number, value: string) => {
-    updateCurrentStrain((entry) => {
-      const nextProducts = [...entry.products[selectedDose]];
-      nextProducts[index] = value;
-      return {
-        ...entry,
-        products: {
-          ...entry.products,
-          [selectedDose]: nextProducts,
-        },
-      };
-    });
-  };
-
   const handleAccentChange = (value: string) => {
     const normalized = normalizeAccentHex(value, DEFAULT_ACCENT);
     setDataset((prev) => {
@@ -275,30 +261,6 @@ export default function StrainAdminClient({ initialData, allProducts }: Props) {
     });
   };
 
-  const handleAddProduct = () => {
-    updateCurrentStrain((entry) => ({
-      ...entry,
-      products: {
-        ...entry.products,
-        [selectedDose]: [...entry.products[selectedDose], ""],
-      },
-    }));
-  };
-
-  const handleRemoveProduct = (index: number) => {
-    updateCurrentStrain((entry) => {
-      const nextProducts = entry.products[selectedDose].filter(
-        (_item, idx) => idx !== index
-      );
-      return {
-        ...entry,
-        products: {
-          ...entry.products,
-          [selectedDose]: nextProducts,
-        },
-      };
-    });
-  };
 
   const handleReset = () => {
     const clone = cloneDataset(initialSnapshot);

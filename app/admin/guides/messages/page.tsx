@@ -1,6 +1,6 @@
 import { promises as fs } from "fs";
 import path from "path";
-import { AdminNav } from "@/app/admin/AdminNav";
+import { AdminHeader } from "@/app/admin/AdminHeader";
 import { AdminGuideMessagesClient } from "./AdminGuideMessagesClient";
 import type { GuideAccountDataset, GuideMessageDataset } from "@/lib/types";
 
@@ -31,10 +31,10 @@ export default async function AdminGuideMessagesPage() {
   ]);
 
   return (
-    <div className="min-h-screen bg-slate-50">
-      <AdminNav active="guides" title="Guide Messages" />
-      <div className="mx-auto max-w-5xl px-4 py-6 space-y-4">
-        <p className="text-sm text-slate-600">
+    <main className="min-h-screen bg-[var(--shell-bg)] text-[var(--ink-main)]">
+      <div className="mx-auto max-w-7xl px-3 sm:px-6 py-4">
+        <AdminHeader />
+        <p className="text-sm text-[var(--ink-soft)] mb-4">
           Send messages to individual guides or broadcast to all. Messages appear in the guide portal inbox.
         </p>
         <AdminGuideMessagesClient
@@ -42,7 +42,7 @@ export default async function AdminGuideMessagesPage() {
           initialMessages={messagesData.messages}
         />
       </div>
-    </div>
+    </main>
   );
 }
 

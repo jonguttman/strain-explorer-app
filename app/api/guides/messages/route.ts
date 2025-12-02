@@ -9,7 +9,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { promises as fs } from "fs";
 import path from "path";
 import { getGuideFromRequest } from "@/lib/guideSession";
-import type { GuideMessageDataset, GuideMessage } from "@/lib/types";
+import type { GuideMessageDataset } from "@/lib/types";
 
 const DATA_PATH = path.join(process.cwd(), "data", "guideMessages.json");
 

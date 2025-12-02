@@ -1,4 +1,4 @@
-import { AdminNav } from "../AdminNav";
+import { AdminHeader } from "../AdminHeader";
 import { FeedbackAdminClient } from "./FeedbackAdminClient";
 import { promises as fs } from "fs";
 import path from "path";
@@ -64,19 +64,18 @@ export default async function FeedbackAdminPage() {
   ]);
 
   return (
-    <div className="min-h-screen bg-slate-50">
-      <AdminNav active="feedback" title="Feedback Explorer" />
-      <div className="mx-auto max-w-7xl px-4 py-6 space-y-4">
-        <p className="text-sm text-slate-600">
+    <main className="min-h-screen bg-[var(--shell-bg)] text-[var(--ink-main)]">
+      <div className="mx-auto max-w-7xl px-3 sm:px-6 py-4">
+        <AdminHeader />
+        <p className="text-sm text-[var(--ink-soft)] mb-4">
           View and analyze feedback submissions from the kiosk.
         </p>
-
         <FeedbackAdminClient
           initialEntries={feedbackData.entries}
           accessKeys={accessKeysData.keys}
           strainNames={strainNames}
         />
       </div>
-    </div>
+    </main>
   );
 }

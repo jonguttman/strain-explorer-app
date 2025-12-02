@@ -1,6 +1,6 @@
 import { promises as fs } from "fs";
 import path from "path";
-import { AdminNav } from "@/app/admin/AdminNav";
+import { AdminHeader } from "@/app/admin/AdminHeader";
 import { ProductsAdminClient } from "./ProductsAdminClient";
 import type { ProductDataset, Product } from "@/lib/types";
 import { getStrains } from "@/data/strainData";
@@ -29,17 +29,15 @@ export default async function ProductsAdminPage() {
   }));
 
   return (
-    <div className="flex flex-col h-screen bg-slate-50">
-      <AdminNav active="products" title="Products Admin" />
-      <div className="flex-1 min-h-0 overflow-y-auto">
-        <main className="mx-auto max-w-7xl px-6 py-6">
-          <ProductsAdminClient 
-            initialProducts={products} 
-            strainOptions={strainOptions}
-          />
-        </main>
+    <main className="min-h-screen bg-[var(--shell-bg)] text-[var(--ink-main)]">
+      <div className="mx-auto max-w-7xl px-3 sm:px-6 py-4">
+        <AdminHeader />
+        <ProductsAdminClient 
+          initialProducts={products} 
+          strainOptions={strainOptions}
+        />
       </div>
-    </div>
+    </main>
   );
 }
 

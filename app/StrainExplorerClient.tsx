@@ -296,77 +296,81 @@ export function StrainExplorerClient() {
         onSelect={setSelectedStrainId}
       />
 
-      <div className="flex-1 w-full px-4 pb-10 sm:px-6 lg:px-8">
+      <div className="w-full px-4 pb-10 sm:px-6 lg:px-8">
         <div
-          className="mx-auto flex h-full w-full max-w-xl flex-col gap-2"
+          className="mx-auto w-full max-w-xl flex flex-col gap-2"
           style={accentStyle}
         >
+          {/* Main card with FIXED height - prevents all jumping */}
           <section 
-            className="mt-4 flex flex-1 flex-col rounded-3xl border shadow-sm overflow-hidden"
+            className="mt-4 rounded-3xl border shadow-sm overflow-hidden h-[475px] sm:h-[550px] md:h-[625px]"
             style={{ 
               background: "var(--card-bg)", 
               borderColor: "var(--card-border)" 
             }}
           >
-            {mode === "visual" ? (
-              showFeedbackQR ? (
-                <div className="flex-1 flex flex-col" style={{ background: "var(--card-bg)" }}>
-                  <div className="flex-1 flex items-center justify-center px-4 py-6">
-                    <div className="h-64 w-full md:h-80 lg:h-96">
-                      <FeedbackOverlay
-                        accentHex={accentHex}
-                        strainId={selectedStrainId}
-                        doseKey={selectedDoseKey}
-                        ctaKey={activeCta.key}
-                        ctaLabel={activeCta.label}
-                        accessKeyId={accessKeyParam ?? undefined}
-                        onClose={() => setShowFeedbackQR(false)}
-                      />
+            {/* Content fills the fixed-height section */}
+            <div className="h-full flex flex-col">
+              {mode === "visual" ? (
+                showFeedbackQR ? (
+                  <div className="flex-1 flex flex-col min-h-0" style={{ background: "var(--card-bg)" }}>
+                    <div className="flex-1 flex items-center justify-center px-4 py-6 overflow-auto">
+                      <div className="w-full max-w-sm">
+                        <FeedbackOverlay
+                          accentHex={accentHex}
+                          strainId={selectedStrainId}
+                          doseKey={selectedDoseKey}
+                          ctaKey={activeCta.key}
+                          ctaLabel={activeCta.label}
+                          accessKeyId={accessKeyParam ?? undefined}
+                          onClose={() => setShowFeedbackQR(false)}
+                        />
+                      </div>
+                    </div>
+                    <div className="flex-shrink-0 py-3" style={{ borderTop: "1px solid var(--card-border)" }}>
+                      <div className="flex items-center justify-center">
+                        <ModeSwitch mode={mode} onChange={setMode} />
+                      </div>
                     </div>
                   </div>
-                  <div className="py-3" style={{ borderTop: "1px solid var(--card-border)" }}>
+                ) : (
+                  <RadarPanel
+                    color={accentHex}
+                    traits={doseData.traits}
+                    axisLabels={doseData.axisLabels}
+                    experienceMeta={doseData.experienceMeta ?? undefined}
+                    modeSwitch={<ModeSwitch mode={mode} onChange={setMode} />}
+                    strainName={strainDisplayName}
+                    effectWord={doseData.experienceMeta?.effectWord}
+                    doseLabel={currentDoseLabel}
+                    grams={currentDoseGrams}
+                    strainId={selectedStrainId}
+                  />
+                )
+              ) : (
+                <div className="flex-1 flex flex-col min-h-0" style={{ background: "var(--card-bg)" }}>
+                  <div className="flex-1 px-4 py-6 overflow-auto">
+                    <DetailsPanel
+                      content={doseData.content}
+                      strainName={strainDisplayName}
+                      doseLabel={currentDoseLabel}
+                      grams={currentDoseGrams}
+                      meta={doseData.meta ?? null}
+                      snapshot={doseData.snapshot ?? null}
+                      accentHex={accentHex}
+                      testimonials={doseData.testimonials ?? []}
+                      accessKeyId={accessKeyParam ?? undefined}
+                      products={productsForSelection}
+                    />
+                  </div>
+                  <div className="flex-shrink-0 py-3" style={{ borderTop: "1px solid var(--card-border)" }}>
                     <div className="flex items-center justify-center">
                       <ModeSwitch mode={mode} onChange={setMode} />
                     </div>
                   </div>
                 </div>
-              ) : (
-                <RadarPanel
-                  color={accentHex}
-                  traits={doseData.traits}
-                  axisLabels={doseData.axisLabels}
-                  doseKey={selectedDoseKey}
-                  experienceMeta={doseData.experienceMeta ?? undefined}
-                  modeSwitch={<ModeSwitch mode={mode} onChange={setMode} />}
-                  strainName={strainDisplayName}
-                  effectWord={doseData.experienceMeta?.effectWord}
-                  doseLabel={currentDoseLabel}
-                  grams={currentDoseGrams}
-                />
-              )
-            ) : (
-              <div className="flex-1 flex flex-col" style={{ background: "var(--card-bg)" }}>
-                <div className="flex-1 px-4 py-6 overflow-auto">
-                  <DetailsPanel
-                    content={doseData.content}
-                    strainName={strainDisplayName}
-                    doseLabel={currentDoseLabel}
-                    grams={currentDoseGrams}
-                    meta={doseData.meta ?? null}
-                    snapshot={doseData.snapshot ?? null}
-                    accentHex={accentHex}
-                    testimonials={doseData.testimonials ?? []}
-                    accessKeyId={accessKeyParam ?? undefined}
-                    products={productsForSelection}
-                  />
-                </div>
-                <div className="py-3" style={{ borderTop: "1px solid var(--card-border)" }}>
-                  <div className="flex items-center justify-center">
-                    <ModeSwitch mode={mode} onChange={setMode} />
-                  </div>
-                </div>
-              </div>
-            )}
+              )}
+            </div>
           </section>
 
           <DoseSlider

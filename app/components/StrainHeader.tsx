@@ -37,7 +37,7 @@ export function StrainHeader({
         </div>
 
         {/* Right: CTA button - flex-1 to balance with left side */}
-        <div className="flex-1 flex justify-end">
+        <div className="flex-1 flex justify-end items-center gap-2 sm:gap-3">
           <button
             type="button"
             onClick={onShowFeedback}

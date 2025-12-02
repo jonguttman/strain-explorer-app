@@ -103,6 +103,7 @@ export default function FeedbackQR({
         className="cursor-pointer rounded-lg transition hover:opacity-90 hover:shadow-md focus:outline-none focus-visible:ring-2 focus-visible:ring-[#3f301f] focus-visible:ring-offset-2"
         aria-label="Tap to open feedback form"
       >
+        {/* eslint-disable-next-line @next/next/no-img-element -- QR code uses data URL */}
         <img
           src={qrDataUrl}
           alt="Scan to share feedback"

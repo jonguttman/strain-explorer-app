@@ -1,4 +1,4 @@
-import { AdminNav } from "../AdminNav";
+import { AdminHeader } from "../AdminHeader";
 import { getEditableDataset } from "@/data/strainData";
 import { getAllProducts } from "@/lib/productData";
 import StrainAdminClient from "./StrainAdminClient";
@@ -8,11 +8,13 @@ export default function StrainsAdminPage() {
   const allProducts = getAllProducts();
 
   return (
-    <div className="flex flex-col h-screen bg-slate-50">
-      <AdminNav active="strains" title="Strain Admin" />
-      <div className="flex-1 min-h-0">
-        <StrainAdminClient initialData={initialData} allProducts={allProducts} />
+    <main className="min-h-screen bg-[var(--shell-bg)] text-[var(--ink-main)]">
+      <div className="mx-auto max-w-7xl px-3 sm:px-6 py-4">
+        <AdminHeader />
+        <div className="min-h-0">
+          <StrainAdminClient initialData={initialData} allProducts={allProducts} />
+        </div>
       </div>
-    </div>
+    </main>
   );
 }

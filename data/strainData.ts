@@ -5,7 +5,6 @@ import rawStrainData from "./strains.json";
 import type {
   DoseKey,
   TraitAxisId,
-  VisualConfig,
   DoseSnapshot,
   StrainMeta,
   StrainTestimonials,

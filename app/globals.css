@@ -113,3 +113,173 @@ body {
   background: linear-gradient(to right, var(--card-border) 0%, var(--card-inner) 100%);
   border-radius: 999px;
 }
+
+/* ============================================
+   Spore Print Animation Lab
+   ============================================ */
+
+/* A) Whole-print breathing - subtle inhale/exhale of entire print */
+.spore-breathe {
+  animation: sporeBreathing 6s ease-in-out infinite;
+  transform-origin: center center;
+}
+
+@keyframes sporeBreathing {
+  0%   { transform: scale(1);    opacity: 0.85; }
+  50%  { transform: scale(1.04); opacity: 1; }
+  100% { transform: scale(1);    opacity: 0.85; }
+}
+
+/* B) Individual gills pulsing - radial gills gently thicken and fade */
+.spore-gill {
+  animation: gillPulse 4.8s ease-in-out infinite;
+}
+
+.spore-gill:nth-child(odd) {
+  animation-duration: 4.2s;
+}
+
+.spore-gill:nth-child(even) {
+  animation-duration: 5.3s;
+}
+
+.spore-gill:nth-child(3n) {
+  animation-delay: 0.3s;
+}
+
+.spore-gill:nth-child(5n) {
+  animation-delay: 0.6s;
+}
+
+@keyframes gillPulse {
+  0%   { stroke-width: 1.2; opacity: 0.5; }
+  50%  { stroke-width: 1.8; opacity: 0.9; }
+  100% { stroke-width: 1.2; opacity: 0.5; }
+}
+
+/* C) Aura ring pulsing behind the print */
+.spore-aura {
+  fill: rgba(139, 90, 43, 0.06);
+  animation: auraPulse 8s ease-in-out infinite;
+  transform-origin: center;
+}
+
+@keyframes auraPulse {
+  0%   { transform: scale(1);    opacity: 0.04; }
+  50%  { transform: scale(1.12); opacity: 0.12; }
+  100% { transform: scale(1);    opacity: 0.04; }
+}
+
+/* ============================================
+   Spore Data Radar Animations
+   ============================================ */
+
+/* Base hook class */
+.spore-data-animated {
+  --spore-base-duration: 5s;
+}
+
+/* Base transition for gills */
+.spore-data-gill {
+  transition: stroke-width 220ms ease-out, stroke 220ms ease-out, opacity 220ms ease-out;
+}
+
+/* Animated gills */
+.spore-data-gill--animated {
+  animation-name: sporeDataGillPulse;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+  animation-duration: var(--spore-base-duration);
+  transform-origin: center center;
+}
+
+/* Keyframes for gill pulse */
+@keyframes sporeDataGillPulse {
+  0% {
+    stroke-width: var(--spore-gill-width, 1.1);
+    opacity: var(--spore-gill-opacity, 0.6);
+  }
+  50% {
+    stroke-width: calc(var(--spore-gill-width, 1.1) * 1.15);
+    opacity: calc(var(--spore-gill-opacity, 0.6) + 0.12);
+  }
+  100% {
+    stroke-width: var(--spore-gill-width, 1.1);
+    opacity: var(--spore-gill-opacity, 0.6);
+  }
+}
+
+/* Speed modulation via data attribute */
+svg.spore-data-animated[data-speed="0.5"] .spore-data-gill--animated {
+  animation-duration: 7s;
+}
+
+svg.spore-data-animated[data-speed="1"] .spore-data-gill--animated {
+  animation-duration: 5s;
+}
+
+svg.spore-data-animated[data-speed="1.5"] .spore-data-gill--animated {
+  animation-duration: 3.8s;
+}
+
+svg.spore-data-animated[data-speed="2"] .spore-data-gill--animated {
+  animation-duration: 3s;
+}
+
+/* Subtle stagger using nth-child */
+.spore-data-gill--animated:nth-child(6n) {
+  animation-delay: -0.2s;
+}
+
+.spore-data-gill--animated:nth-child(6n+1) {
+  animation-delay: -0.5s;
+}
+
+.spore-data-gill--animated:nth-child(6n+2) {
+  animation-delay: -0.9s;
+}
+
+.spore-data-gill--animated:nth-child(6n+3) {
+  animation-delay: -1.3s;
+}
+
+.spore-data-gill--animated:nth-child(6n+4) {
+  animation-delay: -1.7s;
+}
+
+.spore-data-gill--animated:nth-child(6n+5) {
+  animation-delay: -2.1s;
+}
+
+/* Intensity mapping - disable animation at 0 */
+svg.spore-data-animated[data-intensity="0"] .spore-data-gill--animated {
+  animation-name: none;
+}
+
+/* Lower intensity = slower, more subtle */
+svg.spore-data-animated[data-intensity="0.1"] .spore-data-gill--animated,
+svg.spore-data-animated[data-intensity="0.2"] .spore-data-gill--animated,
+svg.spore-data-animated[data-intensity="0.3"] .spore-data-gill--animated {
+  animation-duration: 6.5s;
+}
+
+/* Medium intensity */
+svg.spore-data-animated[data-intensity="0.4"] .spore-data-gill--animated,
+svg.spore-data-animated[data-intensity="0.5"] .spore-data-gill--animated,
+svg.spore-data-animated[data-intensity="0.6"] .spore-data-gill--animated {
+  animation-duration: 5s;
+}
+
+/* Higher intensity = faster, more alive */
+svg.spore-data-animated[data-intensity="0.7"] .spore-data-gill--animated,
+svg.spore-data-animated[data-intensity="0.8"] .spore-data-gill--animated {
+  animation-duration: 4s;
+}
+
+svg.spore-data-animated[data-intensity="0.9"] .spore-data-gill--animated,
+svg.spore-data-animated[data-intensity="1"] .spore-data-gill--animated {
+  animation-duration: 3.2s;
+}
+
+/* Note: SporeDataRadar now uses internal RAF-driven animation
+   for per-axis/per-gill organic motion instead of global CSS scale */
