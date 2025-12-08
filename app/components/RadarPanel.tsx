@@ -97,9 +97,13 @@ export function RadarPanel({ color, traits, axisLabels, doseKey, experienceMeta,
         tooltip: { enabled: false },
       heroGlow: {
         enabled: style.hasGlow,
-        color: hexToRgba(color, 0.55),
-        blur: 32,
-        lineWidth: 2.5,
+        color: hexToRgba(color, style.glowOpacity ?? 0.55),
+        blur: style.glowBlur ?? 32,
+        lineWidth: style.borderWidth ?? 2.5,
+        // Phase 8E enhancements
+        innerBlur: Math.max(8, (style.glowBlur ?? 32) * 0.4),
+        innerOpacity: (style.glowOpacity ?? 0.55) * 0.7,
+        showPointGlow: style.pointGlow ?? false,
       },
     } as ChartOptions<"radar">["plugins"],
       animation: {
@@ -134,7 +138,7 @@ export function RadarPanel({ color, traits, axisLabels, doseKey, experienceMeta,
           },
         },
       },
-  }), [style.hasGlow, color]);
+  }), [style.hasGlow, style.glowOpacity, style.glowBlur, style.borderWidth, style.pointGlow, color]);
 
   return (
     <div 
