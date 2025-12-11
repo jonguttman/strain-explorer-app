@@ -5,13 +5,17 @@ import React from "react";
 type PsillyMarkProps = {
   size?: number;
   className?: string;
+  invertColors?: boolean;
 };
 
 // Brand colors - warm brown to match headline
 const BRAND_BROWN = "#3f301f";
 const BRAND_CREAM = "#fdfbf7";
 
-export function PsillyMark({ size = 32, className }: PsillyMarkProps) {
+export function PsillyMark({ size = 32, className, invertColors = false }: PsillyMarkProps) {
+  const rectColor = invertColors ? BRAND_CREAM : BRAND_BROWN;
+  const whiteColor = invertColors ? BRAND_BROWN : BRAND_CREAM;
+  
   return (
     <svg
       id="Layer_1"
@@ -25,16 +29,16 @@ export function PsillyMark({ size = 32, className }: PsillyMarkProps) {
       <defs>
         <style>{`
           .psilly-rect {
-            fill: ${BRAND_BROWN};
+            fill: ${rectColor};
           }
           .psilly-cream {
-            fill: #fde7cb;
+            fill: ${invertColors ? "#3f301f" : "#fde7cb"};
           }
           .psilly-white {
-            fill: ${BRAND_CREAM};
+            fill: ${whiteColor};
           }
           .psilly-mark {
-            fill: ${BRAND_BROWN};
+            fill: ${rectColor};
           }
         `}</style>
       </defs>

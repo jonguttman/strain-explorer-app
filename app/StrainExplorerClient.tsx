@@ -35,6 +35,7 @@ import {
   DEFAULT_DOSE_ORDER,
   STRAINS,
 } from "./components/strainConstants";
+import { HowItWorksModal } from "./components/HowItWorksModal";
 
 type StrainDosePayload = {
   traits: DoseTraits;
@@ -68,6 +69,7 @@ export function StrainExplorerClient() {
   const [showFeedbackQR, setShowFeedbackQR] = useState(false);
   const [welcomeLabel, setWelcomeLabel] = useState<string | undefined>(undefined);
   const [isStrainSheetOpen, setIsStrainSheetOpen] = useState(false);
+  const [showHowItWorks, setShowHowItWorks] = useState(false);
   const activeCta = useMemo(
     () => CTA_VARIANTS[Math.floor(Math.random() * CTA_VARIANTS.length)],
     []
@@ -111,13 +113,12 @@ export function StrainExplorerClient() {
     [selectedStrainId, selectedDoseKey]
   );
 
-  useEffect(() => {
-    if ("serviceWorker" in navigator) {
-      navigator.serviceWorker.register("/sw.js").catch((err) => {
-        console.error("Service worker registration failed", err);
-      });
-    }
-  }, []);
+  // Service worker registration disabled - uncomment when PWA is needed
+  // useEffect(() => {
+  //   if ("serviceWorker" in navigator) {
+  //     navigator.serviceWorker.register("/sw.js").catch(() => {});
+  //   }
+  // }, []);
 
   useEffect(() => {
     async function loadAccessKeyLabel() {
@@ -262,7 +263,7 @@ export function StrainExplorerClient() {
   }
 
   return (
-    <div className="min-h-screen bg-[#f6eddc] text-[#3f301f] flex flex-col">
+    <div className="min-h-screen bg-[#0a0806] text-[#f5eee1] flex flex-col">
       <StrainHeader
         strainName={strainDisplayName}
         grams={currentDoseGrams}
@@ -276,14 +277,19 @@ export function StrainExplorerClient() {
       />
 
       {/* Mobile: strain selector pill */}
-      <div className="sm:hidden px-4 pb-3 bg-[var(--shell-bg)] border-b border-[var(--card-border)]">
+      <div className="sm:hidden px-4 pb-3 bg-transparent">
         <button
           type="button"
           onClick={() => setIsStrainSheetOpen(true)}
-          className="inline-flex items-center rounded-full border border-[var(--card-border)] bg-[var(--card-bg)] px-4 py-2 text-[14px] font-medium text-[var(--ink-main)] shadow-sm"
+          className="inline-flex items-center rounded-full px-4 py-2 text-[14px] font-medium shadow-lg"
+          style={{
+            background: "linear-gradient(180deg, #f3b34c 0%, #d4913f 100%)",
+            color: "#1a1612",
+            boxShadow: "0 4px 12px rgba(243, 179, 76, 0.35)",
+          }}
         >
           {strainDisplayName}
-          <svg className="ml-2 h-4 w-4 text-[var(--ink-soft)]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <svg className="ml-2 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
           </svg>
         </button>
@@ -303,19 +309,19 @@ export function StrainExplorerClient() {
         >
           {/* Main card with FIXED height - prevents all jumping */}
           <section 
-            className="mt-4 rounded-3xl border shadow-sm overflow-hidden h-[475px] sm:h-[550px] md:h-[625px]"
+            className="mt-4 rounded-3xl overflow-hidden h-[475px] sm:h-[550px] md:h-[625px]"
             style={{ 
-              background: "var(--card-bg)", 
-              borderColor: "var(--card-border)" 
+              background: "transparent",
+              border: "1px solid rgba(255, 255, 255, 0.08)",
             }}
           >
             {/* Content fills the fixed-height section */}
             <div className="h-full flex flex-col">
               {mode === "visual" ? (
                 showFeedbackQR ? (
-                  <div className="flex-1 flex flex-col min-h-0" style={{ background: "var(--card-bg)" }}>
+                  <div className="flex-1 flex flex-col min-h-0" style={{ background: "#0a0806" }}>
                     <div className="flex-1 flex items-center justify-center px-4 py-6 overflow-auto">
-                      <div className="w-full max-w-sm">
+                      <div className="w-full max-w-sm rounded-2xl p-4" style={{ background: "#fdf7ec" }}>
                         <FeedbackOverlay
                           accentHex={accentHex}
                           strainId={selectedStrainId}
@@ -327,7 +333,7 @@ export function StrainExplorerClient() {
                         />
                       </div>
                     </div>
-                    <div className="flex-shrink-0 py-3" style={{ borderTop: "1px solid var(--card-border)" }}>
+                    <div className="flex-shrink-0 py-3" style={{ borderTop: "1px solid rgba(255, 255, 255, 0.1)" }}>
                       <div className="flex items-center justify-center">
                         <ModeSwitch mode={mode} onChange={setMode} />
                       </div>
@@ -348,8 +354,8 @@ export function StrainExplorerClient() {
                   />
                 )
               ) : (
-                <div className="flex-1 flex flex-col min-h-0" style={{ background: "var(--card-bg)" }}>
-                  <div className="flex-1 px-4 py-6 overflow-auto">
+                <div className="flex-1 flex flex-col min-h-0">
+                  <div className="flex-1 px-4 py-6 overflow-auto rounded-2xl m-2" style={{ background: "#fdf7ec" }}>
                     <DetailsPanel
                       content={doseData.content}
                       strainName={strainDisplayName}
@@ -363,7 +369,7 @@ export function StrainExplorerClient() {
                       products={productsForSelection}
                     />
                   </div>
-                  <div className="flex-shrink-0 py-3" style={{ borderTop: "1px solid var(--card-border)" }}>
+                  <div className="flex-shrink-0 py-3" style={{ borderTop: "1px solid rgba(255, 255, 255, 0.1)" }}>
                     <div className="flex items-center justify-center">
                       <ModeSwitch mode={mode} onChange={setMode} />
                     </div>
@@ -381,30 +387,46 @@ export function StrainExplorerClient() {
             currentDoseLabel={currentDoseLabel}
             currentGrams={currentDoseGrams}
             strainName={strainDisplayName}
+            onShowHowItWorks={() => setShowHowItWorks(true)}
           />
         </div>
       </div>
+
+      {/* How it works modal */}
+      <HowItWorksModal 
+        isOpen={showHowItWorks} 
+        onClose={() => setShowHowItWorks(false)} 
+      />
 
       {/* Mobile: strain selection bottom sheet */}
       {isStrainSheetOpen && (
         <div className="sm:hidden fixed inset-0 z-50">
           {/* Backdrop */}
           <div 
-            className="absolute inset-0 bg-black/30"
+            className="absolute inset-0 bg-black/60"
             onClick={() => setIsStrainSheetOpen(false)}
           />
           
           {/* Sheet */}
-          <div className="absolute inset-x-0 bottom-0 rounded-t-2xl bg-[var(--card-bg)] border-t border-[var(--card-border)] shadow-xl max-h-[70vh] overflow-hidden flex flex-col">
+          <div 
+            className="absolute inset-x-0 bottom-0 rounded-t-2xl shadow-xl max-h-[70vh] overflow-hidden flex flex-col"
+            style={{
+              background: "linear-gradient(180deg, #1a1612 0%, #0a0806 100%)",
+              borderTop: "1px solid rgba(255, 255, 255, 0.1)",
+            }}
+          >
             {/* Header */}
-            <div className="flex items-center justify-between px-4 py-3 border-b border-[var(--card-border)]">
-              <h2 className="text-[16px] font-semibold text-[var(--ink-main)]">
+            <div 
+              className="flex items-center justify-between px-4 py-3"
+              style={{ borderBottom: "1px solid rgba(255, 255, 255, 0.1)" }}
+            >
+              <h2 className="text-[16px] font-semibold text-white/90">
                 Choose a strain
               </h2>
               <button
                 type="button"
                 onClick={() => setIsStrainSheetOpen(false)}
-                className="text-[var(--ink-soft)] hover:text-[var(--ink-main)] p-1"
+                className="text-white/50 hover:text-white p-1"
               >
                 <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -429,14 +451,20 @@ export function StrainExplorerClient() {
                       setSelectedStrainId(strain.id);
                       setIsStrainSheetOpen(false);
                     }}
-                    className="w-full flex items-center justify-between px-4 py-3 hover:bg-[var(--accent-pill)] transition"
+                    className="w-full flex items-center justify-between px-4 py-3 hover:bg-white/5 transition"
                   >
                     <div className="flex flex-col items-start">
-                      <span className={`text-[15px] ${isSelected ? "font-semibold text-[var(--accent)]" : "text-[var(--ink-main)]"}`}>
+                      <span 
+                        className="text-[15px]"
+                        style={{
+                          fontWeight: isSelected ? 600 : 400,
+                          color: isSelected ? "#f3b34c" : "rgba(255, 255, 255, 0.8)",
+                        }}
+                      >
                         {strain.name}
                       </span>
                       {effectWord && (
-                        <span className="text-[12px] text-[var(--ink-soft)]">
+                        <span className="text-[12px] text-white/50">
                           {effectWord}
                         </span>
                       )}
@@ -444,7 +472,7 @@ export function StrainExplorerClient() {
                     {isSelected && (
                       <div 
                         className="h-2 w-2 rounded-full"
-                        style={{ backgroundColor: "var(--accent)" }}
+                        style={{ backgroundColor: "#f3b34c" }}
                       />
                     )}
                   </button>

@@ -12,20 +12,27 @@ export function StrainScroller({
   onSelect,
 }: StrainScrollerProps) {
   return (
-    <div className="hidden sm:block w-full border-b border-[var(--card-border)] bg-[var(--shell-bg)]">
-      {/* Desktop: centered underline tabs */}
-      <div className="mx-auto max-w-5xl flex flex-wrap justify-center items-center gap-1 px-4 sm:px-8 pt-1 pb-0">
+    <div className="hidden sm:block w-full bg-transparent pt-3 pb-2">
+      {/* Desktop: dark capsule pill buttons - visually aligned with radar panel */}
+      <div className="mx-auto max-w-xl flex justify-center items-center gap-2 px-4">
         {strains.map((strain) => {
           const isActive = strain.id === selectedId;
           return (
             <button
               key={strain.id}
               onClick={() => onSelect(strain.id)}
-              className={`whitespace-nowrap px-3 py-2 text-[14px] transition border-b-2 ${
+              className={`whitespace-nowrap px-3 py-1.5 text-[12px] sm:text-[13px] rounded-full transition-all duration-200 font-medium ${
                 isActive
-                  ? "font-semibold text-[var(--accent)] border-[var(--accent)]"
-                  : "text-[var(--ink-soft)] border-transparent hover:text-[var(--ink-main)] hover:border-[var(--card-border)]"
+                  ? "text-[#1a1612] shadow-lg"
+                  : "text-white/80 hover:text-white hover:bg-white/10"
               }`}
+              style={isActive ? {
+                background: "linear-gradient(180deg, #f3b34c 0%, #d4913f 100%)",
+                boxShadow: "0 4px 12px rgba(243, 179, 76, 0.35)",
+              } : {
+                background: "rgba(255, 255, 255, 0.08)",
+                border: "1px solid rgba(255, 255, 255, 0.12)",
+              }}
             >
               {strain.name}
             </button>

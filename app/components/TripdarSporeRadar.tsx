@@ -30,7 +30,8 @@
 "use client";
 
 import * as React from "react";
-import type { TraitAxisId } from "@/lib/types";
+import type { TraitAxisId, TripdarVisualSkin } from "@/lib/types";
+import type { GoldenAuraSkinOverrides } from "@/lib/tripdarPreset";
 import {
   shapeAxisValueConfigurable,
   polarToCartesian,
@@ -43,6 +44,7 @@ import {
   mergeVisualOverrides,
   type TripdarVisualOverrides,
 } from "@/lib/tripdarRadar";
+import { GoldenAuraSkin } from "./tripdar/skins/GoldenAuraSkin";
 
 // =============================================================================
 // TYPES
@@ -102,6 +104,17 @@ export type TripdarSporeRadarProps = {
    * Any values provided here override the defaults.
    */
   visualOverrides?: TripdarVisualOverrides;
+
+  /**
+   * Which visual skin to use. Defaults to "classic" (spore gill style).
+   */
+  visualSkin?: TripdarVisualSkin;
+
+  /**
+   * Golden Aura skin-specific visual overrides.
+   * Only used when visualSkin === "golden-aura".
+   */
+  goldenAuraOverrides?: GoldenAuraSkinOverrides;
 
   className?: string;
 };
@@ -203,6 +216,8 @@ export function TripdarSporeRadar({
   spinAngle = 0,
   spinKey,
   visualOverrides,
+  visualSkin = "classic",
+  goldenAuraOverrides,
   className,
 }: TripdarSporeRadarProps) {
   // ==========================================================================
@@ -516,7 +531,7 @@ export function TripdarSporeRadar({
   });
 
   // ==========================================================================
-  // UNIQUE IDS
+  // UNIQUE IDS (must be before any conditional returns to satisfy React hooks rules)
   // ==========================================================================
   const instanceId = React.useId();
   const bgGradientId = `tripdar-bg-${instanceId}`;
@@ -524,7 +539,27 @@ export function TripdarSporeRadar({
   const clipId = `tripdar-clip-${instanceId}`;
 
   // ==========================================================================
-  // RENDER
+  // GOLDEN AURA SKIN (conditional render)
+  // ==========================================================================
+  if (visualSkin === "golden-aura") {
+    return (
+      <GoldenAuraSkin
+        shapedAxes={animatedAxes}
+        rawAxes={axes}
+        strainColor={tintColor}
+        time={time}
+        rotation={currentRotation}
+        disableAnimation={disableAnimation}
+        size={size}
+        compact={compact}
+        overrides={goldenAuraOverrides}
+        className={className}
+      />
+    );
+  }
+
+  // ==========================================================================
+  // RENDER (classic skin)
   // ==========================================================================
   return (
     <svg
@@ -612,10 +647,10 @@ export function TripdarSporeRadar({
 
         {/* Inner core */}
         <circle cx={cx} cy={cy} r={innerRadius * 0.7} fill="#F9F0E5" />
-
-        {/* Center mark */}
-        {showCenterMark && <TripdarCenterMark size={size} />}
       </g>
+
+      {/* Center mark - outside rotating group so it stays stationary */}
+      {showCenterMark && <TripdarCenterMark size={size} />}
     </svg>
   );
 }

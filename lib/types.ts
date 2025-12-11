@@ -261,3 +261,9 @@ export interface GuideMessageDataset {
   messages: GuideMessage[];
 }
 
+// ============================================
+// Tripdar Visual Skin Types
+// ============================================
+
+export type TripdarVisualSkin = "classic" | "golden-aura";
+
