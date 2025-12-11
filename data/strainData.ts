@@ -18,6 +18,9 @@ import type {
   StrainDoseResult,
   StrainDataset,
   StrainExperienceMeta,
+  MicroVibeId,
+  MicroVibes,
+  MicroVibesByDose,
 } from "@/lib/types";
 
 // Re-export types for convenience
@@ -41,13 +44,31 @@ const dataset = rawStrainData as {
   doses: DoseKey[];
   axes: TraitAxisId[];
   doseConfig: DoseConfigMap;
-  strains: Record<string, Omit<StrainJsonEntry, 'meta' | 'snapshots' | 'testimonials' | 'experienceMeta'> & {
+  strains: Record<string, Omit<StrainJsonEntry, 'meta' | 'snapshots' | 'testimonials' | 'experienceMeta' | 'microVibes'> & {
     meta?: StrainMeta;
     snapshots?: Record<DoseKey, DoseSnapshot>;
     testimonials?: StrainTestimonials;
     experienceMeta?: Record<DoseKey, StrainExperienceMeta>;
+    microVibes?: MicroVibesByDose;
   }>;
 };
+
+// Microvibe validation constants
+const MICROVIBE_IDS: MicroVibeId[] = ["ease", "desire", "lift", "connect", "create", "focus"];
+
+/**
+ * Validate that all 6 micro-vibe values are present.
+ * Throws if any are missing.
+ */
+function validateMicroVibes(vibes: Partial<MicroVibes>, strainName: string, doseKey: DoseKey): MicroVibes {
+  const missing = MICROVIBE_IDS.filter(id => typeof vibes[id] !== "number");
+  if (missing.length > 0) {
+    throw new Error(
+      `Incomplete microVibes for ${strainName}/${doseKey}: missing ${missing.join(", ")}`
+    );
+  }
+  return vibes as MicroVibes;
+}
 
 const STRAIN_SLUGS: Record<string, { slug: string; colorHex: string }> = {
   "Golden Teacher": { slug: "golden-teacher", colorHex: "#f3b34c" },
@@ -128,6 +149,12 @@ export function getStrainDoseData(
     strainEntry.testimonials?.[doseKey]?.filter(Boolean) ?? [];
   const experienceMeta = strainEntry.experienceMeta?.[doseKey] ?? null;
 
+  // Extract and validate microVibes if present
+  const rawMicroVibes = strainEntry.microVibes?.[doseKey];
+  const microVibes = rawMicroVibes 
+    ? validateMicroVibes(rawMicroVibes, strainName, doseKey)
+    : null;
+
   const baseColor = SLUG_TO_INFO[strainId]?.colorHex ?? DEFAULT_COLOR;
   const accentHex =
     strainEntry.visual?.[doseKey]?.colorHex?.trim() || baseColor;
@@ -156,6 +183,7 @@ export function getStrainDoseData(
     snapshot,
     testimonialsForDose,
     experienceMeta,
+    microVibes,
   };
 }
 

@@ -282,6 +282,16 @@
             "Controlled environment"
           ]
         }
+      },
+      "microVibes": {
+        "micro": {
+          "ease": 72,
+          "desire": 45,
+          "lift": 85,
+          "connect": 68,
+          "create": 55,
+          "focus": 78
+        }
       }
     },
     "Penis Envy": {

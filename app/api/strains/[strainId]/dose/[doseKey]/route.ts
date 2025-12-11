@@ -44,6 +44,7 @@ export async function GET(_request: Request, { params }: RouteParams) {
     snapshot: result.snapshot,
     testimonials: result.testimonialsForDose,
     experienceMeta: result.experienceMeta,
+    microVibes: result.microVibes ?? null,
   };
 
   return NextResponse.json(payload);

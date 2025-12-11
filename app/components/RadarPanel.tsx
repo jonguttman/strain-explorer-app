@@ -13,9 +13,11 @@
 // =============================================================================
 
 import { useRef, useState, useEffect } from "react";
-import type { TraitAxisId, DoseTraits, StrainExperienceMeta, ExperienceLevel } from "@/lib/types";
+import { useSearchParams } from "next/navigation";
+import type { TraitAxisId, DoseTraits, StrainExperienceMeta, ExperienceLevel, DoseKey, MicroVibes } from "@/lib/types";
 import type { TripdarVisualOverrides } from "@/lib/tripdarRadar";
 import { TripdarSporeRadar } from "./TripdarSporeRadar";
+import { MicrodoseRadialBars } from "./tripdar/MicrodoseRadialBars";
 import { TRIPDAR_PRESET } from "@/lib/tripdarPreset";
 import { STRAINS } from "./strainConstants";
 
@@ -38,6 +40,9 @@ type RadarPanelProps = {
   strainId?: string;
   // Visual overrides for fine-grained radar tuning
   visualOverrides?: TripdarVisualOverrides;
+  // Microdose visualization support
+  doseKey?: DoseKey;
+  microVibes?: MicroVibes | null;
 };
 
 // =============================================================================
@@ -100,6 +105,18 @@ const ANGLE_PER_STEP = 55;
 // COMPONENT
 // =============================================================================
 
+// Transition animation styles for microdose viz swap
+const TRANSITION_STYLES = `
+@keyframes microviz-fade-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes microviz-fade-out {
+  from { opacity: 1; transform: translateY(0); }
+  to { opacity: 0; transform: translateY(8px); }
+}
+`;
+
 export function RadarPanel({ 
   color, 
   traits, 
@@ -112,9 +129,18 @@ export function RadarPanel({
   grams,
   strainId,
   visualOverrides,
+  doseKey,
+  microVibes,
 }: RadarPanelProps) {
   // Note: axisLabels is kept for API compatibility but TripdarSporeRadar uses fixed axis order
   void _axisLabels;
+
+  // Admin override for testing microdose visualization
+  const searchParams = useSearchParams();
+  const forceMicroviz = searchParams.get("microviz") === "1";
+
+  // Show microdose visualization when forced or when viewing micro dose with valid data
+  const showMicrodose = forceMicroviz || (doseKey === "micro" && microVibes != null);
 
   // ==========================================================================
   // DIRECTIONAL SPIN STATE
@@ -229,23 +255,39 @@ export function RadarPanel({
           </div>
         </div>
 
-        {/* Tripdar Spore Radar - fills remaining space */}
-        <div className="relative z-10 mx-auto flex-1 min-h-0 flex items-center justify-center py-2">
-          <TripdarSporeRadar
-            axes={axes}
-            strainColor={color}
-            animationPreset={{
-              speed: TRIPDAR_PRESET.speed,
-              intensity: TRIPDAR_PRESET.intensity,
-            }}
-            showQuadrantRails
-            showVibeCast
-            showCenterMark
-            spinAngle={spinAngle}
-            spinKey={spinKey}
-            visualOverrides={visualOverrides}
-            className="drop-shadow-[0_8px_20px_rgba(0,0,0,0.06)]"
-          />
+        {/* Tripdar visualization - swaps based on dose with transition */}
+        <div className="relative z-20 mx-auto flex-1 min-h-0 flex items-center justify-center py-1">
+          <style>{TRANSITION_STYLES}</style>
+          {showMicrodose ? (
+            <div 
+              style={{ animation: "microviz-fade-in 260ms ease-out forwards" }}
+            >
+              <MicrodoseRadialBars
+                vibes={microVibes ?? { ease: 50, desire: 50, lift: 50, connect: 50, create: 50, focus: 50 }}
+                tintColor={color}
+              />
+            </div>
+          ) : (
+            <div
+              style={{ animation: spinKey > 0 ? undefined : "microviz-fade-in 260ms ease-out forwards" }}
+            >
+              <TripdarSporeRadar
+                axes={axes}
+                strainColor={color}
+                animationPreset={{
+                  speed: TRIPDAR_PRESET.speed,
+                  intensity: TRIPDAR_PRESET.intensity,
+                }}
+                showQuadrantRails
+                showVibeCast
+                showCenterMark
+                spinAngle={spinAngle}
+                spinKey={spinKey}
+                visualOverrides={visualOverrides}
+                className="drop-shadow-[0_8px_20px_rgba(0,0,0,0.06)]"
+              />
+            </div>
+          )}
         </div>
       </div>
 

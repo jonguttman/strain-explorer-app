@@ -21,6 +21,7 @@ import type {
   AccessKey,
   Product,
   StrainExperienceMeta,
+  MicroVibes,
 } from "@/lib/types";
 import { getProductsForStrainAndDose } from "@/lib/productData";
 import { StrainHeader } from "./components/StrainHeader";
@@ -49,6 +50,7 @@ type StrainDosePayload = {
   snapshot?: DoseSnapshot | null;
   testimonials?: string[];
   experienceMeta?: StrainExperienceMeta | null;
+  microVibes?: MicroVibes | null;
 };
 
 export function StrainExplorerClient() {
@@ -208,6 +210,7 @@ export function StrainExplorerClient() {
           snapshot: data.snapshot ?? null,
           testimonials: data.testimonials ?? [],
           experienceMeta: data.experienceMeta ?? null,
+          microVibes: data.microVibes ?? null,
         };
         cacheRef.current[cacheKey] = payload;
         if (!cancelled) {
@@ -345,6 +348,8 @@ export function StrainExplorerClient() {
                     doseLabel={currentDoseLabel}
                     grams={currentDoseGrams}
                     strainId={selectedStrainId}
+                    doseKey={selectedDoseKey}
+                    microVibes={doseData.microVibes}
                   />
                 )
               ) : (
