@@ -11,6 +11,13 @@ export type TraitAxisId =
   | "spiritual_depth"
   | "sociability";
 
+// Microdose-specific 6-axis "micro-vibe" system
+export type MicroVibeId = "ease" | "desire" | "lift" | "connect" | "create" | "focus";
+
+export type MicroVibes = Record<MicroVibeId, number>; // 0-100 per vibe
+
+export type MicroVibesByDose = Partial<Record<DoseKey, MicroVibes>>;
+
 export type DoseSnapshot = {
   onset: string;
   duration: string;
@@ -75,6 +82,7 @@ export type StrainJsonEntry = {
   snapshots: Record<DoseKey, DoseSnapshot>;
   testimonials: StrainTestimonials;
   experienceMeta?: Record<DoseKey, StrainExperienceMeta>;
+  microVibes?: MicroVibesByDose;
 };
 
 export type EditorDataset = {
@@ -117,6 +125,7 @@ export type StrainDoseResult = {
   snapshot: DoseSnapshot | null;
   testimonialsForDose: string[];
   experienceMeta: StrainExperienceMeta | null;
+  microVibes?: MicroVibes | null;
 };
 
 export type StrainDataset = {
